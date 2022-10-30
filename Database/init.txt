@@ -1,0 +1,147 @@
+CREATE TABLE requests
+(
+	request_id serial,
+	request_code varchar(3) NOT NULL,
+	status_code varchar(3) NOT NULL DEFAULT '100',
+	first_name varchar(20) NOT NULL,
+	last_name varchar(20) NOT NULL,
+	patronymic varchar(20),
+	email text NOT NULL,
+	faculty_code varchar(3) NOT NULL,
+	student_group varchar(10) NOT NULL,
+	dir_path varchar,
+	files_attached numeric(3) DEFAULT 0,
+	time_when_added TIMESTAMP DEFAULT current_timestamp,
+	email_answer text,
+	time_when_update TIMESTAMP DEFAULT current_timestamp,
+	PRIMARY KEY (request_id)
+);
+CREATE TABLE request_codes
+(
+	request_code varchar(3),
+	request_name text NOT NULL,
+	PRIMARY KEY(request_code)
+);
+CREATE TABLE faculty_codes
+(
+	faculty_code varchar(3),
+	faculty_name text NOT NULL,
+	PRIMARY KEY (faculty_code)
+);
+CREATE TABLE consultation_schedule
+(
+	schedule_id varchar(3),
+	day_of_the_week text,
+	time_interval text,
+	PRIMARY KEY (schedule_id)
+);
+CREATE TABLE consultation_appointment
+(
+	appointment_id serial,
+	status_code varchar(3),
+	first_name varchar(20) NOT NULL,
+	last_name varchar(20) NOT NULL,
+	patronymic varchar(20),
+	email text NOT NULL,
+	subject text NOT NULL,
+	appointment_time_code varchar(3),
+	time_when_added TIMESTAMP DEFAULT current_timestamp,
+	email_answer text,
+	time_when_update TIMESTAMP DEFAULT current_timestamp,
+	PRIMARY KEY (appointment_id)
+);
+CREATE TABLE status_codes
+(
+	status_code varchar(3),
+	status_name text NOT NULL,
+	PRIMARY KEY (status_code)
+);
+CREATE TABLE questions
+(
+	question_id serial,
+	status_code varchar(3),
+	email text NOT NULL,
+	first_name varchar(20) NOT NULL,
+	last_name varchar(20) NOT NULL,
+	patronymic varchar(20),
+	student_group varchar(10) NOT NULL,
+	question text NOT NULL,
+	time_when_added TIMESTAMP DEFAULT current_timestamp,
+	email_answer text,
+	time_when_update TIMESTAMP DEFAULT current_timestamp,
+	PRIMARY KEY (question_id)
+);
+CREATE TABLE staff_request_privileges
+(
+	privilege_id varchar(3),
+	login varchar(10) NOT NULL,
+	request_code varchar(3) NOT NULL,
+	UNIQUE (login,request_code),
+	PRIMARY KEY(privilege_id)
+);
+CREATE TABLE staff_members
+(
+	login varchar(10),
+	password varchar(20) NOT NULL,
+	faculty_code varchar(3),
+	first_name varchar(20) NOT NULL,
+	last_name varchar(20) NOT NULL,
+	patronymic varchar(20),
+	can_view_questions bool DEFAULT false,
+	can_view_appointments bool DEFAULT false,
+	PRIMARY KEY(login)
+);
+
+ALTER TABLE requests ADD FOREIGN KEY (request_code) REFERENCES request_codes;
+ALTER TABLE requests ADD FOREIGN KEY (status_code) REFERENCES status_codes;
+ALTER TABLE requests ADD FOREIGN KEY (faculty_code) REFERENCES faculty_codes;
+
+ALTER TABLE staff_request_privileges ADD FOREIGN KEY (login) REFERENCES staff_members;
+ALTER TABLE staff_request_privileges ADD FOREIGN KEY (request_code) REFERENCES request_codes;
+
+ALTER TABLE staff_members ADD FOREIGN KEY (faculty_code) REFERENCES faculty_codes;
+
+ALTER TABLE questions ADD FOREIGN KEY (status_code) REFERENCES status_codes;
+
+ALTER TABLE consultation_appointment ADD FOREIGN KEY (status_code) REFERENCES status_codes;
+ALTER TABLE consultation_appointment ADD FOREIGN KEY (appointment_time_code) REFERENCES consultation_schedule;
+
+INSERT INTO request_codes (request_code, request_name)
+VALUES 
+('000', 'Справка о факте обучения (по месту требования)'),
+('001', 'Справка о факте обучения (в органы социальной защиты, пенсионный фонд)'),
+('002', 'Справка-вызов'),
+('003', 'Копия договора на обучение'),
+('P00', 'Изменение персональных данных'),
+('P01', 'Предоставление или продление академического отпуска'),
+('P02', 'Предоставление отпуска по беременности и родам'),
+('P03', 'Предоставление отпуска по уходу за ребенком до 3 лет'),
+('P04', 'Заявление об отчислении'),
+('P05', 'Заявление о переводе внутри университета'),
+('P06', 'Заявление о восстановлении');
+
+INSERT INTO faculty_codes (faculty_code, faculty_name)
+VALUES
+('000', 'Институт «Современные технологии машиностроения, автомобилестроения и металлургии» (СТМАиМ)'),
+('001', 'Теплотехнический факультет (ТТ)'),
+('002', 'Машиностроительный факультет (М)'),
+('003', 'Факультет «Математики и Естественных Наук» (МиЕН)'),
+('004', 'Приборостроительный факультет (П)'),
+('005', 'Факультет «Информатика и вычислительная техника» (ИВТ)'),
+('006', 'Инженерно-экономический факультет (ИЭ)'),
+('007', 'Инженерно-строительный факультет'),
+('008', 'Факультет «Право и гуманитарные науки» (ПиГН)'),
+('009', 'Факультет «Управление качеством» (УК)'),
+('010', 'Факультет «Реклама и дизайн» (РиД)'),
+('011', 'Институт дополнительного профессионального образования (ИДПО)'),
+('012', 'Иниститут непрерывного профессионального образования ИжГТУ (ИНПО)'),
+('013', 'Институт физической культуры и спорта (ИФКиС)'),
+('014', 'Институт экономики, управления и финансов (ИЭУФ)'),
+('015', 'Управление магистратуры, аспирантуры и докторантуры (УМАД)')
+;
+
+INSERT INTO status_codes (status_code, status_name)
+VALUES
+('100', 'New request'),
+('101', 'Request done'),
+('102', 'Request declined');
