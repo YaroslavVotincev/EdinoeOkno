@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\artem\\Desktop\\asd\\EdinoeOkno\\EdinoeOkno_Web\\EdinoeOkno_Web\\EdinoeOkno_Web.csproj": {}
+    "C:\\Users\\artem\\Desktop\\Новая папка\\EdinoeOkno\\EdinoeOkno_Web\\EdinoeOkno_Web\\EdinoeOkno_Web.csproj": {}
   },
   "projects": {
-    "C:\\Users\\artem\\Desktop\\asd\\EdinoeOkno\\EdinoeOkno_Web\\EdinoeOkno_Web\\EdinoeOkno_Web.csproj": {
+    "C:\\Users\\artem\\Desktop\\Новая папка\\EdinoeOkno\\EdinoeOkno_Web\\EdinoeOkno_Web\\EdinoeOkno_Web.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\artem\\Desktop\\asd\\EdinoeOkno\\EdinoeOkno_Web\\EdinoeOkno_Web\\EdinoeOkno_Web.csproj",
+        "projectUniqueName": "C:\\Users\\artem\\Desktop\\Новая папка\\EdinoeOkno\\EdinoeOkno_Web\\EdinoeOkno_Web\\EdinoeOkno_Web.csproj",
         "projectName": "EdinoeOkno_Web",
-        "projectPath": "C:\\Users\\artem\\Desktop\\asd\\EdinoeOkno\\EdinoeOkno_Web\\EdinoeOkno_Web\\EdinoeOkno_Web.csproj",
+        "projectPath": "C:\\Users\\artem\\Desktop\\Новая папка\\EdinoeOkno\\EdinoeOkno_Web\\EdinoeOkno_Web\\EdinoeOkno_Web.csproj",
         "packagesPath": "C:\\Users\\artem\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\artem\\Desktop\\asd\\EdinoeOkno\\EdinoeOkno_Web\\EdinoeOkno_Web\\obj\\",
+        "outputPath": "C:\\Users\\artem\\Desktop\\Новая папка\\EdinoeOkno\\EdinoeOkno_Web\\EdinoeOkno_Web\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\artem\\AppData\\Roaming\\NuGet\\NuGet.Config",

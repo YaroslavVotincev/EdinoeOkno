@@ -1,3 +1,6 @@
+* {
+    font-family: sans-serif !important; }
+
 header {
     width: 900px;
     height: 120px;
@@ -58,7 +61,7 @@ input[type=submit] {
     display: block;
 }
 .link {
-    color: black;
+    color: #0000ff;
     font-size: 200%;
     text-align: center;
     top: 5px;
