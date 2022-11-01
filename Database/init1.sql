@@ -1,3 +1,5 @@
+CREATE SCHEMA dev;
+SET search_path = dev;
 CREATE TABLE requests
 (
 	request_id serial,
@@ -12,7 +14,7 @@ CREATE TABLE requests
 	dir_path varchar,
 	files_attached numeric(3) DEFAULT 0,
 	time_when_added TIMESTAMP DEFAULT current_timestamp,
-	email_answer text,
+	email_response text DEFAULT 'Ответ не добавлен',
 	time_when_update TIMESTAMP DEFAULT current_timestamp,
 	PRIMARY KEY (request_id)
 );
@@ -26,13 +28,16 @@ CREATE TABLE faculty_codes
 (
 	faculty_code varchar(3),
 	faculty_name text NOT NULL,
+	short_name varchar(10) NOT NULL,
+	UNIQUE (short_name),
 	PRIMARY KEY (faculty_code)
 );
 CREATE TABLE consultation_schedule
 (
 	schedule_id varchar(3),
-	day_of_the_week text,
-	time_interval text,
+	day_of_the_week text NOT NULL,
+	time_interval text NOT NULL,
+	info text DEFAULT 'Без информации',
 	PRIMARY KEY (schedule_id)
 );
 CREATE TABLE consultation_appointment
@@ -44,9 +49,9 @@ CREATE TABLE consultation_appointment
 	patronymic varchar(20),
 	email text NOT NULL,
 	subject text NOT NULL,
-	appointment_time_code varchar(3),
+	appointment_time_code varchar(3) NOT NULL,
 	time_when_added TIMESTAMP DEFAULT current_timestamp,
-	email_answer text,
+	email_response text DEFAULT 'Ответ не добавлен',
 	time_when_update TIMESTAMP DEFAULT current_timestamp,
 	PRIMARY KEY (appointment_id)
 );
@@ -67,7 +72,7 @@ CREATE TABLE questions
 	student_group varchar(10) NOT NULL,
 	question text NOT NULL,
 	time_when_added TIMESTAMP DEFAULT current_timestamp,
-	email_answer text,
+	email_response text DEFAULT 'Ответ не добавлен',
 	time_when_update TIMESTAMP DEFAULT current_timestamp,
 	PRIMARY KEY (question_id)
 );
@@ -83,7 +88,7 @@ CREATE TABLE staff_members
 (
 	login varchar(10),
 	password varchar(20) NOT NULL,
-	faculty_code varchar(3),
+	faculty_code varchar(3) NOT NULL,
 	first_name varchar(20) NOT NULL,
 	last_name varchar(20) NOT NULL,
 	patronymic varchar(20),
@@ -120,25 +125,24 @@ VALUES
 ('P05', 'Заявление о переводе внутри университета'),
 ('P06', 'Заявление о восстановлении');
 
-INSERT INTO faculty_codes (faculty_code, faculty_name)
+INSERT INTO faculty_codes (faculty_code, faculty_name, short_name)
 VALUES
-('000', 'Институт «Современные технологии машиностроения, автомобилестроения и металлургии» (СТМАиМ)'),
-('001', 'Теплотехнический факультет (ТТ)'),
-('002', 'Машиностроительный факультет (М)'),
-('003', 'Факультет «Математики и Естественных Наук» (МиЕН)'),
-('004', 'Приборостроительный факультет (П)'),
-('005', 'Факультет «Информатика и вычислительная техника» (ИВТ)'),
-('006', 'Инженерно-экономический факультет (ИЭ)'),
-('007', 'Инженерно-строительный факультет'),
-('008', 'Факультет «Право и гуманитарные науки» (ПиГН)'),
-('009', 'Факультет «Управление качеством» (УК)'),
-('010', 'Факультет «Реклама и дизайн» (РиД)'),
-('011', 'Институт дополнительного профессионального образования (ИДПО)'),
-('012', 'Иниститут непрерывного профессионального образования ИжГТУ (ИНПО)'),
-('013', 'Институт физической культуры и спорта (ИФКиС)'),
-('014', 'Институт экономики, управления и финансов (ИЭУФ)'),
-('015', 'Управление магистратуры, аспирантуры и докторантуры (УМАД)')
-;
+('000', 'Институт «Современные технологии машиностроения, автомобилестроения и металлургии»', 'СТМАиМ'),
+('001', 'Теплотехнический факультет', 'ТТ'),
+('002', 'Машиностроительный факультет', 'М'),
+('003', 'Факультет «Математики и Естественных Наук»', 'МиЕН'),
+('004', 'Приборостроительный факультет', 'П'),
+('005', 'Факультет «Информатика и вычислительная техника»', 'ИВТ'),
+('006', 'Инженерно-экономический факультет', 'ИЭ'),
+('007', 'Инженерно-строительный факультет', 'ИС'),
+('008', 'Факультет «Право и гуманитарные науки»', 'ПиГН'),
+('009', 'Факультет «Управление качеством»', 'УК'),
+('010', 'Факультет «Реклама и дизайн»', 'РиД'),
+('011', 'Институт дополнительного профессионального образования', 'ИДПО'),
+('012', 'Иниститут непрерывного профессионального образования ИжГТУ', 'ИНПО'),
+('013', 'Институт физической культуры и спорта', 'ИФКиС'),
+('014', 'Институт экономики, управления и финансов', 'ИЭУФ'),
+('015', 'Управление магистратуры, аспирантуры и докторантуры', 'УМАД');
 
 INSERT INTO status_codes (status_code, status_name)
 VALUES
