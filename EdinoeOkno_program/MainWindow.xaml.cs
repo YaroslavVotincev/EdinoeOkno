@@ -23,6 +23,18 @@ namespace EdinoeOkno_program
         public MainWindow()
         {
             InitializeComponent();
+
         }
+
+        private void endInit_Loaded(object sender, RoutedEventArgs e)
+        {
+            endInit.Content = Form1.Children.Count;
+            textBox.TextChanged += textBox_Changed;
+        }
+        private void textBox_Changed(object sender, EventArgs e)
+        {
+            label.Content = textBox.Text;
+        }
+
     }
 }

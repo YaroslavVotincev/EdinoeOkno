@@ -11,12 +11,14 @@ CREATE TABLE requests
 	email text NOT NULL,
 	faculty_code varchar(3) NOT NULL,
 	student_group varchar(10) NOT NULL,
-	dir_path varchar,
+	dir_path varchar DEFAULT 'Без прикреплённых файлов',
 	files_attached numeric(3) DEFAULT 0,
 	time_when_added TIMESTAMP DEFAULT current_timestamp,
 	email_response text DEFAULT 'Ответ не добавлен',
 	time_when_update TIMESTAMP DEFAULT current_timestamp,
-	PRIMARY KEY (request_id)
+	PRIMARY KEY (request_id),
+	CONSTRAINT email_validity_check CHECK 
+		(email ~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$')
 );
 CREATE TABLE request_codes
 (
@@ -149,3 +151,101 @@ VALUES
 ('100', 'New request'),
 ('101', 'Request done'),
 ('102', 'Request declined');
+
+CREATE VIEW req_front AS 
+(SELECT 
+ 	r.request_code,
+ 	r.first_name,
+	r.last_name,
+	r.patronymic,
+	r.email,
+	r.faculty_code,
+	r.student_group,
+	r.dir_path,
+	r.files_attached 
+FROM requests r);
+
+CREATE VIEW req_new_back AS 
+(
+SELECT 
+	r.request_id, 
+	rc.request_name,
+	sc.status_name, 
+	r.first_name, 
+	r.last_name,
+	r.patronymic,
+	r.email,
+	fc.faculty_name, 
+	fc.short_name,
+	r.student_group,
+	r.dir_path,
+	r.files_attached, 
+	r.time_when_added
+FROM dev.requests r, dev.request_codes rc, dev.status_codes sc, dev.faculty_codes fc
+WHERE rc.request_code = r.request_code
+AND fc.faculty_code = r.faculty_code
+AND sc.status_code = r.status_code
+AND r.status_code = '100'
+ORDER BY r.time_when_added DESC
+);
+
+CREATE VIEW req_done_back AS 
+(
+SELECT 
+	r.request_id, 
+	rc.request_name,
+	sc.status_name, 
+	r.first_name, 
+	r.last_name,
+	r.patronymic,
+	r.email,
+	fc.faculty_name, 
+	fc.short_name,
+	r.student_group,
+	r.dir_path,
+	r.files_attached, 
+	r.time_when_added,
+	r.email_response,
+	r.time_when_update
+FROM dev.requests r, dev.request_codes rc, dev.status_codes sc, dev.faculty_codes fc
+WHERE rc.request_code = r.request_code
+AND fc.faculty_code = r.faculty_code
+AND sc.status_code = r.status_code
+AND r.status_code = '101'
+ORDER BY r.time_when_added DESC
+);
+
+CREATE VIEW req_decl_back AS 
+(
+SELECT 
+	r.request_id, 
+	rc.request_name,
+	sc.status_name, 
+	r.first_name, 
+	r.last_name,
+	r.patronymic,
+	r.email,
+	fc.faculty_name, 
+	fc.short_name,
+	r.student_group,
+	r.dir_path,
+	r.files_attached, 
+	r.time_when_added,
+	r.email_response,
+	r.time_when_update
+FROM dev.requests r, dev.request_codes rc, dev.status_codes sc, dev.faculty_codes fc
+WHERE rc.request_code = r.request_code
+AND fc.faculty_code = r.faculty_code
+AND sc.status_code = r.status_code
+AND r.status_code = '102'
+ORDER BY r.time_when_added DESC
+);
+
+insert into req_front values
+('000','Pasha','Pavlov','Pavlovich','123@gmail.com','000','B20-191',null,0);
+update requests set status_code = '101' where request_id between 1 and 5;
+update requests set status_code = '102' where request_id between 6 and 9;
+
+SELECT * from req_new_back;
+SELECT * from req_done_back;
+SELECT * from req_decl_back;
