@@ -180,7 +180,7 @@ SELECT
 	r.student_group,
 	r.dir_path,
 	r.files_attached, 
-	r.time_when_added
+	to_char(r.time_when_added, 'hh24:mi dd/mm/yyyy') as time_when_added
 FROM dev.requests r, dev.request_codes rc, dev.status_codes sc, dev.faculty_codes fc
 WHERE rc.request_code = r.request_code
 AND fc.faculty_code = r.faculty_code
@@ -204,9 +204,9 @@ SELECT
 	r.student_group,
 	r.dir_path,
 	r.files_attached, 
-	r.time_when_added,
+	to_char(r.time_when_added, 'hh24:mi dd/mm/yyyy') as time_when_added,
 	r.email_response,
-	r.time_when_update
+	to_char(r.time_when_update, 'hh24:mi dd/mm/yyyy') as time_when_update
 FROM dev.requests r, dev.request_codes rc, dev.status_codes sc, dev.faculty_codes fc
 WHERE rc.request_code = r.request_code
 AND fc.faculty_code = r.faculty_code
@@ -230,9 +230,9 @@ SELECT
 	r.student_group,
 	r.dir_path,
 	r.files_attached, 
-	r.time_when_added,
+	to_char(r.time_when_added, 'hh24:mi dd/mm/yyyy') as time_when_added,
 	r.email_response,
-	r.time_when_update
+	to_char(r.time_when_update, 'hh24:mi dd/mm/yyyy') as time_when_update
 FROM dev.requests r, dev.request_codes rc, dev.status_codes sc, dev.faculty_codes fc
 WHERE rc.request_code = r.request_code
 AND fc.faculty_code = r.faculty_code
@@ -243,9 +243,9 @@ ORDER BY r.time_when_added DESC
 
 insert into req_front values
 ('000','Pasha','Pavlov','Pavlovich','123@gmail.com','000','B20-191',null,0);
-update requests set status_code = '101' where request_id between 1 and 5;
-update requests set status_code = '102' where request_id between 6 and 9;
+--update requests set status_code = '101' where request_id between 1 and 5;
+--update requests set status_code = '102' where request_id between 6 and 9;
 
 SELECT * from req_new_back;
-SELECT * from req_done_back;
-SELECT * from req_decl_back;
+--SELECT * from req_done_back;
+--SELECT * from req_decl_back;
