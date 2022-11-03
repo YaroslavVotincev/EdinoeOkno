@@ -50,6 +50,27 @@ p{
 {
     color: Red;
 }
+.input__file {
+
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+}
+.input__file-button{
+    float: right;
+    background-color: #0048ff;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 0 auto;
+    display: block;
+    height: 15px;
+    width: 150px;
+    text-align: center;
+}
+
 input[type=submit] {
     background-color: #0048ff;
     color: white;

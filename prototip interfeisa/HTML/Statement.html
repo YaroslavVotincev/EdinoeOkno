@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,9 +15,11 @@
 </header>
 <main>
   <h1>Заявка на получение справок и выписок</h1>
-  <form action="../PHP/addStatement.php" method="POST">
+  <form action="addStatement.php" method="POST">
 
-    <p>Имя<span class="kek">*</span><label>
+
+
+      <p>Имя<span class="kek">*</span><label>
       <input required type = "text" name = "name">
     </label></p>
 
@@ -27,10 +30,31 @@
     <p>Отчество<span class="kek">*</span><label>
       <input required type = "text" name = "patronimic">
     </label></p>
+    <p>Выбор документа<span class="kek">*</span><select name="tag">
+      <option selected value="000">Справка о факте обучения (по месту требования) </option>
+      <option value="001"> Справка о факте обучения (в органы социальной защиты, пенсионный фонд)</option>
+      <option value="002"> Справка-вызов</option>
+      <option value="003">Копия договора на обучение</option>
+    </select>
+
     <!-- сделать выбор -->
-    <p>Факультет<span class="kek">*</span><label>
-      <input required type = "text" name = "fac">
-    </label></p>
+    <p>Факультет<span class="kek">*</span><select name="fac">
+      <option selected value="001">СТМАим </option>
+      <option value="002">ТТ</option>
+      <option value="003"> МиЕН</option>
+      <option value="004">П</option>
+      <option value="005">ИВТ</option>
+      <option value="006">ИЭ</option>
+      <option value="007">ИС</option>
+      <option value="008">ПиГН</option>
+      <option value="009">УК</option>
+      <option value="010">РиД</option>
+      <option value="011">ИДПО</option>
+      <option value="012">ИНПО</option>
+      <option value="013">ИФКиС</option>
+      <option value="014">ИЭУФ</option>
+      <option value="015">УМАД</option>
+    </select></p>
 
     <p>Группа<span class="kek">*</span><label>
       <input required type = "text" name = "group">
@@ -44,3 +68,6 @@
 </main>
 </body>
 </html>
+
+
+
