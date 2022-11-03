@@ -7,9 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid x:Name="Form1">
-        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="330,164,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
-        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="350,300,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <Label x:Name="label" Content="Label" HorizontalAlignment="Left" Margin="546,248,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="endInit" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Loaded="endInit_Loaded"/>
+        <ListBox x:Name="requestsListBox" HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="292" Margin="10,73,0,0" BorderBrush="Black" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+        <ScrollViewer x:Name="workingArea" Margin="307,73,88.6,0" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" BorderBrush="Black"/>
     </Grid>
 </Window>

@@ -12,7 +12,7 @@ CREATE TABLE requests
 	faculty_code varchar(3) NOT NULL,
 	student_group varchar(10) NOT NULL,
 	dir_path varchar DEFAULT 'Без прикреплённых файлов',
-	files_attached numeric(3) DEFAULT 0,
+	files_attached int DEFAULT 0,
 	time_when_added TIMESTAMP DEFAULT current_timestamp,
 	email_response text DEFAULT 'Ответ не добавлен',
 	time_when_update TIMESTAMP DEFAULT current_timestamp,
@@ -241,11 +241,25 @@ AND r.status_code = '102'
 ORDER BY r.time_when_added DESC
 );
 
-insert into req_front values
-('000','Pasha','Pavlov','Pavlovich','123@gmail.com','000','B20-191',null,0);
---update requests set status_code = '101' where request_id between 1 and 5;
---update requests set status_code = '102' where request_id between 6 and 9;
-
+insert into dev.req_front values
+('000','Pasha','Pavlov','Pavlovich','123@gmail.com','000','B20-191','',0);
+INSERT INTO dev.req_front VALUES 
+('002','Andrey','Bolshoi','Ivanovich','vasya@mail.ru','007','G19-192','',2);
+INSERT INTO dev.req_front VALUES 
+('003','Artem','Ciklop','Petrov','artem@mail.ru','004','R1-12','',1);
+INSERT INTO dev.req_front VALUES 
+('002','Vasiliy','Zabegaev','Artemovich','lupa@mail.ru','003','G19-192','',2);
+INSERT INTO dev.req_front VALUES 
+('002','Petya','Vasnecov','Vasilyevich','pupa@mail.ru','001','H19-192','',2);
+INSERT INTO dev.req_front VALUES 
+('002','Andrey','Bolshoi','Ivanovich','vasya@mail.ru','007','G19-192','',2);
+INSERT INTO dev.req_front VALUES 
+('P04','Zhenya','Makarov','Danilovich','1234@mail.ru','002','G19-182','',1);
+INSERT INTO dev.req_front VALUES 
+('P02','Rustam','Bibivoch','Ivanovich','5555@mail.ru','004','G19-192','',2);
+INSERT INTO dev.req_front VALUES 
+('002','Gleb','Smit','Ivanovich','twerk@mail.ru','015','G19-192','',2);
+--DELETE from requests;
 SELECT * from req_new_back;
 --SELECT * from req_done_back;
 --SELECT * from req_decl_back;

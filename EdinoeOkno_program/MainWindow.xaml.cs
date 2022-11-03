@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Npgsql;
 
 namespace EdinoeOkno_program
 {
@@ -20,20 +22,116 @@ namespace EdinoeOkno_program
     /// </summary>
     public partial class MainWindow : Window
     {
+        const string CONNECTION_STRING = "Server=localhost;Port=5432;User id=postgres;Password=;Database=EdinoeOkno";
+        List<Request> requestsList = new List<Request>();
+        NpgsqlConnection dBconnection;
+        Request selectedRequest;
         public MainWindow()
         {
             InitializeComponent();
-
+            ConnectDB();
+            GetRequestList();
+            FillRequestsListBox();
+            
         }
 
-        private void endInit_Loaded(object sender, RoutedEventArgs e)
+        private void ConnectDB()
         {
-            endInit.Content = Form1.Children.Count;
-            textBox.TextChanged += textBox_Changed;
+            dBconnection = new NpgsqlConnection(CONNECTION_STRING);
+            dBconnection.Open();
         }
-        private void textBox_Changed(object sender, EventArgs e)
+
+        private void GetRequestList()
         {
-            label.Content = textBox.Text;
+            using (NpgsqlCommand cmd =
+                new NpgsqlCommand($@"SELECT * FROM dev.req_new_back", dBconnection))
+            {
+                using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        foreach (DbDataRecord dB in reader)
+                        {
+                            //var temp = (int)dB["request_id"];
+                            //var temp1 = (string)dB["request_name"];
+                            //var temp2 = (string)dB["status_name"];
+                            //var temp3 = (string)dB["first_name"];
+                            //var temp4 = (string)dB["last_name"];
+                            //var temp5 = (string)dB["patronymic"];
+                            //var temp6 = (string)dB["email"];
+                            //var temp7 = (string)dB["faculty_name"];
+                            //var temp8 = (string)dB["short_name"];
+                            //var temp9 = (string)dB["student_group"];
+                            //var temp10 = (string)dB["time_when_added"];
+                            //var temp11 = (string)dB["dir_path"];
+                            //var temp12 = (int)dB["files_attached"];
+                            requestsList.Add(
+                                new Request(
+                                (int)   dB["request_id"],
+                                (string)dB["request_name"],
+                                (string)dB["status_name"],
+                                (string)dB["first_name"],
+                                (string)dB["last_name"],
+                                (string)dB["patronymic"],
+                                (string)dB["email"],
+                                (string)dB["faculty_name"],
+                                (string)dB["short_name"],
+                                (string)dB["student_group"],
+                                (string)dB["time_when_added"],
+                                (string)dB["dir_path"],
+                                (int)   dB["files_attached"]));
+
+
+                        }
+                    }
+                }
+            }
+        }
+
+        private void FillRequestsListBox()
+        {
+            requestsListBox.Items.Clear();
+            string preview;
+            Request r;
+            for (int i = 0; i < requestsList.Count; i++)
+            {
+                r = requestsList[i];
+                r.button = new Button();
+                preview = $"Заявка №{r.request_id}\n{r.request_name}\n";
+                r.button.Tag = r;
+                r.button.HorizontalContentAlignment = HorizontalAlignment.Left;
+                r.button.FontSize = 10;
+                r.button.Width = requestsListBox.Width - 35;
+                r.button.Content = preview;
+                r.button.Click += SelectRequest;
+                requestsListBox.Items.Add(r.button);               
+            }
+        }
+
+        private void SelectRequest(object sender, EventArgs eventArgs)
+        {
+            Button selectedButton = (Button)sender;
+            selectedRequest = (Request)selectedButton.Tag;
+            ConstructWorkingArea();
+            //for (int i = 0; i < requestsList.Count; i++)
+            //{
+            //    if (selectedButton == requestsList[i].button)
+            //    {
+            //        selectedRequest = requestsList[i];
+            //        ConstructWorkingArea();
+            //        break;
+            //    }
+            //}
+        }
+
+        private void ConstructWorkingArea()
+        {
+            
+            StackPanel st = new StackPanel();
+            workingArea.Content = st;
+            Label xyinya = new Label();
+            xyinya.Content = selectedRequest.button.Content;
+            st.Children.Add(xyinya);
         }
 
     }
