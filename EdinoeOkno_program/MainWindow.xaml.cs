@@ -22,7 +22,7 @@ namespace EdinoeOkno_program
     /// </summary>
     public partial class MainWindow : Window
     {
-        const string CONNECTION_STRING = "Server=localhost;Port=5432;User id=postgres;Password=;Database=EdinoeOkno";
+        const string CONNECTION_STRING = "Server=26.137.232.44;Port=5432;User id=Stas;Password=1;Database=EdinoeOkno";
         List<Request> requestsList = new List<Request>();
         NpgsqlConnection dBconnection;
         Request selectedRequest;
@@ -113,6 +113,7 @@ namespace EdinoeOkno_program
             Button selectedButton = (Button)sender;
             selectedRequest = (Request)selectedButton.Tag;
             ConstructWorkingArea();
+
             //for (int i = 0; i < requestsList.Count; i++)
             //{
             //    if (selectedButton == requestsList[i].button)
@@ -123,15 +124,31 @@ namespace EdinoeOkno_program
             //    }
             //}
         }
-
-        private void ConstructWorkingArea()
+        private void buttonSend_Click(object sender, EventArgs eventArgs)
         {
-            
+            Button button = (Button)sender;
+            TextBox text = (TextBox)button.Tag;
+            MailSend.Send(selectedRequest.email, selectedRequest.request_name, text.Text);
+        }
+        private void ConstructWorkingArea()
+        {     
             StackPanel st = new StackPanel();
             workingArea.Content = st;
-            Label xyinya = new Label();
-            xyinya.Content = selectedRequest.button.Content;
-            st.Children.Add(xyinya);
+            Label selected = new Label();
+            selected.Content = $"Заявка №{selectedRequest.request_id}\n{selectedRequest.request_name}\n\nИмя: {selectedRequest.first_name}\n" +
+                $"Фамилия: {selectedRequest.last_name}\nОтчество: {selectedRequest.patronymic}\nemail: {selectedRequest.email}\n" +
+                $"Факультет: {selectedRequest.faculty_name}\nГруппа: {selectedRequest.group}\n";
+            st.Children.Add(selected);
+            TextBox responseArea = new TextBox();
+            responseArea.Width = workingArea.Width;
+            responseArea.Height = 50;
+            Button buttonSend = new Button();
+            buttonSend.Height = 20;
+            buttonSend.Content = "Отправить";
+            buttonSend.Tag = responseArea;
+            buttonSend.Click += buttonSend_Click;
+            st.Children.Add(responseArea);
+            st.Children.Add(buttonSend);
         }
 
     }
