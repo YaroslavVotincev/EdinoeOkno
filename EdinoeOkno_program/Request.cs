@@ -13,7 +13,7 @@ namespace EdinoeOkno_program
     {
         public int request_id;
         public string request_name;
-        public string status_code;
+        public int status_code;
         public string status_name;
         public string first_name;
         public string last_name;
@@ -25,6 +25,7 @@ namespace EdinoeOkno_program
         public string dir_path;
         public int files_attached;
         public string time_when_requested;
+        public string time_when_updated = "-";
         public string response = "";
 
         public bool valid_email;

@@ -1,4 +1,3 @@
-C:\Users\User\Desktop\учеба\Проектная деятельность\repos\EdinoeOkno\EdinoeOkno_program\obj\Debug\EdinoeOkno_program.csprojAssemblyReference.cache
 C:\Users\User\Desktop\учеба\Проектная деятельность\repos\EdinoeOkno\EdinoeOkno_program\obj\Debug\MainWindow.g.cs
 C:\Users\User\Desktop\учеба\Проектная деятельность\repos\EdinoeOkno\EdinoeOkno_program\obj\Debug\App.g.cs
 C:\Users\User\Desktop\учеба\Проектная деятельность\repos\EdinoeOkno\EdinoeOkno_program\obj\Debug\EdinoeOkno_program_MarkupCompile.cache
@@ -86,3 +85,5 @@ D:\repos\EdinoeOkno\EdinoeOkno_program\obj\Debug\EdinoeOkno_program.csproj.CoreC
 D:\repos\EdinoeOkno\EdinoeOkno_program\obj\Debug\EdinoeOkno_program.csproj.CopyComplete
 D:\repos\EdinoeOkno\EdinoeOkno_program\obj\Debug\EdinoeOkno_program.exe
 D:\repos\EdinoeOkno\EdinoeOkno_program\obj\Debug\EdinoeOkno_program.pdb
+C:\Users\User\Desktop\учеба\Проектная деятельность\repos\EdinoeOkno\EdinoeOkno_program\obj\Debug\EdinoeOkno_program.csproj.AssemblyReference.cache
+C:\Users\User\Desktop\учеба\Проектная деятельность\repos\EdinoeOkno\EdinoeOkno_program\obj\Debug\EdinoeOkno_program.csproj.SuggestedBindingRedirects.cache

@@ -20,32 +20,48 @@ namespace EdinoeOkno_program
 {
     public class MailSend
     {
-        //   MMail.SendMail("Почта", "Тема сообщения", "Текс сообщения");
-        public static void Send(string addressee, string Subject, string messageText)
+        public SmtpClient mySmtpClient = new SmtpClient("smtp.mail.ru");
+        public string ourAddress = "edinoeokno@internet.ru";
+        public string password = "Y23xgi7F4zFZLMvbBxVz";
+        public string ourName = "МФЦ \"Единое Окно\"";
+
+        public MailSend()
+        {
+            //password = "";
+            mySmtpClient.UseDefaultCredentials = true;
+            mySmtpClient.EnableSsl = true; // использование шифрования по SSL
+            System.Net.NetworkCredential basicAuthenticationInfo = new
+                   System.Net.NetworkCredential(ourAddress, password);
+            mySmtpClient.Credentials = basicAuthenticationInfo;
+        }
+
+        public MailSend(string smptServer, string usingMail, string password)
+        {
+            this.mySmtpClient = new SmtpClient(smptServer); //Сервер исходящей почты (SMTP-сервер)
+            // set smtp-client with basicAuthentication
+            mySmtpClient.UseDefaultCredentials = true;
+            mySmtpClient.EnableSsl = true; // использование шифрования по SSL
+            System.Net.NetworkCredential basicAuthenticationInfo = new
+                   System.Net.NetworkCredential(usingMail, password);
+            mySmtpClient.Credentials = basicAuthenticationInfo;
+        }
+
+
+        public bool Send(string addressee, string name, string subject, string messageText)
         {
             try
-            {
-
-                SmtpClient mySmtpClient = new SmtpClient("smtp.mail.ru"); //Сервер исходящей почты (SMTP-сервер)
-                // set smtp-client with basicAuthentication
-                mySmtpClient.UseDefaultCredentials = true;
-                mySmtpClient.EnableSsl = true; // использование шифрования по SSL
-
-                System.Net.NetworkCredential basicAuthenticationInfo = new
-                   System.Net.NetworkCredential("edinoeokno@internet.ru", "Y23xgi7F4zFZLMvbBxVz"); //авторизация от кого отправляются письма
-                mySmtpClient.Credentials = basicAuthenticationInfo;
-
+            {   
                 // add from,to mailaddresses
-                MailAddress from = new MailAddress("edinoeokno@internet.ru", "МФЦ \"Единое Окно\"");// от кого с именем отправителя 
-                MailAddress to = new MailAddress(addressee, "Студенту"); // кому
+                MailAddress from = new MailAddress(ourAddress, ourName);// от кого с именем отправителя 
+                MailAddress to = new MailAddress(addressee, name); // кому
                 MailMessage myMail = new System.Net.Mail.MailMessage(from, to);
 
                 // add ReplyTo
-                MailAddress replyTo = new MailAddress("edinoeokno@internet.ru"); // этот емаил будет подставлятся при нажатии кнопки "ответить на сообщение"
+                MailAddress replyTo = new MailAddress(ourAddress); // этот емаил будет подставлятся при нажатии кнопки "ответить на сообщение"
                 myMail.ReplyToList.Add(replyTo);
 
                 // set subject and encoding
-                myMail.Subject = Subject;    // тема сообшения
+                myMail.Subject = subject;    // тема сообшения
                 myMail.SubjectEncoding = System.Text.Encoding.UTF8;
 
                 // set body-message and encoding
@@ -55,21 +71,26 @@ namespace EdinoeOkno_program
                 myMail.IsBodyHtml = false;
 
                 mySmtpClient.Send(myMail);
+
+                return true;
             }
 
             catch (SmtpException ex)
             {
                 MessageBox.Show(ex.Message);
                 //throw new ApplicationException
-                  //("SmtpException has occured: " + ex.Message);
+                //("SmtpException has occured: " + ex.Message);
+
+                return false;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
                 //throw ex;
+                return false;
             }
 
-            MessageBox.Show("Отправлено");
+            //MessageBox.Show("Отправлено");
         }
 
     }

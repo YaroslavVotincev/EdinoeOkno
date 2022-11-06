@@ -5,9 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EdinoeOkno_program"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid x:Name="Form1">
-        <ListBox x:Name="requestsListBox" HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="292" Margin="10,73,0,0" BorderBrush="Black" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
-        <ScrollViewer x:Name="workingArea" Margin="307,73,88.6,0" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" BorderBrush="Black"/>
-    </Grid>
+        Title="Единое окно" Height="450" Width="800">
+    <TabControl Grid.Row ="0" Margin="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TabStripPlacement="Right" BorderThickness="5" >
+        <TabItem Header="Заявки" Height="50" Width="100">
+            <Grid>
+                <Button x:Name="updateButton" Content="Обновить" HorizontalAlignment="Left" Height="20" Width="66" Margin="10,25,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                <ListBox x:Name="requestsListBox" HorizontalAlignment="Left" Width="249" Margin="10,50,0,0" BorderBrush="Black" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+                <ScrollViewer x:Name="workingArea" Margin="264,50,10,0" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" BorderBrush="Black"/>
+                <ComboBox x:Name="statusComboBox" Margin="88,25,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="171" Height="20" SelectedIndex="0">
+                    <ComboBoxItem Content="Новые"/>
+                    <ComboBoxItem Content="Обработанные"/>
+                    <ComboBoxItem Content="Отклоненные"/>
+                </ComboBox>
+
+            </Grid>
+        </TabItem>
+        <TabItem Header="Вопросы" Height="50" Width="100">
+            <TextBlock FontSize="35" VerticalAlignment="Center" HorizontalAlignment="Center">В разработке</TextBlock>
+        </TabItem>
+        <TabItem Header="Запись" Height="50" Width="100">
+            <TextBlock FontSize="35" VerticalAlignment="Center" HorizontalAlignment="Center">В разработке</TextBlock>
+        </TabItem>
+    </TabControl>
 </Window>
