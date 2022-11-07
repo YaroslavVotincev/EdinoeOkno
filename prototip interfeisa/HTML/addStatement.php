@@ -24,5 +24,6 @@ $password = '1';
 $dbconn = pg_connect("host=$host port=5432 dbname=$db user=$username password=$password");
  $query = "insert into dev.req_front values ('$tag','$name','$surname','$patronimic','$email','$fac','$group','0','0');";
  $result = pg_query($dbconn,$query );
- pg_close($dbconn);
+ echo $query;
+pg_close($dbconn);
 ?>

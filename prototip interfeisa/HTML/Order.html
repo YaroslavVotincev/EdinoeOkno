@@ -62,10 +62,16 @@
       <p>Email<span class="kek">*</span><label>
         <input required type = "text" name = "email">
       </label></p>
-
     <div class="input__wrapper">
-      <input name="filename" type="file" id="input__file" class="input input__file" multiple>
-        <p>Оправка докуметов (только .doc или .pdf) <span class="kek">*</span>
+      <input name="filename[]" type="file"  id="input__file" class="input input__file" multiple>
+      <p>Заявление <span class="kek">*</span>
+        <label for="input__file" class="input__file-button">
+          <span class="input__file-button-text">Выберите файл</span>
+        </label></p>
+    </div>
+    <div class="input__wrapper">
+      <input name="filename[]" type="file"  class="input input__file" multiple>
+        <p>Документы</span>
       <label for="input__file" class="input__file-button">
         <span class="input__file-button-text">Выберите файл</span>
       </label></p>
