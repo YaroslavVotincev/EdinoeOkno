@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="../MultipleFile/style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<h1>Загрузка множества файлов</h1>
+<form action="" method="post" enctype="multipart/form-data">
+    Файлы:<br />
+    <input onclick="myFunction()" id ='1' class="add" name="filename[]" type="file" multiple=""/>
+
+    <div id='2' class="none"><input class="add1" name="filename[]" type="file" multiple=""/></div>
+   <br>
+    <input type="submit" value="Отправить" />
+</form>
+
+
+<script>
+    function myFunction() {
+        var element = document.getElementById("2");
+        element.classList.remove("none");
+    }
+</script>
+
+
+</body>
+</html>

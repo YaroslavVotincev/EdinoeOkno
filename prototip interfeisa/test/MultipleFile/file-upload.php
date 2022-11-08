@@ -1,23 +1,24 @@
 <?php
-//конфиг
 $token = 'y0_AgAAAABl4J01AAiOLAAAAADTIhvZdGfIs24sRhqhWMv8Wa6WzOVu6TQ';
 //заливаесм фаил на сервер
-//говно не работает
-
+$target_dir = "uploads/";
 $publicURL=" ";
-$cnt = count($_FILES['filename']['name']);
 
-if($_FILES['filename']['name']<0)
-    $cnt = $cnt -1;
-echo $cnt;
-if($cnt > 0) {
+
+   $cnt = count($_FILES['filename']['name']);
+
+   if($_FILES['filename']['name'][1]<0)
+       $cnt = $cnt -1;
+    echo $cnt;
+    if($cnt > 0) {
     for($i = 0; $i < $cnt; ++$i) {
-        $target_file = "uploads/" . basename($_FILES["filename"]["name"][$i]);
+        // Тут выполняем всякое разное с файлом. Путь к нему в $_FILES['mail_file']['tmp_name'][$i]
+        $target_file = $target_dir . basename($_FILES["filename"]["name"][$i]);
         move_uploaded_file($_FILES["filename"]["tmp_name"][$i], $target_file);
 //заливаем на диск
         $file = $target_file;
         $path = '/uploads/';
-        echo "uploads/" . basename($_FILES["filename"]["name"][$i]);
+
 // Запрашиваем URL для загрузки.
         $ch = curl_init('https://cloud-api.yandex.net/v1/disk/resources/upload?path=' . urlencode($path . basename($file)));
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: OAuth ' . $token));
@@ -72,42 +73,8 @@ if($cnt > 0) {
     }
 
 }
-//connect
-$host='26.137.232.44';
-$db = 'EdinoeOkno';
-$username = 'Artem';
-$password = '1';
+echo $publicURL;
 
-//$dbconn = pg_connect("host=$host port=5432 dbname=$db user=$username password=$password");
 
-$name =" ";
-$surname = " ";
-$patronimic = " ";
-$fac = " ";
-$group = " ";
-$email = " ";
-if (isset ($_POST["name"]) && isset ($_POST["surname"]) &&
-    isset ($_POST["patronimic"])  && isset ($_POST["fac"]) &&
-    isset ($_POST["group"]) && isset ($_POST["email"])&& isset($_POST["tag"]))
-{
-    $tag = $_POST["tag"];
-    $name =" ";
-    $surname = " ";
-    $patronimic = " ";
-    $fac = " ";
-    $group = " ";
-    $email = " ";
-    $name =$_POST["name"];
-    $surname = $_POST["surname"];
-    $patronimic = $_POST["patronimic"];
-    $fac = $_POST["fac"];
-    $group = $_POST["group"];
-    $email = $_POST["email"];
-}
-//отправляем в бд
-$query = "insert into dev.req_front values ('$tag','$name','$surname','$patronimic','$email','$fac','$group','$publicURL',$cnt);";
-//$result = pg_query($dbconn,$query );
-echo $query;
-//pg_close($dbconn);
 
 ?>
