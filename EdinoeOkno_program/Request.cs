@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Npgsql;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
+using System.Windows;
+using System.Data.Common;
 
 namespace EdinoeOkno_program
 {
@@ -104,6 +106,20 @@ namespace EdinoeOkno_program
             catch
             {
                 return false;
+            }
+        }
+
+        public async Task UpdateRequest(int new_status_code, string response, NpgsqlConnection dBconnection, string dBSchema)
+        {
+            try
+            {
+                string query = $@"UPDATE {dBSchema}.requests SET status_code = '10{new_status_code}', email_response = '{response}', time_when_update = current_timestamp WHERE request_id = {this.request_id};";
+                NpgsqlCommand cmd = new NpgsqlCommand(query, dBconnection);
+                await cmd.ExecuteNonQueryAsync();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
     }

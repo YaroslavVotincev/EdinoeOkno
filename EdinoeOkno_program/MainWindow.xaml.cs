@@ -55,7 +55,7 @@ namespace EdinoeOkno_program
         /// <summary>
         /// Обновляет requestListBox с помощью повторного запроса к БД
         /// </summary>
-        private void updateListBoxButton_Click(object sender, RoutedEventArgs e)
+        private void updateListBoxButton_Click(object sender, EventArgs e)
         {
             DefaultListBox();
             DefaultWorkingArea();
@@ -79,7 +79,7 @@ namespace EdinoeOkno_program
         /// <summary>
         /// Меняет текущий requestListBox на лист с заявками с другим статусом
         /// </summary>
-        private void statusComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void statusComboBox_SelectionChanged(object sender, EventArgs e)
         {
             DefaultListBox();
             DefaultWorkingArea();
@@ -168,7 +168,7 @@ namespace EdinoeOkno_program
             }
             try
             {
-                requestsList.Clear();
+               requestsList.Clear();
                using (NpgsqlCommand cmd =
                new NpgsqlCommand($@"SELECT * FROM {dBSchema}.{views[status_code]}", dBconnection))
                 {
@@ -365,8 +365,7 @@ namespace EdinoeOkno_program
             personInfo.Text = "\nИнформация о заявшившем:";
             st.Children.Add(personInfo);
             //имя
-            StackPanel first_nameRow = new StackPanel();
-            first_nameRow.Orientation = Orientation.Horizontal;
+            StackPanel first_nameRow = new StackPanel() { Orientation = Orientation.Horizontal };
             Label first_nameLabel = new Label() { Content = "Имя:" };
             TextBox first_nameBox = SetReadTextBox();
             first_nameBox.Text = selectedRequest.first_name;
@@ -377,8 +376,7 @@ namespace EdinoeOkno_program
             first_nameRow.Children.Add(first_nameCopyButton);
             st.Children.Add(first_nameRow);
             //фамилия
-            StackPanel last_nameRow = new StackPanel();
-            last_nameRow.Orientation = Orientation.Horizontal;
+            StackPanel last_nameRow = new StackPanel() { Orientation = Orientation.Horizontal };
             Label last_nameLabel = new Label() { Content = "Фам:" };
             TextBox last_nameBox = SetReadTextBox();
             last_nameBox.Text = selectedRequest.last_name;
@@ -389,8 +387,7 @@ namespace EdinoeOkno_program
             last_nameRow.Children.Add(last_nameCopyButton);
             st.Children.Add(last_nameRow);
             //отчество
-            StackPanel patronymicRow = new StackPanel();
-            patronymicRow.Orientation = Orientation.Horizontal;
+            StackPanel patronymicRow = new StackPanel() { Orientation = Orientation.Horizontal };
             Label patronymicLabel = new Label() { Content = "Отч:" };
             TextBox patronymicBox = SetReadTextBox();
             patronymicBox.Text = selectedRequest.patronymic;
@@ -401,20 +398,20 @@ namespace EdinoeOkno_program
             patronymicRow.Children.Add(patronymicCopyButton);
             st.Children.Add(patronymicRow);
             //Факультет
-            StackPanel facultyRow = new StackPanel();
-            facultyRow.Orientation = Orientation.Horizontal;
+            StackPanel facultyRow = new StackPanel() { Orientation = Orientation.Horizontal };
             Label facultyLabel = new Label() { Content = "Факультет: " };
             TextBox facultyBox = SetReadTextBox();
             facultyBox.Text = $"({selectedRequest.faculty_name_short}) {selectedRequest.faculty_name}";
             facultyBox.VerticalContentAlignment = VerticalAlignment.Center;
+            facultyBox.Width = 300;
+            facultyBox.TextWrapping = TextWrapping.Wrap;
             Button facultyCopyButton = SetCopyButton(facultyBox.Text);
             facultyRow.Children.Add(facultyLabel);
             facultyRow.Children.Add(facultyBox);
             facultyRow.Children.Add(facultyCopyButton);
             st.Children.Add(facultyRow);
             //группа
-            StackPanel groupRow = new StackPanel();
-            groupRow.Orientation = Orientation.Horizontal;
+            StackPanel groupRow = new StackPanel() { Orientation = Orientation.Horizontal };
             Label groupLabel = new Label() { Content = "Группа: " };
             TextBox groupBox = SetReadTextBox();
             groupBox.Text = selectedRequest.group.ToUpper();
@@ -425,8 +422,7 @@ namespace EdinoeOkno_program
             groupRow.Children.Add(groupCopyButton);
             st.Children.Add(groupRow);
             //email
-            StackPanel emailRow = new StackPanel();
-            emailRow.Orientation = Orientation.Horizontal;
+            StackPanel emailRow = new StackPanel() { Orientation = Orientation.Horizontal };
             Label emailLabel = new Label() { Content = "Эл. почта: " };
             TextBox emailBox = SetReadTextBox();
             emailBox.Text = selectedRequest.email;
@@ -442,8 +438,7 @@ namespace EdinoeOkno_program
                 $"\nКоличество файлов: {selectedRequest.files_attached}";
             st.Children.Add(filesInfo);
             //файлы
-            StackPanel linkRow = new StackPanel();
-            linkRow.Orientation = Orientation.Horizontal;
+            StackPanel linkRow = new StackPanel() { Orientation = Orientation.Horizontal };
             Label linkLabel = new Label() { Content = "Ссылка на файлы: " };
             TextBox linkBox = SetReadTextBox();
             linkBox.Text = selectedRequest.dir_path;
@@ -483,7 +478,52 @@ namespace EdinoeOkno_program
                 };
                 confirm_responseCheckBox.Click += confirm_responseCheckBox_Click;
                 st.Children.Add(confirm_responseCheckBox);
+
+                StackPanel changeStatusButtonsRow = new StackPanel() { Orientation = Orientation.Horizontal };
+                Button doneButton = new Button()
+                {
+                    Content = "Подтвердить выполнение",
+                    Background = Brushes.Green,
+                    Tag = responseBox
+                };
+                Button declineButton = new Button()
+                {
+                    Content = "Отклонить заявку",
+                    Background = Brushes.Red,
+                    Tag = responseBox
+                };
+                doneButton.Click += doneButton_Click;
+                declineButton.Click += declineButton_Click;
+                changeStatusButtonsRow.Children.Add(doneButton);
+                changeStatusButtonsRow.Children.Add(declineButton);
+                st.Children.Add(changeStatusButtonsRow);
             } 
+        }
+
+        private void declineButton_Click(object sender, EventArgs e)
+        {
+            Button button = sender as Button;
+            TextBox textBox = button.Tag as TextBox;
+            DefaultWorkingArea();
+            new_requestsList.Remove(selectedRequest);
+            FillRequestsListBox(new_requestsList);
+            selectedRequest.UpdateRequest(2, textBox.Text, dBconnection, dBSchema);            
+        }
+
+        private void doneButton_Click(object sender, EventArgs e)
+        {
+            Button button = sender as Button;
+            TextBox textBox = button.Tag as TextBox;
+            DefaultWorkingArea();
+            new_requestsList.Remove(selectedRequest);
+            FillRequestsListBox(new_requestsList);
+            selectedRequest.UpdateRequest(1, textBox.Text, dBconnection, dBSchema);
+
+        }
+
+        private void FreezeScreen()
+        {
+
         }
 
         private void confirm_responseCheckBox_Click(object sender, EventArgs e)
@@ -496,10 +536,7 @@ namespace EdinoeOkno_program
         private void linkBox_Click(object sender, EventArgs e)
         {
             Button textBox = sender as Button;
-            var sInfo = new System.Diagnostics.ProcessStartInfo((string)(textBox.Tag))
-            {
-                UseShellExecute = true,
-            };
+            var sInfo = new System.Diagnostics.ProcessStartInfo((string)(textBox.Tag)) { UseShellExecute = true };
             System.Diagnostics.Process.Start(sInfo);
         }
     }
