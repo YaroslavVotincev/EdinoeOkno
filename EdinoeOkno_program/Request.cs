@@ -61,7 +61,39 @@ namespace EdinoeOkno_program
             this.files_attached = files_attached;
             this.valid_email = IsValidEmail(email);
         }
-
+        public Request(int request_id,
+                        string request_name,
+                        string status_name,
+                        string first_name,
+                        string last_name,
+                        string patronymic,
+                        string email,
+                        string faculty_name,
+                        string faculty_name_short,
+                        string group,
+                        string time_when_requested,
+                        string dir_path,
+                        int files_attached,
+                        string time_when_updated,
+                        string response)
+        {
+            this.request_id = request_id;
+            this.request_name = request_name;
+            this.status_name = status_name;
+            this.first_name = first_name;
+            this.last_name = last_name;
+            this.patronymic = patronymic;
+            this.email = email;
+            this.faculty_name = faculty_name;
+            this.faculty_name_short = faculty_name_short;
+            this.group = group;
+            this.time_when_requested = time_when_requested;
+            this.dir_path = dir_path;
+            this.files_attached = files_attached;
+            this.valid_email = IsValidEmail(email);
+            this.time_when_updated = time_when_updated;
+            this.response = response; 
+        }
         public static bool IsValidEmail(string email)
         {
             try

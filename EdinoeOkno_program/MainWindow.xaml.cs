@@ -43,27 +43,65 @@ namespace EdinoeOkno_program
             InitializeComponent();
             DefaultListBox();
             statusComboBox.SelectionChanged += statusComboBox_SelectionChanged;
+            updateListBoxButton.Click += updateListBoxButton_Click;
             DefaultWorkingArea();
             ConnectDB();
             GetRequestList(new_requestsList, 0);
-            GetRequestList(done_requestsList, 1);
-            GetRequestList(decl_requestsList, 2);
+            //GetRequestList(done_requestsList, 1);
+            //GetRequestList(decl_requestsList, 2);
             FillRequestsListBox(new_requestsList);
         }
 
-        private void statusComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        /// <summary>
+        /// Обновляет requestListBox с помощью повторного запроса к БД
+        /// </summary>
+        private void updateListBoxButton_Click(object sender, RoutedEventArgs e)
         {
-            if (statusComboBox.SelectedIndex == 0)
+            DefaultListBox();
+            DefaultWorkingArea();
+            if(statusComboBox.SelectedIndex == 0)
             {
+                GetRequestList(new_requestsList, 0);
                 FillRequestsListBox(new_requestsList);
             }
             else if (statusComboBox.SelectedIndex == 1)
             {
+                GetRequestList(done_requestsList, 1);
                 FillRequestsListBox(done_requestsList);
             }
-            else FillRequestsListBox(decl_requestsList);
-            DefaultWorkingArea();
+            else
+            {
+                GetRequestList(decl_requestsList, 2);
+                FillRequestsListBox(decl_requestsList);
+            }
+
         }
+        /// <summary>
+        /// Меняет текущий requestListBox на лист с заявками с другим статусом
+        /// </summary>
+        private void statusComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DefaultListBox();
+            DefaultWorkingArea();
+            if (statusComboBox.SelectedIndex == 0)
+            {
+                GetRequestList(new_requestsList, 0);
+                FillRequestsListBox(new_requestsList);
+            }
+            else if (statusComboBox.SelectedIndex == 1)
+            {
+                GetRequestList(done_requestsList, 1);
+                FillRequestsListBox(done_requestsList);
+            }
+            else
+            {
+                GetRequestList(decl_requestsList, 2);
+                FillRequestsListBox(decl_requestsList);
+            }
+        }
+        /// <summary>
+        /// Подключается к БД
+        /// </summary>
         private void ConnectDB()
         {
             dBconnection = new NpgsqlConnection(CONNECTION_STRING);
@@ -86,29 +124,42 @@ namespace EdinoeOkno_program
                 //MessageBox.Show(ex.Message);
             }
         }
+        /// <summary>
+        /// Очищает requestsListBox
+        /// </summary>
         private void DefaultListBox()
         {
             requestsListBox.Items.Clear();
-            TextBlock loadingMessage = new TextBlock();
-            loadingMessage.Text = "Происходит загрузка, пожалуйста подождите...";
-            loadingMessage.TextWrapping = TextWrapping.Wrap;
-            loadingMessage.Width = requestsListBox.Width;
-            loadingMessage.FontWeight = FontWeights.Bold;
-            loadingMessage.FontSize = 16;
+            TextBlock loadingMessage = new TextBlock
+            {
+                Text = "Происходит загрузка, пожалуйста подождите...",
+                TextWrapping = TextWrapping.Wrap,
+                Width = requestsListBox.Width,
+                FontWeight = FontWeights.Bold,
+                FontSize = 16
+            };
             requestsListBox.Items.Add(loadingMessage);
         }
+        /// <summary>
+        /// Очищает workingArea
+        /// </summary>
         private void DefaultWorkingArea()
         {
             workingArea.Content = null;
             StackPanel temp  = new StackPanel();
             workingArea.Content = temp;
-            TextBlock defaultWorkingAreaMessage = new TextBlock();
-            defaultWorkingAreaMessage.Text = "Выберите элемент из списка...";
-            defaultWorkingAreaMessage.TextWrapping = TextWrapping.Wrap;
-            defaultWorkingAreaMessage.Width = requestsListBox.Width;
-            defaultWorkingAreaMessage.FontSize = 12;
+            TextBlock defaultWorkingAreaMessage = new TextBlock
+            {
+                Text = "Выберите элемент из списка...",
+                TextWrapping = TextWrapping.Wrap,
+                Width = requestsListBox.Width,
+                FontSize = 12
+            };
             temp.Children.Add(defaultWorkingAreaMessage);
         }
+        /// <summary>
+        /// Заполняет заданный requestsList со статусом status_code с помощью запроса к БД
+        /// </summary>
         private void GetRequestList(List<Request> requestsList, int status_code)
         {
             if(dBconnection.State == System.Data.ConnectionState.Closed)
@@ -117,6 +168,7 @@ namespace EdinoeOkno_program
             }
             try
             {
+                requestsList.Clear();
                using (NpgsqlCommand cmd =
                new NpgsqlCommand($@"SELECT * FROM {dBSchema}.{views[status_code]}", dBconnection))
                 {
@@ -139,22 +191,41 @@ namespace EdinoeOkno_program
                                 //var temp10 = (string)dB["time_when_added"];
                                 //var temp11 = (string)dB["dir_path"];
                                 //var temp12 = (int)dB["files_attached"];
-                                requestsList.Add(
-                                    new Request(
-                                    (int)dB["request_id"],
-                                    (string)dB["request_name"],
-                                    (string)dB["status_name"],
-                                    (string)dB["first_name"],
-                                    (string)dB["last_name"],
-                                    (string)dB["patronymic"],
-                                    (string)dB["email"],
-                                    (string)dB["faculty_name"],
-                                    (string)dB["short_name"],
-                                    (string)dB["student_group"],
-                                    (string)dB["time_when_added"],
-                                    (string)dB["dir_path"],
-                                    (int)dB["files_attached"]));
-                                new_requestsList.Last<Request>().status_code = status_code;
+                                if (status_code == 0)
+                                    requestsList.Add(
+                                        new Request(
+                                        (int)dB["request_id"],
+                                        (string)dB["request_name"],
+                                        (string)dB["status_name"],
+                                        (string)dB["first_name"],
+                                        (string)dB["last_name"],
+                                        (string)dB["patronymic"],
+                                        (string)dB["email"],
+                                        (string)dB["faculty_name"],
+                                        (string)dB["short_name"],
+                                        (string)dB["student_group"],
+                                        (string)dB["time_when_added"],
+                                        (string)dB["dir_path"],
+                                        (int)dB["files_attached"]));
+                                else
+                                    requestsList.Add(
+                                        new Request(
+                                        (int)dB["request_id"],
+                                        (string)dB["request_name"],
+                                        (string)dB["status_name"],
+                                        (string)dB["first_name"],
+                                        (string)dB["last_name"],
+                                        (string)dB["patronymic"],
+                                        (string)dB["email"],
+                                        (string)dB["faculty_name"],
+                                        (string)dB["short_name"],
+                                        (string)dB["student_group"],
+                                        (string)dB["time_when_added"],
+                                        (string)dB["dir_path"],
+                                        (int)dB["files_attached"],
+                                        (string)dB["time_when_update"],
+                                        (string)dB["email_response"]));
+                                requestsList.Last<Request>().status_code = status_code;
                             }
                         }
                     }
@@ -163,27 +234,33 @@ namespace EdinoeOkno_program
             catch(Exception ex)
             {
                 requestsListBox.Items.Clear();
-                TextBlock queryErrorLoadingMessage = new TextBlock();
-                queryErrorLoadingMessage.TextWrapping = TextWrapping.Wrap;
-                queryErrorLoadingMessage.Width = requestsListBox.Width;
-                queryErrorLoadingMessage.FontWeight = FontWeights.Bold;
-                queryErrorLoadingMessage.FontSize = 16;
+                TextBlock queryErrorLoadingMessage = new TextBlock
+                {
+                    TextWrapping = TextWrapping.Wrap,
+                    Width = requestsListBox.Width,
+                    FontWeight = FontWeights.Bold,
+                    FontSize = 16
+                };
                 requestsListBox.Items.Add(queryErrorLoadingMessage);
                 MessageBox.Show(ex.Message);
             }
         }
-
+        /// <summary>
+        /// Заполняет requestListBox исходя из переданного requestsList
+        /// </summary>
         private void FillRequestsListBox(List<Request> requestsList)
         {
             requestsListBox.Items.Clear();
             if (requestsList.Count == 0)
-            {               
-                TextBlock noRequestsMessage = new TextBlock();
-                noRequestsMessage.Text = "Заявления не найдены...";
-                noRequestsMessage.TextWrapping = TextWrapping.Wrap;
-                noRequestsMessage.Width = requestsListBox.Width;
-                noRequestsMessage.FontWeight = FontWeights.Bold;
-                noRequestsMessage.FontSize = 16;
+            {
+                TextBlock noRequestsMessage = new TextBlock
+                {
+                    Text = "Заявления не найдены...",
+                    TextWrapping = TextWrapping.Wrap,
+                    Width = requestsListBox.Width,
+                    FontWeight = FontWeights.Bold,
+                    FontSize = 16
+                };
                 requestsListBox.Items.Add(noRequestsMessage);
                 return;
             }
@@ -192,13 +269,15 @@ namespace EdinoeOkno_program
             {
                 r = requestsList[i];
                 r.button = new Button();
-                TextBlock preview = new TextBlock();
-                preview.Text = $"Заявка №{r.request_id}\n" +
+                TextBlock preview = new TextBlock
+                {
+                    Text = $"Заявка №{r.request_id}\n" +
                     $"Состояние: {r.status_name}\n" +
                     $"Время поступления: {r.time_when_requested}\n" +
                     $"Факультет: {r.faculty_name_short}\n" +
-                    $"Тип: {r.request_name}";
-                preview.TextWrapping = TextWrapping.Wrap;
+                    $"Тип: {r.request_name}",
+                    TextWrapping = TextWrapping.Wrap
+                };
                 r.button.Tag = r;
                 r.button.HorizontalContentAlignment = HorizontalAlignment.Stretch;
                 r.button.FontSize = 11;
@@ -208,20 +287,24 @@ namespace EdinoeOkno_program
                 requestsListBox.Items.Add(r.button);               
             }
         }
-
+        /// <summary>
+        /// По нажатию кнопки из requestListBox выбирается соответствующий selectedRequest
+        /// </summary>
         private void SelectRequest(object sender, EventArgs eventArgs)
         {
-            Button selectedButton = (Button)sender;
-            selectedRequest = (Request)selectedButton.Tag;
+            Button selectedButton = sender as Button;
+            selectedRequest = selectedButton.Tag as Request;
             ConstructWorkingArea();
         }
         private void buttonSend_Click(object sender, EventArgs eventArgs)
         {
-            Button button = (Button)sender;
-            TextBox text = (TextBox)button.Tag;
+            Button button = sender as Button;
+            TextBox text = button.Tag as TextBox;
             //MailSend.Send(selectedRequest.email, selectedRequest.request_name, text.Text);
         }
-
+        /// <summary>
+        /// По нажатию кнопки в буфер обмена копируется Tag этой кнопки
+        /// </summary>
         private void copyButton_Click(object sender, EventArgs eventArgs)
         {
             Clipboard.SetText(((Button)sender).Tag.ToString());
@@ -259,14 +342,13 @@ namespace EdinoeOkno_program
         /// </summary>
         private void ConstructWorkingArea()
         {
-            workingArea.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
             StackPanel st = new StackPanel();
             workingArea.Content = st;
-            StackPanel dataRow = new StackPanel();
-            dataRow.Orientation = Orientation.Horizontal;
+
             //Заголовок
             TextBox header = SetReadTextBox();
-            header.Text = $" Заявка №{selectedRequest.request_id} ({selectedRequest.time_when_requested})";
+            header.Text = $" Заявка №{selectedRequest.request_id}" +
+                $" ({selectedRequest.time_when_requested})";
             header.FontSize = 15;
             header.FontWeight = FontWeights.Bold;
             st.Children.Add(header);
@@ -319,34 +401,106 @@ namespace EdinoeOkno_program
             patronymicRow.Children.Add(patronymicCopyButton);
             st.Children.Add(patronymicRow);
             //Факультет
-
+            StackPanel facultyRow = new StackPanel();
+            facultyRow.Orientation = Orientation.Horizontal;
+            Label facultyLabel = new Label() { Content = "Факультет: " };
+            TextBox facultyBox = SetReadTextBox();
+            facultyBox.Text = $"({selectedRequest.faculty_name_short}) {selectedRequest.faculty_name}";
+            facultyBox.VerticalContentAlignment = VerticalAlignment.Center;
+            Button facultyCopyButton = SetCopyButton(facultyBox.Text);
+            facultyRow.Children.Add(facultyLabel);
+            facultyRow.Children.Add(facultyBox);
+            facultyRow.Children.Add(facultyCopyButton);
+            st.Children.Add(facultyRow);
             //группа
+            StackPanel groupRow = new StackPanel();
+            groupRow.Orientation = Orientation.Horizontal;
+            Label groupLabel = new Label() { Content = "Группа: " };
+            TextBox groupBox = SetReadTextBox();
+            groupBox.Text = selectedRequest.group.ToUpper();
+            groupBox.VerticalContentAlignment = VerticalAlignment.Center;
+            Button groupCopyButton = SetCopyButton(groupBox.Text);
+            groupRow.Children.Add(groupLabel);
+            groupRow.Children.Add(groupBox);
+            groupRow.Children.Add(groupCopyButton);
+            st.Children.Add(groupRow);
             //email
+            StackPanel emailRow = new StackPanel();
+            emailRow.Orientation = Orientation.Horizontal;
+            Label emailLabel = new Label() { Content = "Эл. почта: " };
+            TextBox emailBox = SetReadTextBox();
+            emailBox.Text = selectedRequest.email;
+            emailBox.VerticalContentAlignment = VerticalAlignment.Center;
+            Button emailCopyButton = SetCopyButton(emailBox.Text);
+            emailRow.Children.Add(emailLabel);
+            emailRow.Children.Add(emailBox);
+            emailRow.Children.Add(emailCopyButton);
+            st.Children.Add(emailRow);
             //кол-во файлов
+            TextBlock filesInfo = new TextBlock();
+            filesInfo.Text = $"\nПрикреплённые документы:" +
+                $"\nКоличество файлов: {selectedRequest.files_attached}";
+            st.Children.Add(filesInfo);
             //файлы
-            //перевод состояния
+            StackPanel linkRow = new StackPanel();
+            linkRow.Orientation = Orientation.Horizontal;
+            Label linkLabel = new Label() { Content = "Ссылка на файлы: " };
+            TextBox linkBox = SetReadTextBox();
+            linkBox.Text = selectedRequest.dir_path;
+            linkBox.VerticalContentAlignment = VerticalAlignment.Center;
+            Button linkCopyButton = SetCopyButton(linkBox.Text);
+            linkCopyButton.Tag = linkBox.Text;
+            linkCopyButton.Click += linkBox_Click;
+            linkCopyButton.Content = "open";
+            linkRow.Children.Add(linkLabel);
+            linkRow.Children.Add(linkBox);
+            linkRow.Children.Add(linkCopyButton);
+            st.Children.Add(linkRow);
+            //ответ на почту
+            TextBlock responseHeader = new TextBlock();
+            responseHeader.Text = $"Ответ на почту {selectedRequest.email}:";
+            st.Children.Add(responseHeader);
             //ввод ответа
+            TextBox responseBox = new TextBox()
+            {
+                Text = selectedRequest.response,
+                Width = 350,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Height = 100,
+                TextWrapping = TextWrapping.Wrap,
+                AcceptsReturn = true,
+                AcceptsTab = true,
+                IsReadOnly = !(selectedRequest.status_code == 0)
+            };
+            st.Children.Add(responseBox);
             //подтверждение отправки ответа
+            if (selectedRequest.status_code == 0)
+            {
+                CheckBox confirm_responseCheckBox = new CheckBox()
+                {
+                    Content = "Без ответа на почту",
+                    Tag = responseBox
+                };
+                confirm_responseCheckBox.Click += confirm_responseCheckBox_Click;
+                st.Children.Add(confirm_responseCheckBox);
+            } 
+        }
 
+        private void confirm_responseCheckBox_Click(object sender, EventArgs e)
+        {
+            CheckBox checkBox = sender as CheckBox;
+            TextBox textBox = checkBox.Tag as TextBox;
+            textBox.IsEnabled = !textBox.IsEnabled;
+        }
 
-            //Label selected = new Label();
-            //selected.Content = $"Заявка №{selectedRequest.request_id}\n{selectedRequest.request_name}\n\nИмя: {selectedRequest.first_name}\n" +
-            //    $"Фамилия: {selectedRequest.last_name}\nОтчество: {selectedRequest.patronymic}\nemail: {selectedRequest.email}\n" +
-            //    $"Факультет: {selectedRequest.faculty_name}\nГруппа: {selectedRequest.group}\n";
-            //st.Children.Add(selected);
-            //TextBox responseArea = new TextBox();
-            //responseArea.Width = workingArea.Width;
-            //responseArea.AcceptsReturn = true;
-            //responseArea.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
-            //responseArea.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
-            //responseArea.Height = 50;
-            //Button buttonSend = new Button();
-            //buttonSend.Height = 20;
-            //buttonSend.Content = "Отправить";
-            //buttonSend.Tag = responseArea;
-            //buttonSend.Click += buttonSend_Click;
-            //st.Children.Add(responseArea);
-            //st.Children.Add(buttonSend);
+        private void linkBox_Click(object sender, EventArgs e)
+        {
+            Button textBox = sender as Button;
+            var sInfo = new System.Diagnostics.ProcessStartInfo((string)(textBox.Tag))
+            {
+                UseShellExecute = true,
+            };
+            System.Diagnostics.Process.Start(sInfo);
         }
     }
 }
