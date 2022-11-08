@@ -13,6 +13,9 @@ header {
     text-align: center;
     top: 50px;
 }
+.none{
+    display: none;
+}
 .Main
 {
     color: white;

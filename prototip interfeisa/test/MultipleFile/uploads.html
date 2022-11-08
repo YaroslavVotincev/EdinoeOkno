@@ -9,18 +9,20 @@
 <h1>Загрузка множества файлов</h1>
 <form action="" method="post" enctype="multipart/form-data">
     Файлы:<br />
-    <input onclick="myFunction()" id ='1' class="add" name="filename[]" type="file" multiple=""/>
-
-    <div id='2' class="none"><input class="add1" name="filename[]" type="file" multiple=""/></div>
+    <input onclick="myFunction(id)" id ='1' class="add" name="filename[]" type="file" multiple=""/>
+    <div onclick="myFunction(id)" id='11' class="none"><input class="add1" name="filename[]" type="file" multiple=""/></div>
+    <div onclick="myFunction(id)" id='111' class="none"><input class="add1" name="filename[]" type="file" multiple=""/></div>
+    <div onclick="myFunction(id)" id='1111' class="none"><input class="add1" name="filename[]" type="file" multiple=""/></div>
+    <div id='11111' class="none"><input class="add1" name="filename[]" type="file" multiple=""/></div>
    <br>
     <input type="submit" value="Отправить" />
 </form>
 
 
 <script>
-    function myFunction() {
-        var element = document.getElementById("2");
-        element.classList.remove("none");
+    function myFunction(id) {
+        var next = document.getElementById(id +'1');
+        next.classList.remove("none");
     }
 </script>
 
