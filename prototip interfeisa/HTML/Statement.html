@@ -3,16 +3,25 @@
 <html lang="en">
 <head>
   <link href="../Styles/Style.css" rel="stylesheet" type="text/css">
+  <img src = "/Styles/Logo/istu-logo.png"/>
   <meta charset="UTF-8">
   <title>Student</title>
 </head>
 <body>
-<header>
- <br><br><span class="logo"> Многофункциональное окно ИжГТУ </span>
-  <nav>
-    <a class="Main" href = "Main.html">Главная</a>
-  </nav>
+<header class = "header">
+  <div class = "container">
+    <div class ="header_logo">Многофункциональный центр ИжГТУ</div>
+    <div class = "header__inner">
+      <nav class="nav">
+        <a class="nav__link" href="Main.html">Главная</a>
+      </nav>
+    </div>
+  </div>
 </header>
+
+<div class = "intro">
+  <div class ="container"></div>
+</div>
 <main>
   <h1>Заявка на получение справок и выписок</h1>
   <form action="addStatement.php" method="POST">

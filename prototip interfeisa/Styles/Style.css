@@ -1,20 +1,110 @@
 * {
-    font-family: sans-serif !important; }
+    font-family:  Cuprum, "Open Sans",sans-serif  !important;
+    scr:url("/Fonts/Cuprum.ttf");
+    format("Cuprum Bold");
+    font-style: normal;
+    }
 
-header {
-    width: 900px;
-    height: 120px;
-    margin: 0 auto;
-    background-color: #0040ff;
-    padding: 0 20px 20px 20px;}
-.logo{
-    color: white;
-    font-size: 200%;
-    text-align: center;
-    top: 50px;
+.header {
+    padding-top: 180px;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
 }
-.none{
-    display: none;
+.header_logo{
+    top: 10px;
+    right: 0px;
+    left: 0px;
+    position: absolute;
+    font-size: 40px;
+    color: white;
+    text-align: center;
+}
+/*.header__inner{
+    display: flex;
+    justify-content: space-around;
+}*/
+
+body{
+    margin: 0;
+}
+*,
+*:before,
+*:after{
+    box-sizing: border-box;
+}
+h1,h2,h3,h4,h5,h6{
+    margin: 0;
+}
+/*Container*/
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.intro{
+    width: 100%;
+    height: 24vh;
+    background:url(Logo/header_back.png) center, no-repeat;
+    background-size: cover;
+}
+.intro_title{
+    font-size: 40px;
+    font-weight: 700;
+    text-align: center;
+}
+/* NAvigation*/
+.nav{
+    font-size: 40px;
+}
+.nav__link{
+    display: inline-block;
+    vertical-align: top;
+    margin: 0px 10px;
+
+    color:#fff;
+    text-decoration: none;
+
+    transition: color .2s linear;
+}
+.nav__link:hover{
+    color: red;
+}
+.centre__nav{
+    font-size: 26px;
+    margin: 20px 0px;
+}
+.centre__nav__link{
+    display: inline-block;
+    vertical-align: top;
+    margin: 0px 10px;
+
+    color:black;
+    text-decoration: none;
+
+    transition: color .2s linear;
+}
+.centre__nav__link:hover{
+    color: red;
+}
+.spravkaref__nav{
+    font-size: 26px;
+    margin: 5px 0px;
+}
+.spravkaref__nav:before{
+    font-family: "Font Awesome 5 Free";
+    font-weight: 400;
+    content: "\f007";
+    color: #0048ff;
+
+}
+img{
+    height: 230px;
+    width: 235px;
+    float:left;
 }
 .Main
 {
@@ -83,10 +173,4 @@ input[type=submit] {
     cursor: pointer;
     margin: 0 auto;
     display: block;
-}
-.link {
-    color: #0000ff;
-    font-size: 200%;
-    text-align: center;
-    top: 5px;
 }
