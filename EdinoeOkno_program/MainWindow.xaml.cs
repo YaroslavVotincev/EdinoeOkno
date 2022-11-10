@@ -479,6 +479,8 @@ namespace EdinoeOkno_program
                 confirm_responseCheckBox.Click += confirm_responseCheckBox_Click;
                 st.Children.Add(confirm_responseCheckBox);
 
+                responseBox.Tag = confirm_responseCheckBox;
+
                 StackPanel changeStatusButtonsRow = new StackPanel() { Orientation = Orientation.Horizontal };
                 Button doneButton = new Button()
                 {
@@ -504,26 +506,33 @@ namespace EdinoeOkno_program
         {
             Button button = sender as Button;
             TextBox textBox = button.Tag as TextBox;
+            CheckBox checkBox = textBox.Tag as CheckBox;
             DefaultWorkingArea();
             new_requestsList.Remove(selectedRequest);
             FillRequestsListBox(new_requestsList);
-            selectedRequest.UpdateRequest(2, textBox.Text, dBconnection, dBSchema);            
+            selectedRequest.UpdateRequest(2, textBox.Text, dBconnection, dBSchema);
+
+            if (checkBox.IsChecked == false)
+                responseMail.Send(selectedRequest.email,
+                            $"{selectedRequest.first_name} {selectedRequest.last_name} {selectedRequest.patronymic}",
+                            $"Ваша заявка \"{selectedRequest.request_name}\" отклонена",
+                            messageText: textBox.Text);
         }
 
         private void doneButton_Click(object sender, EventArgs e)
         {
             Button button = sender as Button;
             TextBox textBox = button.Tag as TextBox;
+            CheckBox checkBox = textBox.Tag as CheckBox;
             DefaultWorkingArea();
             new_requestsList.Remove(selectedRequest);
             FillRequestsListBox(new_requestsList);
             selectedRequest.UpdateRequest(1, textBox.Text, dBconnection, dBSchema);
-
-        }
-
-        private void FreezeScreen()
-        {
-
+            if (checkBox.IsChecked == false)
+                responseMail.Send(selectedRequest.email,
+                            $"{selectedRequest.first_name} {selectedRequest.last_name} {selectedRequest.patronymic}",
+                            $"Ваша заявка \"{selectedRequest.request_name}\" выполнена",
+                            messageText: textBox.Text);
         }
 
         private void confirm_responseCheckBox_Click(object sender, EventArgs e)
