@@ -62,25 +62,49 @@
       <p>Email<span class="kek">*</span><label>
         <input required type = "text" name = "email">
       </label></p>
-    <div class="input__wrapper">
+
+    <div onclick="myFunction(id)" id="1" class="input__wrapper">
       <input name="filename[]" type="file"  id="input__file" class="input input__file" multiple>
       <p>Заявление <span class="kek">*</span>
         <label for="input__file" class="input__file-button">
           <span class="input__file-button-text">Выберите файл</span>
         </label></p>
     </div>
-    <div class="input__wrapper">
-      <input name="filename[]" type="file"  class="input input__file" multiple>
-        <p>Документы</span>
-      <label for="input__file" class="input__file-button">
-        <span class="input__file-button-text">Выберите файл</span>
-      </label></p>
-    </div><br>
+    <div onclick="myFunction(id)" id="11" class="input__wrapper none">
+      <input name="filename[]" type="file"  id="input__file1" class="input input__file" multiple>
+      <p>Дополнительные файлы
+        <label for="input__file1" class="input__file-button">
+          <span class="input__file-button-text">Выберите файл</span>
+        </label></p>
+    </div>
+    <div onclick="myFunction(id)" id="111" class="input__wrapper none">
+      <input name="filename[]" type="file"  id="input__file11" class="input input__file" multiple>
+      <p>Дополнительные файлы
+        <label for="input__file11" class="input__file-button">
+          <span class="input__file-button-text">Выберите файл</span>
+        </label></p>
+    </div>
+    <div onclick="myFunction(id)" id="1111" class="input__wrapper none">
+      <input name="filename[]" type="file"  id="input__file111" class="input input__file" multiple>
+      <p>Дополнительные файлы
+        <label for="input__file111" class="input__file-button">
+          <span class="input__file-button-text">Выберите файл</span>
+        </label></p>
+    </div>
 
 
     <input type="submit" value="Отправить">
  </form>
+  <footer>
+    <br><br>
+  </footer>
 </main>
+<script>
+  function myFunction(id) {
+    var next = document.getElementById(id +'1');
+    next.classList.remove("none");
+  }
+</script>
 </body>
 </html>
 
