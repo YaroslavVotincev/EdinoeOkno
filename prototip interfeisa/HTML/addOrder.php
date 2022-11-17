@@ -111,5 +111,6 @@ if (isset ($_POST["name"]) && isset ($_POST["surname"]) &&
 $query = "insert into dev.req_front values ('$tag','$name','$surname','$patronimic','$email','$fac','$group','$publicURL',$cnt);";
 $result = pg_query($dbconn,$query );
 pg_close($dbconn);
-
+$new_url = '../Main.html';
+header('Location: '.$new_url);
 ?>

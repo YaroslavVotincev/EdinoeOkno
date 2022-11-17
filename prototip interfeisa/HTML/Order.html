@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
   <link href="../Styles/Style.css" rel="stylesheet" type="text/css">
-  <img src = "/Styles/Logo/istu-logo.png"/>
   <meta charset="UTF-8">
   <title>Student</title>
 </head>
 <body>
 <header class = "header">
+  <img src = "/Styles/Logo/istu-logo.png"/>
   <div class = "container">
     <div class ="header_logo">Многофункциональный центр ИжГТУ</div>
     <div class = "header__inner">
@@ -74,7 +74,7 @@
 
     <div onclick="myFunction(id)" id="1" class="input__wrapper">
       <input name="filename[]" type="file"  id="input__file" class="input input__file" multiple>
-      <p>Заявление <span class="kek">*</span>
+      <p>Прикрепить файл <span class="kek">*</span>
         <label for="input__file" class="input__file-button">
           <span class="input__file-button-text">Выберите файл</span>
         </label></p>
@@ -102,7 +102,7 @@
     </div>
 
 
-    <input type="submit" value="Отправить">
+    <input onclick="alert()" type="submit" value="Отправить">
  </form>
   <footer>
     <br><br>
@@ -112,6 +112,11 @@
   function myFunction(id) {
     var next = document.getElementById(id +'1');
     next.classList.remove("none");
+  }
+</script>
+<script>
+  function alert() {
+    alert("Успешно отправленно");
   }
 </script>
 </body>
