@@ -3,12 +3,13 @@
 <html lang="en">
 <head>
   <link href="../Styles/Style.css" rel="stylesheet" type="text/css">
-  <img src = "/Styles/Logo/istu-logo.png"/>
+
   <meta charset="UTF-8">
   <title>Student</title>
 </head>
 <body>
 <header class = "header">
+  <img src = "/Styles/Logo/istu-logo.png"/>
   <div class = "container">
     <div class ="header_logo">Многофункциональный центр ИжГТУ</div>
     <div class = "header__inner">
@@ -72,12 +73,17 @@
       <input required type = "text" name = "email">
     </label></p>
 
-    <input type="submit" value="Отправить">
+    <input onclick="alert() " type="submit" value="Отправить">
   </form>
   <footer>
     <br><br>
   </footer>
 </main>
+<script>
+  function alert() {
+    alert("Успешно отправленно");
+  }
+</script>
 </body>
 </html>
 
