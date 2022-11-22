@@ -44,6 +44,7 @@ CREATE TABLE status_codes
 (
 	status_code varchar(3),
 	status_name text NOT NULL,
+	status_short_name text NOT NULL,
 	PRIMARY KEY (status_code)
 );
 
@@ -106,7 +107,7 @@ CREATE TABLE responses
 	
 	email text NOT NULL,
 	title text NOT NULL,
-	content text NOT NULL,
+	response_content text NOT NULL,
 	type text NOT NULL,
 	time_sended TIMESTAMP DEFAULT now(),
 	
@@ -214,6 +215,40 @@ $request_delete$ LANGUAGE plpgsql;
 CREATE TRIGGER request_delete
 BEFORE DELETE ON requests
     FOR EACH ROW EXECUTE FUNCTION request_delete();
+	
+CREATE VIEW req_back AS
+(
+SELECT
+	r.request_id,
+	r.request_code,
+	rc.request_name,
+	r.status_code,
+	sc.status_name,
+	sc.status_short_name,
+	r.first_name,
+	r.last_name,
+	r.patronymic,
+	r.email,
+	r.faculty_code,
+	fc.faculty_name,
+	fc.faculty_short_name,
+	r.student_group,
+	r.doc_storage_id,
+	ds.doc_amount,
+	ds.public_url,
+	to_char(r.time_when_added, 'hh24:mi dd/mm/yyyy') as time_when_added,
+	to_char(r.time_when_added, 'hh24:mi dd/mm/yyyy') as time_when_updated,
+	rp.staff_member_login,
+	rp.response_content
+FROM requests r
+JOIN request_codes rc ON rc.request_code = r.request_code
+JOIN faculty_codes fc ON fc.faculty_code = r.faculty_code
+JOIN status_codes sc ON sc.status_code = r.status_code
+JOIN doc_storage ds ON ds.doc_storage_id = r.doc_storage_id
+JOIN responses rp ON rp.response_id = r.response_id
+ORDER BY r.request_id DESC
+);
+
 /*
 CREATE FUNCTION doc_storage_delete() RETURNS trigger AS 
 $doc_storage_delete$
@@ -269,23 +304,24 @@ VALUES
 ('014', 'Институт экономики, управления и финансов', 'ИЭУФ'),
 ('015', 'Управление магистратуры, аспирантуры и докторантуры', 'УМАД');
 
-INSERT INTO status_codes (status_code, status_name)
+INSERT INTO status_codes (status_code, status_name, status_short_name)
 VALUES
-('100', 'Новый запрос'),
-('101', 'Запрос выполнен'),
-('102', 'Запрос отклонен');
+('100', 'Новый запрос', 'new'),
+('101', 'Запрос выполнен', 'done'),
+('102', 'Запрос отклонен', 'decl');
 
 INSERT INTO staff_members (login, password, first_name, last_name, patronymic)
 VALUES
 ('admin', 'admin', '1','1','1');
 
-INSERT INTO responses (response_id, email, title, content, type)
+INSERT INTO responses (response_id, email, title, response_content, type)
 VALUES
 (0,'edinoeokno@internet.ru','Без названия','Ответ не добавлен','default_no_response');
 
 INSERT INTO doc_storage (doc_storage_id)
 VALUES
 (0);
+
 /*
 CREATE VIEW req_new_back AS 
 (
@@ -303,7 +339,7 @@ SELECT
 	r.dir_path,
 	r.files_attached, 
 	to_char(r.time_when_added, 'hh24:mi dd/mm/yyyy') as time_when_added
-FROM requests r, request_codes rc, status_codes sc, faculty_codes fc
+FROM requests r, request_codes rc, status_codes sc, faculty_codes fc, doc_storage ds
 WHERE rc.request_code = r.request_code
 AND fc.faculty_code = r.faculty_code
 AND sc.status_code = r.status_code
@@ -376,6 +412,6 @@ values
 
 insert into req_front (request_code, first_name, last_name, patronymic, email, faculty_code, student_group, doc_amount, dir_name, public_url) 
 values
-('000','Pasha','Pavlov','Pavlovich','123@gmail.com','000','Б20-191-1', 1, 'test1', 'https://yadi.sk/d/IOSGdMqTQ7zBcw');
+('000','Pasha','Pavlov','Pavlovich','ya.lisicheg@yandex.ru','000','Б20-191-1', 1, 'test1', 'https://yadi.sk/d/IOSGdMqTQ7zBcw');
 */
 --TRUNCATE requests;
