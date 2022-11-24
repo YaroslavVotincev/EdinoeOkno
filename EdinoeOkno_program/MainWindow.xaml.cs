@@ -28,7 +28,7 @@ namespace EdinoeOkno_program
         const string dBUser = "postgres";
         const string dBPassword = "";
         const string dBDatabase = "EdinoeOkno";
-        const string dBSchema = "dev";
+        const string dBSchema = "dev1";
         string CONNECTION_STRING = $"Server={dBServer};Port={dBPort};User id={dBUser};Password={dBPassword};Database={dBDatabase}";
         List<Request> new_requestsList = new List<Request>();
         List<Request> done_requestsList = new List<Request>();
@@ -36,7 +36,7 @@ namespace EdinoeOkno_program
         NpgsqlConnection dBconnection;
         Request selectedRequest;
         MailSend responseMail = new MailSend();
-        string[] views = { "req_new_back", "req_done_back", "req_decl_back" };
+        string view = "req_back";
 
         public MainWindow()
         {
@@ -46,7 +46,7 @@ namespace EdinoeOkno_program
             updateListBoxButton.Click += updateListBoxButton_Click;
             DefaultWorkingArea();
             ConnectDB();
-            GetRequestList(new_requestsList, 0);
+            GetRequestList(new_requestsList, "new");
             //GetRequestList(done_requestsList, 1);
             //GetRequestList(decl_requestsList, 2);
             FillRequestsListBox(new_requestsList);
@@ -61,17 +61,17 @@ namespace EdinoeOkno_program
             DefaultWorkingArea();
             if(statusComboBox.SelectedIndex == 0)
             {
-                GetRequestList(new_requestsList, 0);
+                GetRequestList(new_requestsList, "new");
                 FillRequestsListBox(new_requestsList);
             }
             else if (statusComboBox.SelectedIndex == 1)
             {
-                GetRequestList(done_requestsList, 1);
+                GetRequestList(done_requestsList, "done");
                 FillRequestsListBox(done_requestsList);
             }
             else
             {
-                GetRequestList(decl_requestsList, 2);
+                GetRequestList(decl_requestsList, "decl");
                 FillRequestsListBox(decl_requestsList);
             }
 
@@ -85,17 +85,17 @@ namespace EdinoeOkno_program
             DefaultWorkingArea();
             if (statusComboBox.SelectedIndex == 0)
             {
-                GetRequestList(new_requestsList, 0);
+                GetRequestList(new_requestsList, "new");
                 FillRequestsListBox(new_requestsList);
             }
             else if (statusComboBox.SelectedIndex == 1)
             {
-                GetRequestList(done_requestsList, 1);
+                GetRequestList(done_requestsList, "done");
                 FillRequestsListBox(done_requestsList);
             }
             else
             {
-                GetRequestList(decl_requestsList, 2);
+                GetRequestList(decl_requestsList, "decl");
                 FillRequestsListBox(decl_requestsList);
             }
         }
@@ -160,7 +160,7 @@ namespace EdinoeOkno_program
         /// <summary>
         /// Заполняет заданный requestsList со статусом status_code с помощью запроса к БД
         /// </summary>
-        private void GetRequestList(List<Request> requestsList, int status_code)
+        private void GetRequestList(List<Request> requestsList, string status)
         {
             if(dBconnection.State == System.Data.ConnectionState.Closed)
             {
@@ -170,7 +170,7 @@ namespace EdinoeOkno_program
             {
                requestsList.Clear();
                using (NpgsqlCommand cmd =
-               new NpgsqlCommand($@"SELECT * FROM {dBSchema}.{views[status_code]}", dBconnection))
+               new NpgsqlCommand($@"SELECT * FROM {dBSchema}.{view} WHERE status_short_name = '{status}'", dBconnection))
                 {
                     using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -178,54 +178,31 @@ namespace EdinoeOkno_program
                         {
                             foreach (DbDataRecord dB in reader)
                             {
-                                //var temp = (int)dB["request_id"];
-                                //var temp1 = (string)dB["request_name"];
-                                //var temp2 = (string)dB["status_name"];
-                                //var temp3 = (string)dB["first_name"];
-                                //var temp4 = (string)dB["last_name"];
-                                //var temp5 = (string)dB["patronymic"];
-                                //var temp6 = (string)dB["email"];
-                                //var temp7 = (string)dB["faculty_name"];
-                                //var temp8 = (string)dB["short_name"];
-                                //var temp9 = (string)dB["student_group"];
-                                //var temp10 = (string)dB["time_when_added"];
-                                //var temp11 = (string)dB["dir_path"];
-                                //var temp12 = (int)dB["files_attached"];
-                                if (status_code == 0)
-                                    requestsList.Add(
-                                        new Request(
-                                        (int)dB["request_id"],
-                                        (string)dB["request_name"],
-                                        (string)dB["status_name"],
-                                        (string)dB["first_name"],
-                                        (string)dB["last_name"],
-                                        (string)dB["patronymic"],
-                                        (string)dB["email"],
-                                        (string)dB["faculty_name"],
-                                        (string)dB["short_name"],
-                                        (string)dB["student_group"],
-                                        (string)dB["time_when_added"],
-                                        (string)dB["dir_path"],
-                                        (int)dB["files_attached"]));
-                                else
-                                    requestsList.Add(
-                                        new Request(
-                                        (int)dB["request_id"],
-                                        (string)dB["request_name"],
-                                        (string)dB["status_name"],
-                                        (string)dB["first_name"],
-                                        (string)dB["last_name"],
-                                        (string)dB["patronymic"],
-                                        (string)dB["email"],
-                                        (string)dB["faculty_name"],
-                                        (string)dB["short_name"],
-                                        (string)dB["student_group"],
-                                        (string)dB["time_when_added"],
-                                        (string)dB["dir_path"],
-                                        (int)dB["files_attached"],
-                                        (string)dB["time_when_update"],
-                                        (string)dB["email_response"]));
-                                requestsList.Last<Request>().status_code = status_code;
+                                Request r_temp = new Request()
+                                {
+                                    request_id = (int)dB["request_id"],
+                                    request_code = (string)dB["request_code"],
+                                    request_name = (string)dB["request_name"],
+                                    status_code = (string)dB["status_code"],
+                                    status_name = (string)dB["status_name"],
+                                    status_short_name = (string)dB["status_short_name"],
+                                    first_name = (string)dB["first_name"],
+                                    last_name = (string)dB["last_name"],
+                                    patronymic = (string)dB["patronymic"],
+                                    email = (string)dB["email"],
+                                    faculty_code = (string)dB["faculty_code"],
+                                    faculty_name = (string)dB["faculty_name"],
+                                    faculty_short_name = (string)dB["faculty_short_name"],
+                                    student_group = (string)dB["student_group"],
+                                    doc_storage_id = (int)dB["doc_storage_id"],
+                                    doc_amount = (int)dB["doc_amount"],
+                                    public_url = (string)dB["public_url"],
+                                    time_when_added = (string)dB["time_when_added"],
+                                    time_when_updated = (string)dB["time_when_updated"],
+                                    staff_member_login = (string)dB["staff_member_login"],
+                                    response_content = (string)dB["response_content"]
+                                };
+                                requestsList.Add(r_temp);
                             }
                         }
                     }
@@ -273,8 +250,8 @@ namespace EdinoeOkno_program
                 {
                     Text = $"Заявка №{r.request_id}\n" +
                     $"Состояние: {r.status_name}\n" +
-                    $"Время поступления: {r.time_when_requested}\n" +
-                    $"Факультет: {r.faculty_name_short}\n" +
+                    $"Время поступления: {r.time_when_added}\n" +
+                    $"Факультет: {r.faculty_short_name}\n" +
                     $"Тип: {r.request_name}",
                     TextWrapping = TextWrapping.Wrap
                 };
@@ -348,14 +325,14 @@ namespace EdinoeOkno_program
             //Заголовок
             TextBox header = SetReadTextBox();
             header.Text = $" Заявка №{selectedRequest.request_id}" +
-                $" ({selectedRequest.time_when_requested})";
+                $" ({selectedRequest.time_when_added})";
             header.FontSize = 15;
             header.FontWeight = FontWeights.Bold;
             st.Children.Add(header);
             //общая информация
             TextBox genInfo = SetReadTextBox();
             genInfo.Text = $"Состояние: {selectedRequest.status_name}\n" +
-                        $"Время поступления: {selectedRequest.time_when_requested}\n" +
+                        $"Время поступления: {selectedRequest.time_when_added}\n" +
                         $"Время обновления:  {selectedRequest.time_when_updated}\n" +
                         $"Обработано сотрудником: -\n" +
                         $"Тип: {selectedRequest.request_name}";
@@ -401,7 +378,7 @@ namespace EdinoeOkno_program
             StackPanel facultyRow = new StackPanel() { Orientation = Orientation.Horizontal };
             Label facultyLabel = new Label() { Content = "Факультет: " };
             TextBox facultyBox = SetReadTextBox();
-            facultyBox.Text = $"({selectedRequest.faculty_name_short}) {selectedRequest.faculty_name}";
+            facultyBox.Text = $"({selectedRequest.faculty_short_name}) {selectedRequest.faculty_name}";
             facultyBox.VerticalContentAlignment = VerticalAlignment.Center;
             facultyBox.Width = 300;
             facultyBox.TextWrapping = TextWrapping.Wrap;
@@ -414,7 +391,7 @@ namespace EdinoeOkno_program
             StackPanel groupRow = new StackPanel() { Orientation = Orientation.Horizontal };
             Label groupLabel = new Label() { Content = "Группа: " };
             TextBox groupBox = SetReadTextBox();
-            groupBox.Text = selectedRequest.group.ToUpper();
+            groupBox.Text = selectedRequest.student_group.ToUpper();
             groupBox.VerticalContentAlignment = VerticalAlignment.Center;
             Button groupCopyButton = SetCopyButton(groupBox.Text);
             groupRow.Children.Add(groupLabel);
@@ -435,13 +412,13 @@ namespace EdinoeOkno_program
             //кол-во файлов
             TextBlock filesInfo = new TextBlock();
             filesInfo.Text = $"\nПрикреплённые документы:" +
-                $"\nКоличество файлов: {selectedRequest.files_attached}";
+                $"\nКоличество файлов: {selectedRequest.doc_amount}";
             st.Children.Add(filesInfo);
             //файлы
             StackPanel linkRow = new StackPanel() { Orientation = Orientation.Horizontal };
             Label linkLabel = new Label() { Content = "Ссылка на файлы: " };
             TextBox linkBox = SetReadTextBox();
-            linkBox.Text = selectedRequest.dir_path;
+            linkBox.Text = selectedRequest.public_url;
             linkBox.VerticalContentAlignment = VerticalAlignment.Center;
             Button linkCopyButton = SetCopyButton(linkBox.Text);
             linkCopyButton.Tag = linkBox.Text;
@@ -458,18 +435,18 @@ namespace EdinoeOkno_program
             //ввод ответа
             TextBox responseBox = new TextBox()
             {
-                Text = selectedRequest.response,
+                Text = selectedRequest.response_content,
                 Width = 350,
                 HorizontalAlignment = HorizontalAlignment.Left,
                 Height = 100,
                 TextWrapping = TextWrapping.Wrap,
                 AcceptsReturn = true,
                 AcceptsTab = true,
-                IsReadOnly = !(selectedRequest.status_code == 0)
+                IsReadOnly = !(selectedRequest.status_short_name == "new")
             };
             st.Children.Add(responseBox);
             //подтверждение отправки ответа
-            if (selectedRequest.status_code == 0)
+            if (selectedRequest.status_short_name == "new")
             {
                 CheckBox confirm_responseCheckBox = new CheckBox()
                 {
@@ -507,15 +484,18 @@ namespace EdinoeOkno_program
             Button button = sender as Button;
             TextBox textBox = button.Tag as TextBox;
             CheckBox checkBox = textBox.Tag as CheckBox;
+            string title = $"Ваша заявка \"{selectedRequest.request_name}\" отклонена";
             DefaultWorkingArea();
             new_requestsList.Remove(selectedRequest);
             FillRequestsListBox(new_requestsList);
-            selectedRequest.UpdateRequest(2, textBox.Text, dBconnection, dBSchema);
+
+            selectedRequest.UpdateRequest("102", title, textBox.Text, dBconnection, dBSchema);
 
             if (checkBox.IsChecked == false)
-                responseMail.Send(selectedRequest.email,
-                            $"{selectedRequest.first_name} {selectedRequest.last_name} {selectedRequest.patronymic}",
-                            $"Ваша заявка \"{selectedRequest.request_name}\" отклонена",
+                responseMail.Send(
+                            addressee:selectedRequest.email,
+                            name:$"{selectedRequest.first_name} {selectedRequest.last_name} {selectedRequest.patronymic}",
+                            subject:$"Ваша заявка \"{selectedRequest.request_name}\" отклонена",
                             messageText: textBox.Text);
         }
 
@@ -524,10 +504,11 @@ namespace EdinoeOkno_program
             Button button = sender as Button;
             TextBox textBox = button.Tag as TextBox;
             CheckBox checkBox = textBox.Tag as CheckBox;
+            string title = $"Ваша заявка \"{selectedRequest.request_name}\" выполнена";
             DefaultWorkingArea();
             new_requestsList.Remove(selectedRequest);
             FillRequestsListBox(new_requestsList);
-            selectedRequest.UpdateRequest(1, textBox.Text, dBconnection, dBSchema);
+            selectedRequest.UpdateRequest("101", title, textBox.Text, dBconnection, dBSchema);
             if (checkBox.IsChecked == false)
                 responseMail.Send(selectedRequest.email,
                             $"{selectedRequest.first_name} {selectedRequest.last_name} {selectedRequest.patronymic}",
