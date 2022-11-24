@@ -9,15 +9,7 @@
     <TabControl Grid.Row ="0" Margin="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TabStripPlacement="Right" BorderThickness="5" >
         <TabItem Header="Заявки" Height="50" Width="100">
             <Grid x:Name="requestFrame">
-                <Button x:Name="updateListBoxButton" Content="Обновить" HorizontalAlignment="Left" Height="20" Width="66" Margin="10,25,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-                <ListBox x:Name="requestsListBox" HorizontalAlignment="Left" Width="249" Margin="10,50,0,0" BorderBrush="Black" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
-                <ScrollViewer x:Name="workingArea" Margin="264,50,10,0" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" BorderBrush="Black" HorizontalScrollBarVisibility="Auto"/>
-                <ComboBox x:Name="statusComboBox" Margin="88,25,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="171" Height="20" SelectedIndex="0">
-                    <ComboBoxItem Content="Новые"/>
-                    <ComboBoxItem Content="Обработанные"/>
-                    <ComboBoxItem Content="Отклоненные"/>
-                </ComboBox>
-
+                <local:Requests_UserConrol></local:Requests_UserConrol>
             </Grid>
         </TabItem>
         <TabItem Header="Вопросы" Height="50" Width="100">
@@ -25,6 +17,11 @@
         </TabItem>
         <TabItem Header="Запись" Height="50" Width="100">
             <TextBlock FontSize="35" VerticalAlignment="Center" HorizontalAlignment="Center">В разработке</TextBlock>
+        </TabItem>
+        <TabItem Header="Анкетирование" Height="50" Width="100">
+            <Grid x:Name="formsFrame">
+                <local:Forms_UserControl></local:Forms_UserControl>
+            </Grid>
         </TabItem>
     </TabControl>
 </Window>

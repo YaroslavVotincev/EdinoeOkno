@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="EdinoeOkno_program.Requests_UserConrol"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:EdinoeOkno_program"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid x:Name="requestFrame">
+        <Button x:Name="updateListBoxButton" Content="Обновить" HorizontalAlignment="Left" Height="20" Width="66" Margin="10,25,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+        <ListBox x:Name="requestsListBox" HorizontalAlignment="Left" Width="249" Margin="10,50,0,0" BorderBrush="Black" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+        <ScrollViewer x:Name="workingArea" Margin="264,50,10,0" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" BorderBrush="Black" HorizontalScrollBarVisibility="Auto"/>
+        <ComboBox x:Name="statusComboBox" Margin="88,25,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="171" Height="20" SelectedIndex="0">
+            <ComboBoxItem Content="Новые"/>
+            <ComboBoxItem Content="Обработанные"/>
+            <ComboBoxItem Content="Отклоненные"/>
+        </ComboBox>
+    </Grid>
+</UserControl>

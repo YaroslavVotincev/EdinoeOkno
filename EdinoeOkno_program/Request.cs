@@ -35,7 +35,6 @@ namespace EdinoeOkno_program
         public string staff_member_login = "-";
         public string response_content;
 
-        public bool valid_email;
         public Button button;    
         public static bool IsValidEmail(string email)
         {

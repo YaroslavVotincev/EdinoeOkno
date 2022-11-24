@@ -132,3 +132,8 @@ C:\Users\artem\Desktop\asdasd\EdinoeOkno\EdinoeOkno_program\obj\Debug\EdinoeOkno
 C:\Users\artem\Desktop\asdasd\EdinoeOkno\EdinoeOkno_program\obj\Debug\EdinoeOkno_program.csproj.CopyComplete
 C:\Users\artem\Desktop\asdasd\EdinoeOkno\EdinoeOkno_program\obj\Debug\EdinoeOkno_program.exe
 C:\Users\artem\Desktop\asdasd\EdinoeOkno\EdinoeOkno_program\obj\Debug\EdinoeOkno_program.pdb
+C:\Users\User\Desktop\учеба\Проектная деятельность\repos\EdinoeOkno\EdinoeOkno_program\obj\Debug\Requests_UserConrol.g.cs
+C:\Users\User\Desktop\учеба\Проектная деятельность\repos\EdinoeOkno\EdinoeOkno_program\obj\Debug\GeneratedInternalTypeHelper.g.cs
+C:\Users\User\Desktop\учеба\Проектная деятельность\repos\EdinoeOkno\EdinoeOkno_program\obj\Debug\Requests_UserConrol.baml
+C:\Users\User\Desktop\учеба\Проектная деятельность\repos\EdinoeOkno\EdinoeOkno_program\obj\Debug\Forms_UserControl.g.cs
+C:\Users\User\Desktop\учеба\Проектная деятельность\repos\EdinoeOkno\EdinoeOkno_program\obj\Debug\Forms_UserControl.baml
