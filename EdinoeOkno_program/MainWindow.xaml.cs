@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
@@ -26,6 +27,16 @@ namespace EdinoeOkno_program
         public MainWindow()
         {
             InitializeComponent();
+            InitAuthorization();
+            OurDatabase.GetDBItems();
+        }
+
+        private void InitAuthorization()
+        {
+            Authorization.requestGrid = this.requestGrid;
+            Authorization.questionsGrid = this.questionsGrid;
+            Authorization.adminGrid = this.adminGrid;
+            Authorization.formsGrid = this.formsGrid;
         }
 
     }

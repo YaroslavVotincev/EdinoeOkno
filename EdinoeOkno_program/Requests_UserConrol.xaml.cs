@@ -152,7 +152,7 @@ namespace EdinoeOkno_program
                 Text = "Выберите элемент из списка...",
                 TextWrapping = TextWrapping.Wrap,
                 Width = requestsListBox.Width,
-                FontSize = 12
+                //FontSize = 12
             };
             temp.Children.Add(defaultWorkingAreaMessage);
         }
@@ -161,10 +161,7 @@ namespace EdinoeOkno_program
         /// </summary>
         private void GetRequestList(List<Request> requestsList, string status)
         {
-            if (dBconnection.State == System.Data.ConnectionState.Closed)
-            {
-                return;
-            }
+            if (dBconnection.State == System.Data.ConnectionState.Open)
             try
             {
                 requestsList.Clear();
@@ -221,6 +218,7 @@ namespace EdinoeOkno_program
                 MessageBox.Show(ex.Message);
             }
         }
+
         /// <summary>
         /// Заполняет requestListBox исходя из переданного requestsList
         /// </summary>
@@ -256,7 +254,7 @@ namespace EdinoeOkno_program
                 };
                 r.button.Tag = r;
                 r.button.HorizontalContentAlignment = HorizontalAlignment.Stretch;
-                r.button.FontSize = 11;
+                //r.button.FontSize = 11;
                 r.button.Width = requestsListBox.Width - 35;
                 r.button.Content = preview;
                 r.button.Click += SelectRequest;
@@ -338,7 +336,7 @@ namespace EdinoeOkno_program
             st.Children.Add(genInfo);
             //информация о заявившем
             TextBlock personInfo = new TextBlock();
-            personInfo.Text = "\nИнформация о заявшившем:";
+            personInfo.Text = "\nИнформация о заявившем:";
             st.Children.Add(personInfo);
             //имя
             StackPanel first_nameRow = new StackPanel() { Orientation = Orientation.Horizontal };

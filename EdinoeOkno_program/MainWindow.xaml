@@ -7,20 +7,30 @@
         mc:Ignorable="d"
         Title="Единое окно" Height="450" Width="800">
     <TabControl Grid.Row ="0" Margin="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TabStripPlacement="Right" BorderThickness="5" >
+        <TabItem Header="Вход" Height="50" Width="100">
+            <Grid x:Name="authorizationGrid">
+                <local:Authorization_UserControl></local:Authorization_UserControl> 
+            </Grid>
+        </TabItem>
         <TabItem Header="Заявки" Height="50" Width="100">
-            <Grid x:Name="requestFrame">
-                <local:Requests_UserConrol></local:Requests_UserConrol>
+            <Grid x:Name="requestGrid">
+                <TextBlock FontSize="35" TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center">Пожалуйста, ввойдите в ваш аккаунт сотрудника во вкладке "Вход"</TextBlock>
             </Grid>
         </TabItem>
         <TabItem Header="Вопросы" Height="50" Width="100">
-            <TextBlock FontSize="35" VerticalAlignment="Center" HorizontalAlignment="Center">В разработке</TextBlock>
-        </TabItem>
-        <TabItem Header="Запись" Height="50" Width="100">
-            <TextBlock FontSize="35" VerticalAlignment="Center" HorizontalAlignment="Center">В разработке</TextBlock>
+            <Grid x:Name="questionsGrid">
+                <TextBlock FontSize="35" TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center">Пожалуйста, ввойдите в ваш аккаунт сотрудника во вкладке "Вход"</TextBlock>
+            </Grid>
         </TabItem>
         <TabItem Header="Анкетирование" Height="50" Width="100">
-            <Grid x:Name="formsFrame">
-                <local:Forms_UserControl></local:Forms_UserControl>
+            <Grid x:Name="formsGrid">
+                <TextBlock FontSize="35" TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center">Пожалуйста, ввойдите в ваш аккаунт сотрудника во вкладке "Вход"</TextBlock>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Адм. приложения" Height="50" Width="100">
+            <Grid x:Name="adminGrid">
+                <local:Аdministration_UserControl></local:Аdministration_UserControl>
+                
             </Grid>
         </TabItem>
     </TabControl>
