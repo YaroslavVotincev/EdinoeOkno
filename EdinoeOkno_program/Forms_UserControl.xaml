@@ -6,5 +6,9 @@
              xmlns:local="clr-namespace:EdinoeOkno_program"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid/>
+    <Grid x:Name="requestFrame">
+        <ListBox x:Name="requestsListBox" HorizontalAlignment="Left" Width="249" Margin="10,10,0,22" BorderBrush="Black" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" SelectionChanged="requestsListBox_SelectionChanged"/>
+        <ScrollViewer x:Name="workingArea" Margin="264,10,10,0" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" BorderBrush="Black" HorizontalScrollBarVisibility="Auto"/>
+        <Button x:Name="AddForm" Content="Добавить форму" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Bottom" Click="Button_Click"  Width="249" Height="20" HorizontalContentAlignment="Center"/>
+    </Grid>
 </UserControl>
