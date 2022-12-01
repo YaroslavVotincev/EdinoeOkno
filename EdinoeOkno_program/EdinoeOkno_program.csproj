@@ -100,12 +100,28 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Authorization.cs" />
+    <Compile Include="Authorization_UserControl.xaml.cs">
+      <DependentUpon>Authorization_UserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms_UserControl.xaml.cs">
       <DependentUpon>Forms_UserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OurDatabase.cs" />
+    <Compile Include="Questions_UserControl.xaml.cs">
+      <DependentUpon>Questions_UserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Requests_UserConrol.xaml.cs">
       <DependentUpon>Requests_UserConrol.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Staff_Member.cs" />
+    <Compile Include="Аdministration_UserControl.xaml.cs">
+      <DependentUpon>Аdministration_UserControl.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Authorization_UserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms_UserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -124,7 +140,15 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Questions_UserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Requests_UserConrol.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Аdministration_UserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -147,6 +171,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Resource Include="Fonts\Cuprum.ttf" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -156,6 +181,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\System.Text.Json.6.0.0\build\System.Text.Json.targets" Condition="Exists('packages\System.Text.Json.6.0.0\build\System.Text.Json.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

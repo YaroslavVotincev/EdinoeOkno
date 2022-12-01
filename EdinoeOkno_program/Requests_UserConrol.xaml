@@ -6,14 +6,51 @@
              xmlns:local="clr-namespace:EdinoeOkno_program"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid x:Name="requestFrame">
-        <Button x:Name="updateListBoxButton" Content="Обновить" HorizontalAlignment="Left" Height="20" Width="66" Margin="10,25,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-        <ListBox x:Name="requestsListBox" HorizontalAlignment="Left" Width="249" Margin="10,50,0,0" BorderBrush="Black" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
-        <ScrollViewer x:Name="workingArea" Margin="264,50,10,0" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" BorderBrush="Black" HorizontalScrollBarVisibility="Auto"/>
-        <ComboBox x:Name="statusComboBox" Margin="88,25,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="171" Height="20" SelectedIndex="0">
-            <ComboBoxItem Content="Новые"/>
-            <ComboBoxItem Content="Обработанные"/>
-            <ComboBoxItem Content="Отклоненные"/>
-        </ComboBox>
+    <Grid>
+        <Grid Background="#FF164ACF" VerticalAlignment="Top" Height="60">
+            <Button x:Name="updateListBoxButton" Content="Найти/обновить" HorizontalAlignment="Left" Height="20" Width="66" Margin="10,30,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+            <ComboBox x:Name="statusComboBox" Margin="50,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="171" Height="20" SelectedIndex="0">
+                <ComboBoxItem Content="Новые"/>
+                <ComboBoxItem Content="Обработанные"/>
+                <ComboBoxItem Content="Отклоненные"/>
+            </ComboBox>
+            
+            
+            <TextBlock TextWrapping="Wrap" Text="Сортировка:" Foreground="White" Margin="241,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+            <ComboBox x:Name="sortingComboBox" Margin="241,14,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="128">
+                <ComboBoxItem Content="Время добавления" IsSelected="True" Tag="request_id"/>
+                <ComboBoxItem Content="Факультет" Tag="faculty_code"/>
+                <ComboBoxItem Content="Группа" Tag="student_group"/>
+                <ComboBoxItem Content="Тип заявки" Tag="request_code"/>
+            </ComboBox>
+            <CheckBox x:Name="descOrderCheckBox" Content="Обратный порядок" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="243,41,0,0" Foreground="White"/>
+            
+            
+            <TextBlock TextWrapping="Wrap" Foreground="White" Margin="383,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"><Run Language="ru-ru" Text="Фильтры:"/></TextBlock>
+            
+            <ComboBox x:Name="filter_statusComboBox" Margin="383,14,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="118">
+                <ComboBoxItem Content="По статусу" IsEnabled="False" IsSelected="True"/>
+            </ComboBox>
+            
+            <ComboBox x:Name="filter_facultyComboBox" Margin="383,38,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="118">
+                <ComboBoxItem Content="По факультету" IsEnabled="False" IsSelected="True"/>
+            </ComboBox>
+            
+            <ComboBox x:Name="filter_requestComboBox" Margin="503,14,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="118">
+                <ComboBoxItem Content="По типу" IsEnabled="False" IsSelected="True"/>
+            </ComboBox>
+            
+            <ComboBox x:Name="filter_reсencyComboBox" Margin="503,38,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="118" Text="По давности">
+                <ComboBoxItem Content="За посл. 1 день"/>
+                <ComboBoxItem Content="За посл. 1 неделю"/>
+                <ComboBoxItem Content="За посл. 1 месяц"/>
+                <ComboBoxItem Content="За всё время" IsSelected="True"/>
+            </ComboBox>
+            
+            <TextBlock TextWrapping="Wrap" Foreground="White" Margin="636,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="123"><Run Language="ru-ru" Text="Поиск по фамилии:"/></TextBlock>
+            <TextBox x:Name="last_nameSearchTextBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="118" Margin="636,14,0,0" Height="22"></TextBox>
+        </Grid>
+        <ListBox x:Name="requestsListBox" HorizontalAlignment="Left" Width="249" Margin="10,65,0,0" BorderBrush="Black" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+        <ScrollViewer x:Name="workingArea" Margin="264,65,10,0" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" BorderBrush="Black" HorizontalScrollBarVisibility="Auto"/>
     </Grid>
 </UserControl>

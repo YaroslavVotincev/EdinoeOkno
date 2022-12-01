@@ -23,6 +23,7 @@ namespace EdinoeOkno_program
     /// </summary>
     public partial class Requests_UserConrol : UserControl
     {
+        /*
         const string dBServer = "localhost";
         const string dBPort = "5432";
         const string dBUser = "postgres";
@@ -30,99 +31,187 @@ namespace EdinoeOkno_program
         const string dBDatabase = "EdinoeOkno";
         const string dBSchema = "dev1";
         string CONNECTION_STRING = $"Server={dBServer};Port={dBPort};User id={dBUser};Password={dBPassword};Database={dBDatabase}";
-        List<Request> new_requestsList = new List<Request>();
-        List<Request> done_requestsList = new List<Request>();
-        List<Request> decl_requestsList = new List<Request>();
-        NpgsqlConnection dBconnection;
+        */
+        List<Request> currentRequestList = new List<Request>();
+        NpgsqlConnection dBconnection = OurDatabase.GetConnection();
         Request selectedRequest;
         MailSend responseMail = new MailSend();
         string view = "req_back";
+
+        List<string> type_filter = new List<string>();
+        List<string> status_filter = new List<string>();
+        List<string> faculty_filter = new List<string>();
+        string last_name_search;
+
         public Requests_UserConrol()
         {
             InitializeComponent();
-            DefaultListBox();
-            statusComboBox.SelectionChanged += statusComboBox_SelectionChanged;
+
+            GetNamesOfRequests();
+            GetNamesOfStatus();
+            GetNamesOfFaculty();
+            last_nameSearchTextBox.TextChanged += last_nameSearchTextBox_TextChanged;
             updateListBoxButton.Click += updateListBoxButton_Click;
+
+            DefaultListBox();
             DefaultWorkingArea();
-            ConnectDB();
-            GetRequestList(new_requestsList, "new");
-            //GetRequestList(done_requestsList, 1);
-            //GetRequestList(decl_requestsList, 2);
-            FillRequestsListBox(new_requestsList);
+            GetRequestList(currentRequestList);
+            FillRequestsListBox(currentRequestList);
         }
 
-        /// <summary>
-        /// Обновляет requestListBox с помощью повторного запроса к БД
-        /// </summary>
-        private void updateListBoxButton_Click(object sender, EventArgs e)
+        private void updateListBoxButton_Click(object sender, RoutedEventArgs e)
         {
             DefaultListBox();
             DefaultWorkingArea();
-            if (statusComboBox.SelectedIndex == 0)
-            {
-                GetRequestList(new_requestsList, "new");
-                FillRequestsListBox(new_requestsList);
-            }
-            else if (statusComboBox.SelectedIndex == 1)
-            {
-                GetRequestList(done_requestsList, "done");
-                FillRequestsListBox(done_requestsList);
-            }
-            else
-            {
-                GetRequestList(decl_requestsList, "decl");
-                FillRequestsListBox(decl_requestsList);
-            }
+            GetRequestList(currentRequestList);
+            FillRequestsListBox(currentRequestList);
+        }
 
-        }
-        /// <summary>
-        /// Меняет текущий requestListBox на лист с заявками с другим статусом
-        /// </summary>
-        private void statusComboBox_SelectionChanged(object sender, EventArgs e)
+        private void last_nameSearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            DefaultListBox();
-            DefaultWorkingArea();
-            if (statusComboBox.SelectedIndex == 0)
-            {
-                GetRequestList(new_requestsList, "new");
-                FillRequestsListBox(new_requestsList);
-            }
-            else if (statusComboBox.SelectedIndex == 1)
-            {
-                GetRequestList(done_requestsList, "done");
-                FillRequestsListBox(done_requestsList);
-            }
-            else
-            {
-                GetRequestList(decl_requestsList, "decl");
-                FillRequestsListBox(decl_requestsList);
-            }
+            last_name_search = last_nameSearchTextBox.Text;
         }
-        /// <summary>
-        /// Подключается к БД
-        /// </summary>
-        private void ConnectDB()
+
+        private void GetNamesOfRequests()
         {
-            dBconnection = new NpgsqlConnection(CONNECTION_STRING);
-            try
+            filter_requestComboBox.SelectionChanged += filter_ComboBox_SelectionChanged;
+            foreach(string[] req_name in OurDatabase.requestNamesList)
             {
-                dBconnection.Open();
-                statusComboBox.IsEnabled = true;
-            }
-            catch (Exception ex)
-            {
-                requestsListBox.Items.Clear();
-                TextBlock dBErrorLoadingMessage = new TextBlock();
-                dBErrorLoadingMessage.Text = $"Произошла ошибка при подключении к базе данных:\n{ex.Message}";
-                dBErrorLoadingMessage.TextWrapping = TextWrapping.Wrap;
-                dBErrorLoadingMessage.Width = requestsListBox.Width;
-                dBErrorLoadingMessage.FontWeight = FontWeights.Bold;
-                dBErrorLoadingMessage.FontSize = 16;
-                requestsListBox.Items.Add(dBErrorLoadingMessage);
-                statusComboBox.IsEnabled = false;
-                //MessageBox.Show(ex.Message);
+                if (Authorization.account.request_privileges.Contains(req_name[0]))
+                {
+                    ComboBoxItem item = new ComboBoxItem()
+                    {
+                        HorizontalAlignment = HorizontalAlignment.Stretch,
+                        VerticalAlignment = VerticalAlignment.Stretch,
+                        HorizontalContentAlignment = HorizontalAlignment.Stretch,
+                        VerticalContentAlignment = VerticalAlignment.Stretch
+                    };
+                    CheckBox checkBox = new CheckBox()
+                    {
+                        HorizontalAlignment = HorizontalAlignment.Stretch,
+                        VerticalAlignment = VerticalAlignment.Stretch,
+                        HorizontalContentAlignment = HorizontalAlignment.Stretch,
+                        VerticalContentAlignment = VerticalAlignment.Stretch,
+                        IsChecked = true,
+                        Tag = req_name[0],
+                        Content = req_name[1]
+                    };
+                    checkBox.Checked += filter_requestCheckBox_Checked;
+                    checkBox.Unchecked += filter_requestCheckBox_Unchecked;
+                    item.Content = checkBox;
+                    filter_requestComboBox.Items.Add(item);
+
+                    type_filter.Add(req_name[0]);
+                }   
             }
         }
+
+        private void filter_requestCheckBox_Checked(object sender, EventArgs e)
+        {
+            CheckBox checkBox = sender as CheckBox;
+            type_filter.Add(checkBox.Tag as string);
+        }
+
+        private void filter_requestCheckBox_Unchecked(object sender, EventArgs e)
+        {
+            CheckBox checkBox = sender as CheckBox;
+            type_filter.Remove(checkBox.Tag as string);
+        }
+
+        private void filter_ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox comboBox = sender as ComboBox;
+            comboBox.SelectedIndex = 0;
+        }
+
+
+        private void GetNamesOfStatus()
+        {
+            filter_statusComboBox.SelectionChanged += filter_ComboBox_SelectionChanged;
+            foreach (string[] status_name in OurDatabase.statusNamesList)
+            {
+                ComboBoxItem item = new ComboBoxItem()
+                {
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Stretch,
+                    HorizontalContentAlignment = HorizontalAlignment.Stretch,
+                    VerticalContentAlignment = VerticalAlignment.Stretch
+                };
+                CheckBox checkBox = new CheckBox()
+                {
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Stretch,
+                    HorizontalContentAlignment = HorizontalAlignment.Stretch,
+                    VerticalContentAlignment = VerticalAlignment.Stretch,
+                    IsChecked = true,
+                    Tag = status_name[0],
+                    Content = status_name[2]
+                };
+                checkBox.Checked += filter_statusCheckBox_Checked;
+                checkBox.Unchecked += filter_statusCheckBox_Unchecked;
+                item.Content = checkBox;
+                filter_statusComboBox.Items.Add(item);
+
+                status_filter.Add(status_name[0]);
+            }
+        }
+
+        private void filter_statusCheckBox_Checked(object sender, EventArgs e)
+        {
+            CheckBox checkBox = sender as CheckBox;
+            status_filter.Add(checkBox.Tag as string);
+        }
+
+        private void filter_statusCheckBox_Unchecked(object sender, EventArgs e)
+        {
+            CheckBox checkBox = sender as CheckBox;
+            status_filter.Remove(checkBox.Tag as string);
+        }
+
+        private void GetNamesOfFaculty()
+        {
+            filter_facultyComboBox.SelectionChanged += filter_ComboBox_SelectionChanged;
+            foreach (string[] fac_name in OurDatabase.facultyNamesList)
+            {
+                ComboBoxItem item = new ComboBoxItem()
+                {
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Stretch,
+                    HorizontalContentAlignment = HorizontalAlignment.Stretch,
+                    VerticalContentAlignment = VerticalAlignment.Stretch
+                };
+                CheckBox checkBox = new CheckBox()
+                {
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Stretch,
+                    HorizontalContentAlignment = HorizontalAlignment.Stretch,
+                    VerticalContentAlignment = VerticalAlignment.Stretch,
+                    IsChecked = true,
+                    Tag = fac_name[0],
+                    Content = fac_name[2]
+                };
+                checkBox.Checked += filter_facultyCheckBox_Checked;
+                checkBox.Unchecked += filter_facultyCheckBox_Unchecked;
+                item.Content = checkBox;
+                filter_facultyComboBox.Items.Add(item);
+
+                faculty_filter.Add(fac_name[0]);
+            }
+        }
+
+        private void filter_facultyCheckBox_Checked(object sender, EventArgs e)
+        {
+            CheckBox checkBox = sender as CheckBox;
+            faculty_filter.Add(checkBox.Tag as string);
+        }
+
+        private void filter_facultyCheckBox_Unchecked(object sender, EventArgs e)
+        {
+            CheckBox checkBox = sender as CheckBox;
+            faculty_filter.Remove(checkBox.Tag as string);
+        }
+
+
         /// <summary>
         /// Очищает requestsListBox
         /// </summary>
@@ -133,9 +222,9 @@ namespace EdinoeOkno_program
             {
                 Text = "Происходит загрузка, пожалуйста подождите...",
                 TextWrapping = TextWrapping.Wrap,
-                Width = requestsListBox.Width,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch,
                 FontWeight = FontWeights.Bold,
-                FontSize = 16
             };
             requestsListBox.Items.Add(loadingMessage);
         }
@@ -145,31 +234,27 @@ namespace EdinoeOkno_program
         private void DefaultWorkingArea()
         {
             workingArea.Content = null;
-            StackPanel temp = new StackPanel();
-            workingArea.Content = temp;
             TextBlock defaultWorkingAreaMessage = new TextBlock
             {
                 Text = "Выберите элемент из списка...",
                 TextWrapping = TextWrapping.Wrap,
-                Width = requestsListBox.Width,
-                FontSize = 12
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch,
             };
-            temp.Children.Add(defaultWorkingAreaMessage);
+            workingArea.Content = defaultWorkingAreaMessage;
         }
         /// <summary>
         /// Заполняет заданный requestsList со статусом status_code с помощью запроса к БД
         /// </summary>
-        private void GetRequestList(List<Request> requestsList, string status)
+        private void GetRequestList(List<Request> requestsList)
         {
-            if (dBconnection.State == System.Data.ConnectionState.Closed)
-            {
-                return;
-            }
+            string status_condition = "('" + String.Join("','", status_filter) + "')";
+            if (dBconnection.State == System.Data.ConnectionState.Open)
             try
             {
                 requestsList.Clear();
                 using (NpgsqlCommand cmd =
-                new NpgsqlCommand($@"SELECT * FROM {dBSchema}.{view} WHERE status_short_name = '{status}'", dBconnection))
+                new NpgsqlCommand($@"SELECT * FROM {OurDatabase.dBSchema}.{view} WHERE status_code IN {status_condition}", dBconnection))
                 {
                     using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -221,6 +306,7 @@ namespace EdinoeOkno_program
                 MessageBox.Show(ex.Message);
             }
         }
+
         /// <summary>
         /// Заполняет requestListBox исходя из переданного requestsList
         /// </summary>
@@ -233,9 +319,9 @@ namespace EdinoeOkno_program
                 {
                     Text = "Заявления не найдены...",
                     TextWrapping = TextWrapping.Wrap,
-                    Width = requestsListBox.Width,
                     FontWeight = FontWeights.Bold,
-                    FontSize = 16
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Stretch,
                 };
                 requestsListBox.Items.Add(noRequestsMessage);
                 return;
@@ -256,7 +342,7 @@ namespace EdinoeOkno_program
                 };
                 r.button.Tag = r;
                 r.button.HorizontalContentAlignment = HorizontalAlignment.Stretch;
-                r.button.FontSize = 11;
+                //r.button.FontSize = 11;
                 r.button.Width = requestsListBox.Width - 35;
                 r.button.Content = preview;
                 r.button.Click += SelectRequest;
@@ -338,7 +424,7 @@ namespace EdinoeOkno_program
             st.Children.Add(genInfo);
             //информация о заявившем
             TextBlock personInfo = new TextBlock();
-            personInfo.Text = "\nИнформация о заявшившем:";
+            personInfo.Text = "\nИнформация о заявившем:";
             st.Children.Add(personInfo);
             //имя
             StackPanel first_nameRow = new StackPanel() { Orientation = Orientation.Horizontal };
@@ -485,10 +571,9 @@ namespace EdinoeOkno_program
             CheckBox checkBox = textBox.Tag as CheckBox;
             string title = $"Ваша заявка \"{selectedRequest.request_name}\" отклонена";
             DefaultWorkingArea();
-            new_requestsList.Remove(selectedRequest);
-            FillRequestsListBox(new_requestsList);
 
-            selectedRequest.UpdateRequest("102", title, textBox.Text, dBconnection, dBSchema);
+
+            selectedRequest.UpdateRequest("102", title, textBox.Text, dBconnection, OurDatabase.dBSchema);
 
             if (checkBox.IsChecked == false)
                 responseMail.Send(
@@ -505,9 +590,8 @@ namespace EdinoeOkno_program
             CheckBox checkBox = textBox.Tag as CheckBox;
             string title = $"Ваша заявка \"{selectedRequest.request_name}\" выполнена";
             DefaultWorkingArea();
-            new_requestsList.Remove(selectedRequest);
-            FillRequestsListBox(new_requestsList);
-            selectedRequest.UpdateRequest("101", title, textBox.Text, dBconnection, dBSchema);
+
+            selectedRequest.UpdateRequest("101", title, textBox.Text, dBconnection, OurDatabase.dBSchema);
             if (checkBox.IsChecked == false)
                 responseMail.Send(selectedRequest.email,
                             $"{selectedRequest.first_name} {selectedRequest.last_name} {selectedRequest.patronymic}",

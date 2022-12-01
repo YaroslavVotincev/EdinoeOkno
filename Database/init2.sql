@@ -68,7 +68,7 @@ CREATE TABLE questions
 	time_when_updated TIMESTAMP DEFAULT now(),
 	
 	CONSTRAINT email_validity_check CHECK (email ~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$'),
-	CONSTRAINT group_validity_check CHECK (student_group ~ '^(Б|С|М|б|с|м)\d\d-\d\d\d-\d$'),
+	--CONSTRAINT group_validity_check CHECK (student_group ~ '^(Б|С|М|б|с|м)\d\d-\d\d\d-\d$'),
 	PRIMARY KEY (question_id)
 );
 
@@ -93,6 +93,8 @@ CREATE TABLE staff_members
 	last_name varchar(20) NOT NULL DEFAULT '',
 	patronymic varchar(20) NOT NULL DEFAULT '',
 	
+	is_admin bool NOT NULL DEFAULT true,
+	can_view_requests bool NOT NULL DEFAULT true,
 	can_view_questions bool NOT NULL DEFAULT true,
 	can_view_appointments bool NOT NULL DEFAULT true,
 	can_view_forms bool NOT NULL DEFAULT true,
@@ -139,7 +141,7 @@ CREATE TABLE req_front
 	public_url text NOT NULL DEFAULT '',
 	
 	CONSTRAINT email_validity_check CHECK (email ~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$'),
-	CONSTRAINT group_validity_check CHECK (student_group ~ '^(Б|С|М|б|с|м)\d\d-\d\d\d-\d$'),
+	--CONSTRAINT group_validity_check CHECK (student_group ~ '^(Б|С|М|б|с|м)\d\d-\d\d\d-\d$'),
 	CONSTRAINT attachements_validity_check CHECK (doc_amount = 0 OR public_url LIKE 'https://yadi.sk/d/%' AND dir_name ~ '^[A-Za-z0-9]+$')
 );
 
@@ -179,15 +181,15 @@ CREATE INDEX staff_faculty_code_index ON staff_members(faculty_code);
 CREATE FUNCTION req_front_insert() RETURNS trigger AS $req_front_insert$
 BEGIN
 	IF NEW.doc_amount = 0 THEN
-		INSERT INTO requests(request_code, first_name, last_name, patronymic, email, faculty_code, student_group)
+		INSERT INTO dev1.requests(request_code, first_name, last_name, patronymic, email, faculty_code, student_group)
 		VALUES (NEW.request_code, NEW.first_name, NEW.last_name, NEW.patronymic, NEW.email, NEW.faculty_code, NEW.student_group);
 	ELSE
 		WITH tmp AS
-		(INSERT INTO doc_storage (doc_amount, dir_name, public_url) 
+		(INSERT INTO dev1.doc_storage (doc_amount, dir_name, public_url) 
 		 VALUES (NEW.doc_amount, NEW.dir_name, NEW.public_url)
 		 RETURNING doc_storage_id
 		)
-		INSERT INTO requests(request_code, first_name, last_name, patronymic, email, faculty_code, student_group, doc_storage_id)
+		INSERT INTO dev1.requests(request_code, first_name, last_name, patronymic, email, faculty_code, student_group, doc_storage_id)
 			SELECT NEW.request_code, NEW.first_name, NEW.last_name, NEW.patronymic, 
 				NEW.email, NEW.faculty_code, NEW.student_group, tmp.doc_storage_id
 			FROM tmp;
@@ -197,16 +199,16 @@ END;
 $req_front_insert$ LANGUAGE plpgsql;
 
 CREATE TRIGGER req_front_insert
-BEFORE INSERT ON req_front
+AFTER INSERT ON req_front
     FOR EACH ROW EXECUTE FUNCTION req_front_insert();
 	
 CREATE FUNCTION request_delete() RETURNS trigger AS $request_delete$	
 BEGIN
 	IF OLD.response_id <> 0 THEN
-		DELETE FROM responses WHERE response_id = OLD.response_id;
+		DELETE FROM dev1.responses WHERE response_id = OLD.response_id;
 	END IF;
 	IF OLD.doc_storage_id <> 0 THEN
-		DELETE FROM doc_storage WHERE doc_storage_id = OLD.doc_storage_id;
+		DELETE FROM dev1.doc_storage WHERE doc_storage_id = OLD.doc_storage_id;
 	END IF;
 	RETURN NULL;
 END;
@@ -237,7 +239,7 @@ SELECT
 	ds.doc_amount,
 	ds.public_url,
 	to_char(r.time_when_added, 'hh24:mi dd/mm/yyyy') as time_when_added,
-	to_char(r.time_when_added, 'hh24:mi dd/mm/yyyy') as time_when_updated,
+	to_char(r.time_when_updated, 'hh24:mi dd/mm/yyyy') as time_when_updated,
 	rp.staff_member_login,
 	rp.response_content
 FROM requests r
@@ -247,6 +249,26 @@ JOIN status_codes sc ON sc.status_code = r.status_code
 JOIN doc_storage ds ON ds.doc_storage_id = r.doc_storage_id
 JOIN responses rp ON rp.response_id = r.response_id
 ORDER BY r.request_id DESC
+);
+
+CREATE VIEW accounts_v AS
+(
+SELECT
+	sm.login,
+	sm.password,
+	sm.faculty_code,
+	sm.first_name,
+	sm.last_name,
+	sm.patronymic,
+	sm.is_admin,
+	sm.can_view_requests,
+	sm.can_view_questions,
+	sm.can_view_appointments,
+	sm.can_view_forms,
+	string_agg (srp.request_code, ',') as request_privileges
+FROM staff_members sm
+JOIN staff_request_privileges srp ON srp.login = sm.login
+GROUP BY sm.login
 );
 
 /*
@@ -322,95 +344,33 @@ INSERT INTO doc_storage (doc_storage_id)
 VALUES
 (0);
 
+INSERT INTO staff_request_privileges (login, request_code)
+VALUES
+('admin', '000'),
+('admin', '001'),
+('admin', '002'),
+('admin', '003'),
+('admin', 'P00'),
+('admin', 'P01'),
+('admin', 'P02'),
+('admin', 'P03'),
+('admin', 'P04'),
+('admin', 'P05'),
+('admin', 'P06');
+
 /*
-CREATE VIEW req_new_back AS 
-(
-SELECT 
-	r.request_id, 
-	rc.request_name,
-	sc.status_name, 
-	r.first_name, 
-	r.last_name,
-	r.patronymic,
-	r.email,
-	fc.faculty_name, 
-	fc.short_name,
-	r.student_group,
-	r.dir_path,
-	r.files_attached, 
-	to_char(r.time_when_added, 'hh24:mi dd/mm/yyyy') as time_when_added
-FROM requests r, request_codes rc, status_codes sc, faculty_codes fc, doc_storage ds
-WHERE rc.request_code = r.request_code
-AND fc.faculty_code = r.faculty_code
-AND sc.status_code = r.status_code
-AND r.status_code = '100'
-ORDER BY r.time_when_added DESC
-);
-
-CREATE VIEW req_done_back AS 
-(
-SELECT 
-	r.request_id, 
-	rc.request_name,
-	sc.status_name, 
-	r.first_name, 
-	r.last_name,
-	r.patronymic,
-	r.email,
-	fc.faculty_name, 
-	fc.short_name,
-	r.student_group,
-	r.dir_path,
-	r.files_attached, 
-	to_char(r.time_when_added, 'hh24:mi dd/mm/yyyy') as time_when_added,
-	r.email_response,
-	to_char(r.time_when_update, 'hh24:mi dd/mm/yyyy') as time_when_update
-FROM requests r, request_codes rc, status_codes sc, faculty_codes fc
-WHERE rc.request_code = r.request_code
-AND fc.faculty_code = r.faculty_code
-AND sc.status_code = r.status_code
-AND r.status_code = '101'
-ORDER BY r.time_when_added DESC
-);
-
-CREATE VIEW req_decl_back AS 
-(
-SELECT 
-	r.request_id, 
-	rc.request_name,
-	sc.status_name, 
-	r.first_name, 
-	r.last_name,
-	r.patronymic,
-	r.email,
-	fc.faculty_name, 
-	fc.short_name,
-	r.student_group,
-	r.dir_path,
-	r.files_attached, 
-	to_char(r.time_when_added, 'hh24:mi dd/mm/yyyy') as time_when_added,
-	r.email_response,
-	to_char(r.time_when_update, 'hh24:mi dd/mm/yyyy') as time_when_update
-FROM requests r, request_codes rc, status_codes sc, faculty_codes fc
-WHERE rc.request_code = r.request_code
-AND fc.faculty_code = r.faculty_code
-AND sc.status_code = r.status_code
-AND r.status_code = '102'
-ORDER BY r.time_when_added DESC
-);
+select * from dev1.doc_storage;
+select * from dev1.responses;
+select * from dev1.req_front;
+select * from dev1.requests;
+SELECT * from dev1.accounts_v;
 */
 /*
-select * from doc_storage;
-select * from responses;
-select * from req_front;
-select * from requests;
-*/
-/*
-insert into req_front (request_code, first_name, last_name, patronymic, email, faculty_code, student_group) 
+insert into dev1.req_front (request_code, first_name, last_name, patronymic, email, faculty_code, student_group) 
 values
 ('000','Pasha','Pavlov','Pavlovich','123@gmail.com','000','Б20-191-1');
 
-insert into req_front (request_code, first_name, last_name, patronymic, email, faculty_code, student_group, doc_amount, dir_name, public_url) 
+insert into dev1.req_front (request_code, first_name, last_name, patronymic, email, faculty_code, student_group, doc_amount, dir_name, public_url) 
 values
 ('000','Pasha','Pavlov','Pavlovich','ya.lisicheg@yandex.ru','000','Б20-191-1', 1, 'test1', 'https://yadi.sk/d/IOSGdMqTQ7zBcw');
 */
