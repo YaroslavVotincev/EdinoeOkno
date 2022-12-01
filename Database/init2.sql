@@ -239,7 +239,7 @@ SELECT
 	ds.doc_amount,
 	ds.public_url,
 	to_char(r.time_when_added, 'hh24:mi dd/mm/yyyy') as time_when_added,
-	to_char(r.time_when_added, 'hh24:mi dd/mm/yyyy') as time_when_updated,
+	to_char(r.time_when_updated, 'hh24:mi dd/mm/yyyy') as time_when_updated,
 	rp.staff_member_login,
 	rp.response_content
 FROM requests r

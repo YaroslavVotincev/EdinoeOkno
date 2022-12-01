@@ -21,6 +21,5 @@ namespace EdinoeOkno_program
         public bool can_view_forms = false;
 
         public List<string> request_privileges = new List<string>();
-        public object Tag;
     }
 }

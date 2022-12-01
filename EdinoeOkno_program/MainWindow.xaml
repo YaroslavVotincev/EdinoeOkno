@@ -9,7 +9,7 @@
     <TabControl Grid.Row ="0" Margin="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TabStripPlacement="Right" BorderThickness="5" >
         <TabItem Header="Вход" Height="50" Width="100">
             <Grid x:Name="authorizationGrid">
-                <local:Authorization_UserControl></local:Authorization_UserControl> 
+               <local:Authorization_UserControl></local:Authorization_UserControl> 
             </Grid>
         </TabItem>
         <TabItem Header="Заявки" Height="50" Width="100">
@@ -29,8 +29,7 @@
         </TabItem>
         <TabItem Header="Адм. приложения" Height="50" Width="100">
             <Grid x:Name="adminGrid">
-                <local:Аdministration_UserControl></local:Аdministration_UserControl>
-                
+                <TextBlock FontSize="35" TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center">Пожалуйста, ввойдите в ваш аккаунт сотрудника во вкладке "Вход"</TextBlock>
             </Grid>
         </TabItem>
     </TabControl>
