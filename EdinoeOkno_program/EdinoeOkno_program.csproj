@@ -108,6 +108,7 @@
       <DependentUpon>Forms_UserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="OurDatabase.cs" />
+    <Compile Include="Question.cs" />
     <Compile Include="Questions_UserControl.xaml.cs">
       <DependentUpon>Questions_UserControl.xaml</DependentUpon>
     </Compile>

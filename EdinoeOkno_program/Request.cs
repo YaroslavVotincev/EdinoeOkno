@@ -34,8 +34,7 @@ namespace EdinoeOkno_program
         public string time_when_updated = "-";
         public string staff_member_login = "-";
         public string response_content;
-
-        public Button button;    
+ 
         public static bool IsValidEmail(string email)
         {
             try
@@ -48,27 +47,6 @@ namespace EdinoeOkno_program
                 return false;
             }
         }
-        public async Task UpdateRequest(string new_status_code, string title, string response_content, NpgsqlConnection dBconnection, string dBSchema)
-        {
-            try
-            {
-                string query = $@"WITH tmp AS
-	                            (INSERT INTO {dBSchema}.responses (email, title, response_content, type) 
-	                                VALUES ('{this.email}', '{title}', '{response_content}', 'request')
-	                                RETURNING response_id
-	                            )
-                                UPDATE {dBSchema}.requests SET
-	                                status_code = '{new_status_code}',
-	                                response_id = (SELECT * FROM tmp),
-	                                time_when_updated = now()
-                                WHERE request_id = '{this.request_id}';";
-                NpgsqlCommand cmd = new NpgsqlCommand(query, dBconnection);
-                await cmd.ExecuteNonQueryAsync();
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
+        
     }
 }

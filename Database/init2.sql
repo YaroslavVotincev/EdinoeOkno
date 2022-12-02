@@ -18,6 +18,7 @@ CREATE TABLE requests
 	
 	time_when_added TIMESTAMP DEFAULT now(),
 	time_when_updated TIMESTAMP DEFAULT now(),
+	staff_member_login varchar(10) DEFAULT 'student',
 	
 	PRIMARY KEY (request_id)
 );
@@ -44,14 +45,14 @@ CREATE TABLE status_codes
 (
 	status_code varchar(3),
 	status_name text NOT NULL,
-	status_short_name text NOT NULL,
+	status_short_name text NOT NULL DEFAULT '',
 	PRIMARY KEY (status_code)
 );
 
 CREATE TABLE questions
 (
 	question_id serial,
-	status_code varchar(3),
+	status_code varchar(3) DEFAULT '100',
 	faculty_code varchar(3),
 	response_id int DEFAULT 0,
 	
@@ -59,13 +60,13 @@ CREATE TABLE questions
 	last_name varchar(20) NOT NULL DEFAULT '',
 	patronymic varchar(20) NOT NULL DEFAULT '',
 	email text NOT NULL,
-	student_group varchar(10) NOT NULL,
 	
 	subject varchar(20) NOT NULL,
-	question text NOT NULL,
+	body text NOT NULL,
 	
 	time_when_added TIMESTAMP DEFAULT now(),
 	time_when_updated TIMESTAMP DEFAULT now(),
+	staff_member_login varchar(10) DEFAULT 'student',
 	
 	CONSTRAINT email_validity_check CHECK (email ~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$'),
 	--CONSTRAINT group_validity_check CHECK (student_group ~ '^(Б|С|М|б|с|м)\d\d-\d\d\d-\d$'),
@@ -105,7 +106,7 @@ CREATE TABLE staff_members
 CREATE TABLE responses
 (
 	response_id serial,
-	staff_member_login varchar(10) DEFAULT 'admin',
+	staff_member_login varchar(10) DEFAULT 'student',
 	
 	email text NOT NULL,
 	title text NOT NULL,
@@ -150,6 +151,7 @@ ALTER TABLE requests ADD FOREIGN KEY (status_code) REFERENCES status_codes ON DE
 ALTER TABLE requests ADD FOREIGN KEY (faculty_code) REFERENCES faculty_codes ON DELETE RESTRICT ON UPDATE CASCADE;
 ALTER TABLE requests ADD FOREIGN KEY (response_id) REFERENCES responses ON DELETE SET DEFAULT;
 ALTER TABLE requests ADD FOREIGN KEY (doc_storage_id) REFERENCES doc_storage ON DELETE SET DEFAULT;
+ALTER TABLE requests ADD FOREIGN KEY (staff_member_login) REFERENCES staff_members(login) ON UPDATE CASCADE;
 
 ALTER TABLE questions ADD FOREIGN KEY (status_code) REFERENCES status_codes ON DELETE RESTRICT ON UPDATE CASCADE;
 ALTER TABLE questions ADD FOREIGN KEY (faculty_code) REFERENCES faculty_codes ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -173,7 +175,7 @@ CREATE INDEX questions_last_name_index ON questions(last_name);
 CREATE INDEX questions_email_index ON questions(email);
 CREATE INDEX questions_time_when_updated_index ON questions(time_when_updated);
 CREATE INDEX questions_faculty_code_index ON questions(faculty_code);
-CREATE INDEX questions_student_group_index ON questions(student_group);
+--CREATE INDEX questions_student_group_index ON questions(student_group);
 
 CREATE INDEX staff_last_name_index ON requests(last_name);
 CREATE INDEX staff_faculty_code_index ON staff_members(faculty_code);
@@ -251,6 +253,33 @@ JOIN responses rp ON rp.response_id = r.response_id
 ORDER BY r.request_id DESC
 );
 
+CREATE VIEW que_back AS
+(
+SELECT
+	q.question_id,
+	q.subject,
+	q.body,
+	q.status_code,
+	sc.status_name,
+	sc.status_short_name,
+	q.first_name,
+	q.last_name,
+	q.patronymic,
+	q.email,
+	q.faculty_code,
+	fc.faculty_name,
+	fc.faculty_short_name,
+	to_char(q.time_when_added, 'hh24:mi dd/mm/yyyy') as time_when_added,
+	to_char(q.time_when_updated, 'hh24:mi dd/mm/yyyy') as time_when_updated,
+	rp.staff_member_login,
+	rp.response_content
+FROM questions q
+JOIN faculty_codes fc ON fc.faculty_code = q.faculty_code
+JOIN status_codes sc ON sc.status_code = q.status_code
+JOIN responses rp ON rp.response_id = q.response_id
+ORDER BY q.question_id DESC
+);
+
 CREATE VIEW accounts_v AS
 (
 SELECT
@@ -267,7 +296,7 @@ SELECT
 	sm.can_view_forms,
 	string_agg (srp.request_code, ',') as request_privileges
 FROM staff_members sm
-JOIN staff_request_privileges srp ON srp.login = sm.login
+LEFT OUTER JOIN staff_request_privileges srp ON srp.login = sm.login
 GROUP BY sm.login
 );
 
@@ -336,6 +365,10 @@ INSERT INTO staff_members (login, password, first_name, last_name, patronymic)
 VALUES
 ('admin', 'admin', '1','1','1');
 
+INSERT INTO staff_members (login, password, first_name, last_name, patronymic)
+VALUES
+('student', '', '1','1','1');
+
 INSERT INTO responses (response_id, email, title, response_content, type)
 VALUES
 (0,'edinoeokno@internet.ru','Без названия','Ответ не добавлен','default_no_response');
@@ -364,6 +397,8 @@ select * from dev1.responses;
 select * from dev1.req_front;
 select * from dev1.requests;
 SELECT * from dev1.accounts_v;
+select * from dev1.questions;
+SELECT * from dev1.staff_members;
 */
 /*
 insert into dev1.req_front (request_code, first_name, last_name, patronymic, email, faculty_code, student_group) 
@@ -373,5 +408,11 @@ values
 insert into dev1.req_front (request_code, first_name, last_name, patronymic, email, faculty_code, student_group, doc_amount, dir_name, public_url) 
 values
 ('000','Pasha','Pavlov','Pavlovich','ya.lisicheg@yandex.ru','000','Б20-191-1', 1, 'test1', 'https://yadi.sk/d/IOSGdMqTQ7zBcw');
+
+insert into dev1.questions (first_name, last_name, patronymic, email, faculty_code, subject, body) 
+values
+('Pasha','Pavlov','Pavlovich','ya.lisicheg@yandex.ru','000', 'Тема1', 'Вопрос1');
 */
+
+
 --TRUNCATE requests;

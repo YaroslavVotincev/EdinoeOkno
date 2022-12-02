@@ -75,7 +75,7 @@ namespace EdinoeOkno_program
                                     {
                                         account = new Staff_Member()
                                         {
-                                            login = this.login,
+                                            login = (string)dB["login"],
                                             first_name = (string)dB["first_name"],
                                             last_name = (string)dB["last_name"],
                                             patronymic = (string)dB["patronymic"],

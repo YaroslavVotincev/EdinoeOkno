@@ -564,9 +564,10 @@ namespace EdinoeOkno_program
                     Tag = line[0]
                 };
                 facultyComboBox.Items.Add(facultyComboBoxItem);
-                if (line[0] == selectedAccount.faculty_code)
-                    facultyComboBox.SelectedItem = facultyComboBoxItem;
+
             }
+            selectedAccount.faculty_code = OurDatabase.facultyNamesList[0][0];
+            facultyComboBox.SelectedIndex = 0;
             facultyComboBox.SelectionChanged += facultyComboBox_SelectionChanged;
             st.Children.Add(facultyComboBox);
 

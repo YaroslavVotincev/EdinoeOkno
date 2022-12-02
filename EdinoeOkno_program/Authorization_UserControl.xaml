@@ -8,7 +8,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Background="#FF164ACF">
         <GroupBox x:Name="authBox" Header="Вход в приложение" BorderBrush="Black" HorizontalAlignment="Center" VerticalAlignment="Center" Height="205" Width="348" Foreground="White">
-            <Grid Background="White">
+            <Grid Background="#FFFCFCFC">
                 <TextBlock x:Name="feedTextBlock" TextWrapping="Wrap" Text="Пожалуйста, введите ваш логин и пароль сотрудника" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,20,0,0" Width="241" TextAlignment="Center" Foreground="Black" FontSize="10" FontStyle="Italic"/>
                 <Label Content="Логин:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="62,61,0,0"></Label>
                 <TextBox x:Name="loginTextBox" HorizontalAlignment="Center" Width="120" VerticalAlignment="Top" Margin="0,65,0,0" Background="#FFE8F0FE" TextChanged="loginTextBox_TextChanged"/>

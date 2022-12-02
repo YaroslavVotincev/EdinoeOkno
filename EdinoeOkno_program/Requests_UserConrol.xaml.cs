@@ -11,6 +11,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Converters;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -23,15 +24,6 @@ namespace EdinoeOkno_program
     /// </summary>
     public partial class Requests_UserConrol : UserControl
     {
-        /*
-        const string dBServer = "localhost";
-        const string dBPort = "5432";
-        const string dBUser = "postgres";
-        const string dBPassword = "";
-        const string dBDatabase = "EdinoeOkno";
-        const string dBSchema = "dev1";
-        string CONNECTION_STRING = $"Server={dBServer};Port={dBPort};User id={dBUser};Password={dBPassword};Database={dBDatabase}";
-        */
         List<Request> currentRequestList = new List<Request>();
         NpgsqlConnection dBconnection = OurDatabase.GetConnection();
         Request selectedRequest;
@@ -188,7 +180,7 @@ namespace EdinoeOkno_program
                     VerticalContentAlignment = VerticalAlignment.Stretch,
                     IsChecked = true,
                     Tag = fac_name[0],
-                    Content = fac_name[2]
+                    Content = $"{fac_name[1]}"
                 };
                 checkBox.Checked += filter_facultyCheckBox_Checked;
                 checkBox.Unchecked += filter_facultyCheckBox_Unchecked;
@@ -248,13 +240,24 @@ namespace EdinoeOkno_program
         /// </summary>
         private void GetRequestList(List<Request> requestsList)
         {
+            //Фильтр
             string status_condition = "('" + String.Join("','", status_filter) + "')";
+            string faculty_condition = "('" + String.Join("','", faculty_filter) + "')";
+            string type_condition = "('" + String.Join("','", type_filter) + "')";
+            string last_name_condition = $"'{last_name_search}%'";
+
+            //Сортировка
+            string order_condition = "";
+            if (sortingComboBox.SelectedIndex != 0)
+                order_condition = "ORDER BY " + (sortingComboBox.SelectedItem as ComboBoxItem).Tag as string + (descOrderCheckBox.IsChecked == true ? " DESC" : "");
+            else order_condition = "ORDER BY request_id" + (descOrderCheckBox.IsChecked == true ? "" : " DESC");
+
             if (dBconnection.State == System.Data.ConnectionState.Open)
             try
             {
                 requestsList.Clear();
                 using (NpgsqlCommand cmd =
-                new NpgsqlCommand($@"SELECT * FROM {OurDatabase.dBSchema}.{view} WHERE status_code IN {status_condition}", dBconnection))
+                new NpgsqlCommand($@"SELECT * FROM {OurDatabase.dBSchema}.{view} WHERE status_code IN {status_condition} AND faculty_code IN {faculty_condition} AND request_code IN {type_condition} AND last_name LIKE {last_name_condition} {order_condition} ", dBconnection))
                 {
                     using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -294,15 +297,6 @@ namespace EdinoeOkno_program
             }
             catch (Exception ex)
             {
-                requestsListBox.Items.Clear();
-                TextBlock queryErrorLoadingMessage = new TextBlock
-                {
-                    TextWrapping = TextWrapping.Wrap,
-                    Width = requestsListBox.Width,
-                    FontWeight = FontWeights.Bold,
-                    FontSize = 16
-                };
-                requestsListBox.Items.Add(queryErrorLoadingMessage);
                 MessageBox.Show(ex.Message);
             }
         }
@@ -330,23 +324,22 @@ namespace EdinoeOkno_program
             for (int i = 0; i < requestsList.Count; i++)
             {
                 r = requestsList[i];
-                r.button = new Button();
+                Button button = new Button();
                 TextBlock preview = new TextBlock
                 {
-                    Text = $"Заявка №{r.request_id}\n" +
+                    Text = $"Заявка №{r.request_id} ({r.last_name})\n" +
                     $"Состояние: {r.status_name}\n" +
                     $"Время поступления: {r.time_when_added}\n" +
                     $"Факультет: {r.faculty_short_name}\n" +
                     $"Тип: {r.request_name}",
                     TextWrapping = TextWrapping.Wrap
                 };
-                r.button.Tag = r;
-                r.button.HorizontalContentAlignment = HorizontalAlignment.Stretch;
-                //r.button.FontSize = 11;
-                r.button.Width = requestsListBox.Width - 35;
-                r.button.Content = preview;
-                r.button.Click += SelectRequest;
-                requestsListBox.Items.Add(r.button);
+                button.Tag = r;
+                button.HorizontalContentAlignment = HorizontalAlignment.Stretch;
+                button.Width = requestsListBox.Width - 35;
+                button.Content = preview;
+                button.Click += SelectRequest;
+                requestsListBox.Items.Add(button);
             }
         }
         /// <summary>
@@ -358,19 +351,7 @@ namespace EdinoeOkno_program
             selectedRequest = selectedButton.Tag as Request;
             ConstructWorkingArea();
         }
-        private void buttonSend_Click(object sender, EventArgs eventArgs)
-        {
-            Button button = sender as Button;
-            TextBox text = button.Tag as TextBox;
-            //MailSend.Send(selectedRequest.email, selectedRequest.request_name, text.Text);
-        }
-        /// <summary>
-        /// По нажатию кнопки в буфер обмена копируется Tag этой кнопки
-        /// </summary>
-        private void copyButton_Click(object sender, EventArgs eventArgs)
-        {
-            Clipboard.SetText(((Button)sender).Tag.ToString());
-        }
+
         /// <summary>
         /// Возвращает новый TextBox только для чтения
         /// </summary>
@@ -378,27 +359,11 @@ namespace EdinoeOkno_program
         {
             return new TextBox()
             {
-                Background = workingArea.Background,
-                BorderBrush = null,
+                Background = new SolidColorBrush(Color.FromArgb(255, 232, 240, 254)),
                 IsReadOnly = true
             };
         }
-        /// <summary>
-        /// Возвращает новый Button для копирования текста
-        /// </summary>
-        public Button SetCopyButton(string copystr)
-        {
-            Button button = new Button()
-            {
-                Width = 24,
-                Height = 18,
-                Content = "copy",
-                FontSize = 8,
-                Tag = copystr,
-            };
-            button.Click += copyButton_Click;
-            return button;
-        }
+
         /// <summary>
         /// Строит workingArea исходя из текущего selectedRequest
         /// </summary>
@@ -408,202 +373,251 @@ namespace EdinoeOkno_program
             workingArea.Content = st;
 
             //Заголовок
-            TextBox header = SetReadTextBox();
-            header.Text = $" Заявка №{selectedRequest.request_id}" +
-                $" ({selectedRequest.time_when_added})";
-            header.FontSize = 15;
-            header.FontWeight = FontWeights.Bold;
+            TextBox header = new TextBox()
+            {
+                IsReadOnly = true,
+                Background = workingArea.Background,
+                BorderBrush = null,
+                Text = $"Заявка №{selectedRequest.request_id} ({selectedRequest.time_when_added})",
+                FontWeight = FontWeights.Bold
+            };
             st.Children.Add(header);
+
             //общая информация
-            TextBox genInfo = SetReadTextBox();
-            genInfo.Text = $"Состояние: {selectedRequest.status_name}\n" +
+            TextBox genInfo = new TextBox()
+            {
+                IsReadOnly = true,
+                Background = workingArea.Background,
+                BorderBrush = null,
+                Text = $"Состояние: {selectedRequest.status_name}\n" +
                         $"Время поступления: {selectedRequest.time_when_added}\n" +
                         $"Время обновления:  {selectedRequest.time_when_updated}\n" +
-                        $"Обработано сотрудником: -\n" +
-                        $"Тип: {selectedRequest.request_name}";
+                        $"Обработано сотрудником: {selectedRequest.staff_member_login}\n" +
+                        $"Тип: {selectedRequest.request_name}",
+            };
             st.Children.Add(genInfo);
+
             //информация о заявившем
-            TextBlock personInfo = new TextBlock();
-            personInfo.Text = "\nИнформация о заявившем:";
+            TextBlock personInfo = new TextBlock()
+            {
+                FontWeight = FontWeights.Bold,
+                Text = "\nИнформация о заявившем:"
+            };
             st.Children.Add(personInfo);
-            //имя
-            StackPanel first_nameRow = new StackPanel() { Orientation = Orientation.Horizontal };
-            Label first_nameLabel = new Label() { Content = "Имя:" };
-            TextBox first_nameBox = SetReadTextBox();
-            first_nameBox.Text = selectedRequest.first_name;
-            first_nameBox.VerticalContentAlignment = VerticalAlignment.Center;
-            Button first_nameCopyButton = SetCopyButton(first_nameBox.Text);
-            first_nameRow.Children.Add(first_nameLabel);
-            first_nameRow.Children.Add(first_nameBox);
-            first_nameRow.Children.Add(first_nameCopyButton);
-            st.Children.Add(first_nameRow);
+
             //фамилия
-            StackPanel last_nameRow = new StackPanel() { Orientation = Orientation.Horizontal };
-            Label last_nameLabel = new Label() { Content = "Фам:" };
-            TextBox last_nameBox = SetReadTextBox();
-            last_nameBox.Text = selectedRequest.last_name;
-            last_nameBox.VerticalContentAlignment = VerticalAlignment.Center;
-            Button last_nameCopyButton = SetCopyButton(last_nameBox.Text);
-            last_nameRow.Children.Add(last_nameLabel);
-            last_nameRow.Children.Add(last_nameBox);
-            last_nameRow.Children.Add(last_nameCopyButton);
-            st.Children.Add(last_nameRow);
+            TextBlock last_nameTextBlock = new TextBlock() { Text = "Фамилия:" };
+            TextBox last_nameTextBox = SetReadTextBox();
+            last_nameTextBox.Text = selectedRequest.last_name;
+            st.Children.Add(last_nameTextBlock);
+            st.Children.Add(last_nameTextBox);
+
+            //имя
+            TextBlock first_nameTextBlock = new TextBlock() { Text = "Имя:" };
+            TextBox first_nameTextBox = SetReadTextBox();
+            first_nameTextBox.Text = selectedRequest.first_name;
+            st.Children.Add(first_nameTextBlock);
+            st.Children.Add(first_nameTextBox);
+
             //отчество
-            StackPanel patronymicRow = new StackPanel() { Orientation = Orientation.Horizontal };
-            Label patronymicLabel = new Label() { Content = "Отч:" };
-            TextBox patronymicBox = SetReadTextBox();
-            patronymicBox.Text = selectedRequest.patronymic;
-            patronymicBox.VerticalContentAlignment = VerticalAlignment.Center;
-            Button patronymicCopyButton = SetCopyButton(patronymicBox.Text);
-            patronymicRow.Children.Add(patronymicLabel);
-            patronymicRow.Children.Add(patronymicBox);
-            patronymicRow.Children.Add(patronymicCopyButton);
-            st.Children.Add(patronymicRow);
+            TextBlock patronymicTextBlock = new TextBlock() { Text = "Отчество:" };
+            TextBox patronymicTextBox = SetReadTextBox();
+            patronymicTextBox.Text = selectedRequest.patronymic;
+            st.Children.Add(patronymicTextBlock);
+            st.Children.Add(patronymicTextBox);
+
             //Факультет
-            StackPanel facultyRow = new StackPanel() { Orientation = Orientation.Horizontal };
-            Label facultyLabel = new Label() { Content = "Факультет: " };
-            TextBox facultyBox = SetReadTextBox();
-            facultyBox.Text = $"({selectedRequest.faculty_short_name}) {selectedRequest.faculty_name}";
-            facultyBox.VerticalContentAlignment = VerticalAlignment.Center;
-            facultyBox.Width = 300;
-            facultyBox.TextWrapping = TextWrapping.Wrap;
-            Button facultyCopyButton = SetCopyButton(facultyBox.Text);
-            facultyRow.Children.Add(facultyLabel);
-            facultyRow.Children.Add(facultyBox);
-            facultyRow.Children.Add(facultyCopyButton);
-            st.Children.Add(facultyRow);
+            TextBlock facultyTextBlock = new TextBlock() { Text = "Факультет:" };
+            TextBox facultyTextBox = SetReadTextBox();
+            facultyTextBox.Text = $"({selectedRequest.faculty_short_name}) {selectedRequest.faculty_name}";
+            st.Children.Add(facultyTextBlock);
+            st.Children.Add(facultyTextBox);
+
             //группа
-            StackPanel groupRow = new StackPanel() { Orientation = Orientation.Horizontal };
-            Label groupLabel = new Label() { Content = "Группа: " };
-            TextBox groupBox = SetReadTextBox();
-            groupBox.Text = selectedRequest.student_group.ToUpper();
-            groupBox.VerticalContentAlignment = VerticalAlignment.Center;
-            Button groupCopyButton = SetCopyButton(groupBox.Text);
-            groupRow.Children.Add(groupLabel);
-            groupRow.Children.Add(groupBox);
-            groupRow.Children.Add(groupCopyButton);
-            st.Children.Add(groupRow);
+            TextBlock groupTextBlock = new TextBlock() { Text = "Группа:" };
+            TextBox groupTextBox = SetReadTextBox();
+            groupTextBox.Text = selectedRequest.student_group;
+            st.Children.Add(groupTextBlock);
+            st.Children.Add(groupTextBox);
+
             //email
-            StackPanel emailRow = new StackPanel() { Orientation = Orientation.Horizontal };
-            Label emailLabel = new Label() { Content = "Эл. почта: " };
-            TextBox emailBox = SetReadTextBox();
-            emailBox.Text = selectedRequest.email;
-            emailBox.VerticalContentAlignment = VerticalAlignment.Center;
-            Button emailCopyButton = SetCopyButton(emailBox.Text);
-            emailRow.Children.Add(emailLabel);
-            emailRow.Children.Add(emailBox);
-            emailRow.Children.Add(emailCopyButton);
-            st.Children.Add(emailRow);
+            TextBlock emailTextBlock = new TextBlock() { Text = "Почта:" };
+            TextBox emailTextBox = SetReadTextBox();
+            emailTextBox.Text = selectedRequest.email;
+            st.Children.Add(emailTextBlock);
+            st.Children.Add(emailTextBox);
+
             //кол-во файлов
-            TextBlock filesInfo = new TextBlock();
-            filesInfo.Text = $"\nПрикреплённые документы:" +
-                $"\nКоличество файлов: {selectedRequest.doc_amount}";
+            TextBlock filesInfo = new TextBlock()
+            {
+                FontWeight = FontWeights.Bold,
+                Text = $"\nПрикреплённые документы: {selectedRequest.doc_amount} шт.",
+            };
             st.Children.Add(filesInfo);
+
             //файлы
-            StackPanel linkRow = new StackPanel() { Orientation = Orientation.Horizontal };
-            Label linkLabel = new Label() { Content = "Ссылка на файлы: " };
-            TextBox linkBox = SetReadTextBox();
-            linkBox.Text = selectedRequest.public_url;
-            linkBox.VerticalContentAlignment = VerticalAlignment.Center;
-            Button linkCopyButton = SetCopyButton(linkBox.Text);
-            linkCopyButton.Tag = linkBox.Text;
-            linkCopyButton.Click += linkBox_Click;
-            linkCopyButton.Content = "open";
-            linkRow.Children.Add(linkLabel);
-            linkRow.Children.Add(linkBox);
-            linkRow.Children.Add(linkCopyButton);
-            st.Children.Add(linkRow);
+            if (selectedRequest.doc_amount != 0)
+            {
+                TextBlock linkTextBlock = new TextBlock() { Text = "Ссылка:" };
+                TextBox linkTextBox = SetReadTextBox();
+                linkTextBox.Text = selectedRequest.public_url;
+                Button linkCopyButton = new Button()
+                {
+                    Content = "Перейти по ссылке",
+                    Tag = selectedRequest.public_url,
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    Background = new SolidColorBrush(Color.FromArgb(255, 22, 74, 207)),
+                    Foreground = Brushes.White,
+                };
+                linkCopyButton.Click += linkBox_Click;
+                st.Children.Add(linkTextBlock);
+                st.Children.Add(linkTextBox);
+                st.Children.Add(linkCopyButton);
+            }
+
+            //предыдущий ответ
+            if (selectedRequest.staff_member_login != "student")
+            {
+                st.Children.Add(new TextBlock()
+                {
+                    Text = $"\n Предыдущий ответ от сотрудника {selectedRequest.staff_member_login}:",
+                    FontWeight = FontWeights.Bold,
+                }
+                );
+                TextBox previous_responseTextBox = new TextBox()
+                {
+                    Text = selectedRequest.response_content,
+                    Width = 350,
+                    TextWrapping = TextWrapping.Wrap,
+                    HorizontalAlignment= HorizontalAlignment.Left,
+                    VerticalAlignment = VerticalAlignment.Top,
+                    Background = new SolidColorBrush(Color.FromArgb(255, 232, 240, 254)),
+                };
+                st.Children.Add(previous_responseTextBox);
+            }
+
             //ответ на почту
-            TextBlock responseHeader = new TextBlock();
-            responseHeader.Text = $"Ответ на почту {selectedRequest.email}:";
+            TextBlock responseHeader = new TextBlock()
+            {
+                Text = $"\nДобавить новый ответ на почту {selectedRequest.email}:",
+                FontWeight = FontWeights.Bold,
+            };
             st.Children.Add(responseHeader);
+
+            //ввод темы
+            st.Children.Add(new TextBlock() { Text = "Тема:", });
+            TextBox titleBox = new TextBox()
+            {
+                Text = $"Ваша заявка №{selectedRequest.request_id}: {selectedRequest.request_name}",
+                Width = 350,
+                TextWrapping = TextWrapping.Wrap,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
+            };
+            st.Children.Add(titleBox);
+
             //ввод ответа
+            st.Children.Add(new TextBlock() { Text = "Ответ:", });
             TextBox responseBox = new TextBox()
             {
-                Text = selectedRequest.response_content,
-                Width = 350,
-                HorizontalAlignment = HorizontalAlignment.Left,
                 Height = 100,
+                Width = 350,
                 TextWrapping = TextWrapping.Wrap,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
                 AcceptsReturn = true,
                 AcceptsTab = true,
-                IsReadOnly = !(selectedRequest.status_short_name == "new")
+                Tag = titleBox
             };
             st.Children.Add(responseBox);
+
             //подтверждение отправки ответа
-            if (selectedRequest.status_short_name == "new")
+            CheckBox confirm_responseCheckBox = new CheckBox() { Content = "Без ответа на почту", Tag = responseBox };
+            st.Children.Add(confirm_responseCheckBox);
+
+            //перевод в другой статус
+            StackPanel statusChangeRow = new StackPanel { Orientation = Orientation.Horizontal };
+            TextBlock statusChangeTextBlock = new TextBlock()
             {
-                CheckBox confirm_responseCheckBox = new CheckBox()
-                {
-                    Content = "Без ответа на почту",
-                    Tag = responseBox
-                };
-                confirm_responseCheckBox.Click += confirm_responseCheckBox_Click;
-                st.Children.Add(confirm_responseCheckBox);
+                Text = $"\nИзменить статус на: ",
+                FontWeight = FontWeights.Bold,
+            };
 
-                responseBox.Tag = confirm_responseCheckBox;
+            ComboBox statusChangeComboBox = new ComboBox() { Tag = confirm_responseCheckBox };
+            foreach (string[] statuses in OurDatabase.statusNamesList)
+            {
+                statusChangeComboBox.Items.Add(new ComboBoxItem()
+                {
+                    Tag = statuses[0],
+                    Content = statuses[2]
+                });
+            };
+            statusChangeComboBox.SelectedIndex = 1;
+            statusChangeRow.Children.Add(statusChangeTextBlock);
+            statusChangeRow.Children.Add(statusChangeComboBox);
+            st.Children.Add(statusChangeRow);
 
-                StackPanel changeStatusButtonsRow = new StackPanel() { Orientation = Orientation.Horizontal };
-                Button doneButton = new Button()
+            Button confirmStatusChangeButton = new Button()
+            {
+                Content = "Подтвердить перевод",
+                Background = new SolidColorBrush(Color.FromArgb(255, 22, 74, 207)),
+                Foreground = Brushes.White,
+                Tag = statusChangeComboBox,
+                HorizontalAlignment = HorizontalAlignment.Left,
+            };
+            confirmStatusChangeButton.Click += confirmStatusChangeButton_Click;
+            st.Children.Add(confirmStatusChangeButton);
+        }
+
+        private void confirmStatusChangeButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            ComboBox comboBox = button.Tag as ComboBox;
+            CheckBox checkBox = comboBox.Tag as CheckBox;
+            TextBox responseBox = checkBox.Tag as TextBox;
+            TextBox titleBox = responseBox.Tag as TextBox;
+
+            DefaultListBox();
+            DefaultWorkingArea();
+
+            try
+            {
+                if (checkBox.IsChecked == false)
                 {
-                    Content = "Подтвердить выполнение",
-                    Background = Brushes.Green,
-                    Tag = responseBox
-                };
-                Button declineButton = new Button()
+                    string query = $@"WITH tmp AS
+                                (INSERT INTO {OurDatabase.dBSchema}.responses (email, title, response_content, type, staff_member_login) 
+                                    VALUES ('{selectedRequest.email}', '{titleBox.Text}', '{responseBox.Text}', 'request', '{Authorization.account.login}')
+                                    RETURNING response_id
+                                )
+                                UPDATE {OurDatabase.dBSchema}.requests SET
+                                    status_code = '{(comboBox.SelectedItem as ComboBoxItem).Tag}',
+                                    response_id = (SELECT * FROM tmp),
+                                    time_when_updated = now(),
+                                    staff_member_login = '{Authorization.account.login}'
+                                WHERE request_id = '{selectedRequest.request_id}';";
+                    NpgsqlCommand cmd = new NpgsqlCommand(query, dBconnection);
+                    cmd.ExecuteNonQuery();
+                    responseMail.Send(selectedRequest.email, selectedRequest.last_name, titleBox.Text, responseBox.Text);
+                }
+                else
                 {
-                    Content = "Отклонить заявку",
-                    Background = Brushes.Red,
-                    Tag = responseBox
-                };
-                doneButton.Click += doneButton_Click;
-                declineButton.Click += declineButton_Click;
-                changeStatusButtonsRow.Children.Add(doneButton);
-                changeStatusButtonsRow.Children.Add(declineButton);
-                st.Children.Add(changeStatusButtonsRow);
+                    string query = $@"
+                                UPDATE {OurDatabase.dBSchema}.requests SET
+                                    status_code = '{(comboBox.SelectedItem as ComboBoxItem).Tag}',
+                                    time_when_updated = now(),
+                                    staff_member_login = '{Authorization.account.login}'
+                                WHERE request_id = '{selectedRequest.request_id}';";
+                    NpgsqlCommand cmd = new NpgsqlCommand(query, dBconnection);
+                    cmd.ExecuteNonQuery();
+                }
             }
-        }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
 
-        private void declineButton_Click(object sender, EventArgs e)
-        {
-            Button button = sender as Button;
-            TextBox textBox = button.Tag as TextBox;
-            CheckBox checkBox = textBox.Tag as CheckBox;
-            string title = $"Ваша заявка \"{selectedRequest.request_name}\" отклонена";
-            DefaultWorkingArea();
-
-
-            selectedRequest.UpdateRequest("102", title, textBox.Text, dBconnection, OurDatabase.dBSchema);
-
-            if (checkBox.IsChecked == false)
-                responseMail.Send(
-                            addressee: selectedRequest.email,
-                            name: $"{selectedRequest.first_name} {selectedRequest.last_name} {selectedRequest.patronymic}",
-                            subject: $"Ваша заявка \"{selectedRequest.request_name}\" отклонена",
-                            messageText: textBox.Text);
-        }
-
-        private void doneButton_Click(object sender, EventArgs e)
-        {
-            Button button = sender as Button;
-            TextBox textBox = button.Tag as TextBox;
-            CheckBox checkBox = textBox.Tag as CheckBox;
-            string title = $"Ваша заявка \"{selectedRequest.request_name}\" выполнена";
-            DefaultWorkingArea();
-
-            selectedRequest.UpdateRequest("101", title, textBox.Text, dBconnection, OurDatabase.dBSchema);
-            if (checkBox.IsChecked == false)
-                responseMail.Send(selectedRequest.email,
-                            $"{selectedRequest.first_name} {selectedRequest.last_name} {selectedRequest.patronymic}",
-                            $"Ваша заявка \"{selectedRequest.request_name}\" выполнена",
-                            messageText: textBox.Text);
-        }
-
-        private void confirm_responseCheckBox_Click(object sender, EventArgs e)
-        {
-            CheckBox checkBox = sender as CheckBox;
-            TextBox textBox = checkBox.Tag as TextBox;
-            textBox.IsEnabled = !textBox.IsEnabled;
+            GetRequestList(currentRequestList);
+            FillRequestsListBox(currentRequestList);
         }
 
         private void linkBox_Click(object sender, EventArgs e)
