@@ -1,7 +1,6 @@
 CREATE schema forms;
 set search_path = forms;
 
-
 CREATE TABLE forms
 (
 	id_form serial NOT NULL,
@@ -27,7 +26,8 @@ CREATE TABLE answers
 	id_answer serial NOT NULL,
 	id_question INT NOT NULL,
 	name_answer text NOT NULL,
-	type_answer text NOT NULL,
+	is_text_input bool NOT NULL DEFAULT FALSE,
+	max_text_input int DEFAULT NULL,
 	PRIMARY KEY (id_answer),
 	FOREIGN KEY (id_question)
 		REFERENCES questions ( id_question )

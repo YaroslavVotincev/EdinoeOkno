@@ -104,6 +104,14 @@
     <Compile Include="Authorization_UserControl.xaml.cs">
       <DependentUpon>Authorization_UserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\CheckboxGroup.cs" />
+    <Compile Include="Forms\CheckboxGroupWithTextInput.cs" />
+    <Compile Include="Forms\Header.cs" />
+    <Compile Include="Forms\IForms_Element.cs" />
+    <Compile Include="Forms\Paragraph.cs" />
+    <Compile Include="Forms\RadioGroup.cs" />
+    <Compile Include="Forms\RadioGroupWithTextInput.cs" />
+    <Compile Include="Forms\TextInput.cs" />
     <Compile Include="Forms_UserControl.xaml.cs">
       <DependentUpon>Forms_UserControl.xaml</DependentUpon>
     </Compile>

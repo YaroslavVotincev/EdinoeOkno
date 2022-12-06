@@ -6,9 +6,25 @@
              xmlns:local="clr-namespace:EdinoeOkno_program"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid x:Name="requestFrame">
-        <ListBox x:Name="requestsListBox" HorizontalAlignment="Left" Width="249" Margin="10,10,0,22" BorderBrush="Black" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" SelectionChanged="requestsListBox_SelectionChanged"/>
-        <ScrollViewer x:Name="workingArea" Margin="264,10,10,0" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" BorderBrush="Black" HorizontalScrollBarVisibility="Auto"/>
-        <Button x:Name="AddForm" Content="Добавить форму" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Bottom" Click="Button_Click"  Width="249" Height="20" HorizontalContentAlignment="Center"/>
+    <Grid Background="#FF164ACF">
+        <TabControl>
+            <TabItem Header="Редактирование анкет">
+                <Grid Background="White">
+                    <ListBox x:Name="formsListBox" HorizontalAlignment="Left" Width="249" Margin="10,30,0,120" BorderBrush="Black" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+                    <ScrollViewer x:Name="formsWorkingArea" Margin="264,30,10,0" Background="#FFF0EBF8" BorderBrush="Black" HorizontalScrollBarVisibility="Auto"/>
+                    <Button x:Name="addFormButton" Content="+" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="25" Width="25"/>
+                    <Button Content="Очистить" Margin="288,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <Button Content="Добавить элемент" Margin="343,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <Button x:Name="previewButton" Content="Предпросмотр" Margin="448,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <Button Content="Готово" Margin="534,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <TextBox x:Name="tempOutput" Text="TextBox" Width="245" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,307,0,0" Height="115" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Статистика">
+                <Grid Background="White">
+
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </UserControl>
