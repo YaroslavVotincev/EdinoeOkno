@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="../../Styles/Style.css" rel="stylesheet" type="text/css">
+    <meta charset="UTF-8">
+    <title>Student</title>
+</head>
+<body>
+<header class = "header">
+    <img src = "../../Styles/Logo/istu-logo.png"/>
+    <div class = "container">
+        <div class ="header_logo">Многофункциональный центр ИжГТУ</div>
+        <div class = "header__inner">
+            <nav class="nav">
+                <a class="nav__link" href="../Main.html">Главная</a>
+            </nav>
+        </div>
+    </div>
+</header>
+
+<div class = "intro">
+    <div class ="container"></div>
+</div>
+<main>
+    <form ENCTYPE="multipart/form-data" action="/test/templates/temp.php" method="POST">
+
+        <div class="forms-header"><h1>Заголовок1</h1></div>
+        <div class="forms-paragraph">
+            Параграф2
+        </div>
+        <div class="forms-textinput">
+            <input class ="none" value="'id_question', 'id_answer', " name="3_textinput[]">
+            <label class ="forms-question-title">вопрос</label>
+            <input class ="forms-textfield" maxlength="3" name="3_textinput[]" type="text" required>
+        </div>
+
+        <div class="forms-checkbox-group">
+            <input class = "none" value="check-box" name="4_checkbox[]">
+            <label class="forms-question-title">Вопрос4</label>
+            <div class="forms-checkbox-button">
+                <input value="'id_question', 'id_answer1'," name="4_checkbox[]" type="checkbox">
+                <label>1</label>
+            </div>
+            <div class="forms-checkbox-button">
+                <input value="'id_question', 'id_answer2'," name="4_checkbox[]" type="checkbox">
+                <label>2</label>
+            </div>
+            <div class="forms-checkbox-button">
+                <input value="'id_question', 'id_answer3'," name="4_checkbox[]" type="checkbox">
+                <label>3</label>
+            </div>
+            <div class="forms-checkbox-button">
+                <input value="'id_question', 'id_answer4'," name="4_checkbox[]" type="checkbox">
+                <label>4</label>
+            </div>
+            <div class="forms-checkbox-button">
+                <input value="'id_question', 'id_answer5'," name="4_checkbox[]" type="checkbox">
+                <label>5</label>
+            </div>
+        </div>
+
+        <div class="forms-checkbox-group">
+            <input class = "none" value="check-box-dop" name="5_checkbox[]">
+            <label class="forms-question-title">Вопрос5</label>
+            <div class="forms-checkbox-button">
+                <input value="'id_question', 'id_answer'," name="5_checkbox[]" type="checkbox">
+                <label>Вариант adsd1</label>
+            </div>
+            <div class="forms-checkbox-group">
+                <input value="'id_question', 'id_answer'," name="5_checkbox[]" type="checkbox">
+                <label>Другое:
+                    <input value="" name="5_checkbox[]" maxlength="20" type="text">
+                </label>
+            </div>
+        </div>
+
+        <div class="forms-radio-group">
+            <label class="forms-question-title">Вопрос6</label>
+            <div class="forms-radio-button">
+                <input required value="'id_question', 'id_answer'," name="6_radio" type="radio">
+                <label>Вариант 1</label>
+            </div>
+            <div class="forms-radio-button">
+                <input required value="'id_question', 'id_answer'," name="6_radio" type="radio">
+                <label>Вариант 3</label>
+            </div>
+        </div>
+
+        <div class="forms-checkbox-group">
+            <input class = "none" value="radio-dop" name="7_radio[]">
+            <label class="forms-question-title">Вопрос7</label>
+            <div class="forms-checkbox-button">
+                <input  value="'id_question', 'id_answer'," name="7_radio[]" type="radio">
+                <label>Вариант 1</label>
+            </div>
+            <div class="forms-checkbox-button">
+                <input  value="'id_question', 'id_answer'," name="7_radio[]" type="radio">
+                <label>Вариант 2</label>
+            </div>
+            <div class="forms-checkbox-button">
+                <input  value="'id_question', 'id_answer'," name="7_radio[]" type="radio">
+                <label>Вариант 3</label>
+            </div>
+            <div class="forms-checkbox-group">
+                <input value="'id_question', 'id_answer'," name="7_radio[]" type="radio">
+                <label>Другое:
+                    <input value="" name="7_radio[]" maxlength="20" type="text">
+                </label>
+            </div>
+        </div>
+
+        <div>
+        <input type="submit" value="Отправить">
+        </div>
+    </form>
+    <footer>
+        <br><br>
+    </footer>
+</main>
+</body>
+</html>

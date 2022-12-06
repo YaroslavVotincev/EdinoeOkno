@@ -1,11 +1,11 @@
 <?php
 //конфиг
 $token = 'y0_AgAAAABl4J01AAiOLAAAAADTIhvZdGfIs24sRhqhWMv8Wa6WzOVu6TQ';
-$publicURL=" ";
-
+$publicURL =" ";
+$folderId = uniqid();
 //создаем папку
 
-$folder = '/uploads/' . uniqid();
+$folder = '/uploads/' . $folderId ;
 $ch = curl_init('https://cloud-api.yandex.net/v1/disk/resources/?path=' . urlencode($folder));
 curl_setopt($ch, CURLOPT_PUT, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: OAuth ' . $token));
@@ -81,6 +81,7 @@ $host='26.137.232.44';
 $db = 'EdinoeOkno';
 $username = 'Artem';
 $password = '1';
+$tableName="dev1.req_front";
 $dbconn = pg_connect("host=$host port=5432 dbname=$db user=$username password=$password");
 
 $name =" ";
@@ -108,7 +109,8 @@ if (isset ($_POST["name"]) && isset ($_POST["surname"]) &&
     $email = $_POST["email"];
 }
 //отправляем в бд
-$query = "insert into dev.req_front values ('$tag','$name','$surname','$patronimic','$email','$fac','$group','$publicURL',$cnt);";
+//(request_code, first_name, last_name, patronymic, email, faculty_code, student_group, doc_amount, dir_name, public_url)
+$query = "insert into $tableName values ('$tag','$name','$surname','$patronimic','$email','$fac','$group','$cnt','$folderId','$publicURL');";
 $result = pg_query($dbconn,$query );
 pg_close($dbconn);
 $new_url = '../Main.html';
