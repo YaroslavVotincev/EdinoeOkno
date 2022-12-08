@@ -1,0 +1,121 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link href="../../Styles_TEST/Main.css" rel="stylesheet" type="text/css">
+
+  <meta charset="UTF-8">
+  <title>Копия договора на обучение</title>
+</head>
+<body>
+<header class="header">
+  <div class="wrapper">
+    <div class = "header__name">
+      <h1>Многофункциональный центр ИжГТУ</h1>
+    </div>
+    <div class = "header__wrapper">
+      <div class = "header__logo">
+        <a href ="../Main.html" class = "header__logo-link">
+          <img src = "../../Styles/Logo/istu-logo.png" alt = "Main" class = "header__logo-pic"/>
+        </a>
+      </div>
+
+      <nav class ="header__nav">
+        <ul class="header__list">
+          <li class ="header__item">
+            <a href ="../Main.html" class ="header__link">Главная</a>
+          </li>
+          <li class ="header__item">
+            <a href ="../SpravkaRef.html" class ="header__link">Справки и заявления</a>
+          </li>
+          <li class ="header__item">
+            <a href ="../Test.html" class ="header__link">Анкетирование</a>
+          </li>
+          <li class ="header__item">
+            <a href ="../Questions.html" class ="header__link">Задать вопрос</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+<main class="main">
+  <div class="intro">
+    <div class="wrapper">
+  <h1>Копия договора на обучение</h1>
+  <form action="../Php/addStatement.php" method="POST">
+
+
+    <p>Фамилия<span class="kek">*</span><label>
+      <input required type = "text" name = "surname">
+    </label></p>
+
+
+      <p>Имя<span class="kek">*</span><label>
+      <input required type = "text" name = "name">
+    </label></p>
+
+    <p>Отчество<span class="kek">*</span><label>
+      <input required type = "text" name = "patronimic">
+    </label></p>
+    <div class="none">
+    <p>Выбор документа<span class="kek">*</span><select name="tag">
+      <option  value="000">Справка о факте обучения (по месту требования) </option>
+      <option value="001"> Справка о факте обучения (в органы социальной защиты, пенсионный фонд)</option>
+      <option value="002"> Справка-вызов</option>
+      <option selected value="003">Копия договора на обучение</option>
+    </select>
+    </div>
+
+    <!-- сделать выбор -->
+    <p>Факультет<span class="kek">*</span><select name="fac">
+      <option selected value="001">СТМАим </option>
+      <option value="002">ТТ</option>
+      <option value="003"> МиЕН</option>
+      <option value="004">П</option>
+      <option value="005">ИВТ</option>
+      <option value="006">ИЭ</option>
+      <option value="007">ИС</option>
+      <option value="008">ПиГН</option>
+      <option value="009">УК</option>
+      <option value="010">РиД</option>
+      <option value="011">ИДПО</option>
+      <option value="012">ИНПО</option>
+      <option value="013">ИФКиС</option>
+      <option value="014">ИЭУФ</option>
+      <option value="015">УМАД</option>
+    </select></p>
+
+    <p>Группа<span class="kek">*</span><label>
+      <input required type = "text" name = "group">
+    </label></p>
+    <p>Email<span class="kek">*</span><label>
+      <input required type = "text" name = "email">
+    </label></p>
+
+    <input onclick="alertText() " type="submit" value="Отправить">
+  </form>
+
+    </div>
+  </div>
+<script>
+  function alertText()
+  {
+    if(document.form_name_send.surname.value === "")
+      alert("Заполните фамилию");
+    else if(document.form_name_send.name.value === "")
+      alert("Заполните имя");
+    else if(document.form_name_send.group.value === "")
+      alert("Заполните группу");
+    else if(document.form_name_send.email.value === "")
+      alert("Заполните email");
+    else
+      alert("Успешно отправленно");
+  }
+</script>
+</main>
+</body>
+</html>
+
+
+

@@ -79,7 +79,7 @@ if($cnt > 0) {
 //connect
 $host='26.137.232.44';
 $db = 'EdinoeOkno';
-$username = 'Artem';
+$username = 'Stas';
 $password = '1';
 $tableName="dev1.req_front";
 $dbconn = pg_connect("host=$host port=5432 dbname=$db user=$username password=$password");
@@ -113,6 +113,7 @@ if (isset ($_POST["name"]) && isset ($_POST["surname"]) &&
 $query = "insert into $tableName values ('$tag','$name','$surname','$patronimic','$email','$fac','$group','$cnt','$folderId','$publicURL');";
 $result = pg_query($dbconn,$query );
 pg_close($dbconn);
-$new_url = '../HTML/Main.html';
-header('Location: '.$new_url);
+$new_url = '../Main.html';
+echo $query;
+//header('Location: '.$new_url);
 ?>

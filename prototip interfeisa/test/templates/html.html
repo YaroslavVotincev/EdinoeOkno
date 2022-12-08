@@ -1,0 +1,94 @@
+<html lang="en">
+
+<head>
+	<link href="../../Styles/Style.css" rel="stylesheet" type="text/css">
+	<meta charset="UTF-8">
+	<title>Student</title>
+</head>
+<body>
+<header class = "header">
+	<img src = "../../Styles/Logo/istu-logo.png"/>
+	<div class = "container">
+		<div class ="header_logo">Многофункциональный центр ИжГТУ</div>
+		<div class = "header__inner">
+			<nav class="nav">
+				<a class="nav__link" href="../Main.html">Главная</a>
+			</nav>
+		</div>
+	</div>
+</header>
+
+<div class = "intro">
+	<div class ="container"></div>
+</div>
+
+<main>
+    <form ENCTYPE="multipart/form-data" action="/test/templates/temp.php" method="POST">
+		
+<div class="form-control-text">
+	<h1>Заголовок</h1>
+	</div>
+<div class="form-control">
+	<label>Параграф
+</label></div><br><br>
+
+		<div class="form-control">
+			<input class ="none" value="1, 1," name="3_textinput[]">
+			<label>вопрос</label>
+			<input maxlength="20" name="3_textinput[]" type="text" >
+		</div><br><br> norm
+
+
+		<div class="form-control">
+			<input class = "none" value="check-box" name="4_checkbox[]">
+			<label>Вопрос</label>
+			<label><input value="2, 2" name="4_checkbox[]" type="checkbox">
+				Вариант 1</label>
+			<label><input value="2, 3" name="4_checkbox[]" type="checkbox">
+				Вариант 2</label>
+			<label><input value="2, 4" name="4_checkbox[]" type="checkbox">
+				Вариант 3</label>
+		</div><br><br> norm
+
+
+		<div class="form-control">
+			<input class = "none" value="check-box-dop" name="5_checkbox[]">
+			<label>Вопрос</label>
+			<label><input value="3, 5," name="5_checkbox[]" type="checkbox">
+				Вариант 1</label>
+			<div class = "form-other"><input value="3, 6," name="5_checkbox[]" type="checkbox">
+				<input name="5_checkbox[]" maxlength="20" type="text" placeholder="Ваш вариант">		</div>
+		</div><br><br>
+
+
+		<div class="form-control">
+			<label>Вопрос</label>
+			<label><input value="4, 7" name="6_radio" type="radio">
+				Вариант 1</label>
+			<label><input value="4, 8" name="6_radio" type="radio">
+				Вариант 2</label>
+		</div>
+
+
+		<br><br>
+		<div class="form-control">
+			<input class = "none" value="radio-dop" name="7_radio[]">
+			<label>Вопрос</label>
+			<label><input value="5, 9," name="7_radio[]" type="radio">
+				Вариант 1</label>
+			<div class = "form-other"><input value="5, 10," name="7_radio[]" type="radio">
+				<input name="7_radio[]" maxlength="20" type="text" placeholder="Ваш вариант">
+			</div>
+		</div>
+
+
+
+
+		
+        <div>
+        <input type="submit" value="Отправить">
+        </div>
+    </form>
+</main>
+</body>
+</html>

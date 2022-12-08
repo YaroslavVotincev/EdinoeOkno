@@ -89,7 +89,6 @@ h1,h2,h3,h4,h5,h6{
 }
 /* NAvigation*/
 .nav{
-    display: flex;
     padding-top: 100px;
     font-size: 40px;
     width: 100%;
@@ -154,7 +153,6 @@ opacity: 1;
     font-weight: 400;
     content: "\f007";
     color: #0048ff;
-
 }
 .Main
 {
