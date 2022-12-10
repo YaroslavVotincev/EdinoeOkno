@@ -143,3 +143,4 @@ C:\Users\User\Desktop\учеба\Проектная деятельность\rep
 C:\Users\User\Desktop\учеба\Проектная деятельность\repos\EdinoeOkno\EdinoeOkno_program\obj\Debug\Аdministration_UserControl.g.cs
 C:\Users\User\Desktop\учеба\Проектная деятельность\repos\EdinoeOkno\EdinoeOkno_program\obj\Debug\Questions_UserControl.baml
 C:\Users\User\Desktop\учеба\Проектная деятельность\repos\EdinoeOkno\EdinoeOkno_program\obj\Debug\Аdministration_UserControl.baml
+C:\Users\User\Desktop\учеба\Проектная деятельность\repos\EdinoeOkno\EdinoeOkno_program\bin\Debug\DotNetProjects.DataVisualization.Toolkit.dll

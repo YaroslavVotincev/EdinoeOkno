@@ -14,20 +14,17 @@ namespace EdinoeOkno_program.Forms
     {
 
         public static string noneInputValue = "radio-dop";
-
         public static string css_class = "form-control";
-
         public static string other_class = "form-other";
-        //public static string label_class = "forms-question-title";
-        //public static string selection_class = "forms-checkbox-button";
-        //public static string input_class = "forms-textfield";
+        private int id_question;
+        private List<int> id_answers = new List<int>();
 
         private int maxInputLength = 20;
 
         private StackPanel body = new StackPanel()
         {
             Background = Brushes.White,
-            Margin = new Thickness(7),
+            HorizontalAlignment = HorizontalAlignment.Stretch,
         };
 
         private StackPanel miscRow = new StackPanel()
@@ -182,10 +179,62 @@ namespace EdinoeOkno_program.Forms
                 maxInputLength = int.Parse(maxInputLengthBox.Text);
             }
         }
+        
+        public StackPanel GetUIElement()
+        {
+            return body;
+        }
+        public void CreateDBElement(int id_form, NpgsqlConnection dBconnection)
+        {
+            if (dBconnection.State == System.Data.ConnectionState.Open)
+            {
+                try
+                {
+                    string query = $@"INSERT INTO forms.questions(id_form,name_question,type_question,is_required) VALUES ('{id_form}','{title.Text}','radio_with_text_input',{requiredAnswer.IsChecked}) RETURNING id_question;";
+                    NpgsqlCommand cmd = new NpgsqlCommand(query, dBconnection);
+                    id_question = Convert.ToInt32(cmd.ExecuteScalar());
+                    foreach (var answer in answersArea.Children)
+                    {
+                        query = $@"INSERT INTO forms.answers(id_question,name_answer) VALUES ('{id_question}','{((answer as StackPanel).Tag as TextBox).Text}') RETURNING id_answer;";
+                        cmd = new NpgsqlCommand(query, dBconnection);
+                        id_answers.Add(Convert.ToInt32(cmd.ExecuteScalar()));
+                    }
+                    query = $@"INSERT INTO forms.answers(id_question,name_answer,is_text_input,max_text_input) VALUES ('{id_question}','Другое:', true, {maxInputLength}) RETURNING id_answer;";
+                    cmd = new NpgsqlCommand(query, dBconnection);
+                    id_answers.Add(Convert.ToInt32(cmd.ExecuteScalar()));
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+        public string GetHTML(int number)
+        {
+            string result;
+            string isRequired = requiredAnswer.IsChecked == true ? " required" : "";
 
+            result = $"<div class=\"{css_class}\">\n" +
+                $"\t<input class = \"none\" value=\"{noneInputValue}\" name=\"{number}_radio[]\">\n" +
+                $"\t<label>{title.Text}</label>\n";
+            int i = 0;
+            foreach (var answer in answersArea.Children)
+            {
+                result += $"\t\t<label><input{isRequired} value=\"{id_question}, {id_answers[i]}\" name=\"{number}_radio[]\" type=\"radio\">\n" +
+                        $"\t\t{((answer as StackPanel).Tag as TextBox).Text}</label>\n";
+                i++;
+            }
+
+            result += $"\t\t<div class = \"{other_class}\"><input value=\"{id_question}, {id_answers[i]},\" name=\"{number}_radio[]\" type=\"radio\">\n" +
+                    $"\t\t\t<input name=\"{number}_radio[]\" maxlength=\"{maxInputLength}\" type=\"text\" placeholder=\"Ваш вариант\">\n" +
+                    $"\t\t</div>\n";
+
+            result += "</div>\n";
+            return result;
+        }
         public string GetPreviewHtml(int number)
         {
-            string result = "";
+            string result;
             string isRequired = requiredAnswer.IsChecked == true ? " required" : "";
 
             result = $"<div class=\"{css_class}\">\n" +
@@ -204,14 +253,5 @@ namespace EdinoeOkno_program.Forms
             result += "</div>\n";
             return result;
         }
-        public StackPanel GetUIElement()
-        {
-            return body;
-        }
-        public void CreateDBElement(int id_form, NpgsqlConnection dBconnection)
-        {
-
-        }
-
     }
 }

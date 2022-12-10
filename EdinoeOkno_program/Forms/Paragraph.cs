@@ -17,7 +17,7 @@ namespace EdinoeOkno_program.Forms
         private StackPanel body = new StackPanel()
         {
             Background = Brushes.White,
-            Margin = new Thickness(7),
+            HorizontalAlignment = HorizontalAlignment.Stretch,
         };
 
         private TextBlock description = new TextBlock()
@@ -39,21 +39,37 @@ namespace EdinoeOkno_program.Forms
             body.Children.Add(description);
             body.Children.Add(paragraph_text);
         }
-
-        public string GetPreviewHtml(int number)
-        {
-            return $"<div class=\"{css_class}\">\n" +
-                $"\t<label>{paragraph_text.Text}\n</label>" +
-                $"</div>\n";
-        }
         public StackPanel GetUIElement()
         {
             return body;
         }
         public void CreateDBElement(int id_form, NpgsqlConnection dBconnection)
         {
-
+            if (dBconnection.State == System.Data.ConnectionState.Open)
+            {
+                try
+                {
+                    string query = $@"INSERT INTO forms.questions(id_form,name_question,type_question) VALUES ('{id_form}','{paragraph_text.Text}','paragraph');";
+                    NpgsqlCommand cmd = new NpgsqlCommand(query, dBconnection);
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
         }
-
+        public string GetHTML(int number)
+        {
+            return $"<div class=\"{css_class}\">\n" +
+                $"\t<label>{paragraph_text.Text}\n</label>" +
+                $"</div>\n";
+        }
+        public string GetPreviewHtml(int number)
+        {
+            return $"<div class=\"{css_class}\">\n" +
+                $"\t<label>{paragraph_text.Text}\n</label>" +
+                $"</div>\n";
+        }
     }
 }

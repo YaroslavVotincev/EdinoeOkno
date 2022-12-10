@@ -305,7 +305,7 @@ CREATE FUNCTION doc_storage_delete() RETURNS trigger AS
 $doc_storage_delete$
 
 	import requests
-	dir_name = TD["old"]["dir_name"];
+	dir_name = TD["old"]["dir_name"]
 	json_headers = {
 		"Authorization": "OAuth y0_AgAAAABl4J01AAiOLAAAAADTIhvZdGfIs24sRhqhWMv8Wa6WzOVu6TQ"
 	}

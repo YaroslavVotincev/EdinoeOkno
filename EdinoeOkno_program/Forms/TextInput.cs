@@ -14,16 +14,15 @@ namespace EdinoeOkno_program.Forms
     internal class TextInput : IForms_Element
     {
         public static string css_class = "form-control";
-        //public static string label_class = "forms-question-title";
-        //public static string input_class = "forms-textfield";
+        private int id_question;
+        private int id_answer;
 
         private int maxInputLength = 20;
 
         private StackPanel body = new StackPanel()
         {
             Background = Brushes.White,
-            Margin = new Thickness(7),
-            
+            HorizontalAlignment = HorizontalAlignment.Stretch,
         };
 
         private StackPanel miscRow = new StackPanel()
@@ -98,8 +97,39 @@ namespace EdinoeOkno_program.Forms
             {
                 maxInputLength = int.Parse(maxInputLengthBox.Text);
             }
+        }      
+        public StackPanel GetUIElement()
+        {
+            return body;
         }
-
+        public void CreateDBElement(int id_form, NpgsqlConnection dBconnection)
+        {
+            if (dBconnection.State == System.Data.ConnectionState.Open)
+            {
+                try
+                {
+                    string query = $@"INSERT INTO forms.questions(id_form,name_question,type_question,is_required) VALUES ('{id_form}','{title.Text}','text_input',{requiredAnswer.IsChecked}) RETURNING id_question;";
+                    NpgsqlCommand cmd = new NpgsqlCommand(query, dBconnection);
+                    id_question = Convert.ToInt32(cmd.ExecuteScalar());
+                    query = $@"INSERT INTO forms.answers(id_question,name_answer,is_text_input,max_text_input) VALUES ('{id_question}','Другое:', true, {maxInputLength}) RETURNING id_answer;";
+                    cmd = new NpgsqlCommand(query, dBconnection);
+                    id_answer = Convert.ToInt32(cmd.ExecuteScalar());
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+        public string GetHTML(int number)
+        {
+            string isRequired = requiredAnswer.IsChecked == true ? "required" : "";
+            return $"<div class=\"{css_class}\">\n" +
+                $"\t<input class =\"none\" value=\"{id_question},{id_answer},\" name=\"{number}_textinput[]\">\n" +
+                $"\t<label>вопрос</label>\n" +
+                $"\t<input maxlength=\"{maxInputLength}\" name=\"{number}_textinput[]\" type=\"text\" {isRequired}>\n" +
+                $"</div>\n";
+        }
         public string GetPreviewHtml(int number)
         {
             string isRequired = requiredAnswer.IsChecked == true ? "required" : "";
@@ -108,14 +138,6 @@ namespace EdinoeOkno_program.Forms
                 $"\t<label>вопрос</label>\n" +
                 $"\t<input maxlength=\"{maxInputLength}\" name=\"{number}_textinput[]\" type=\"text\" {isRequired}>\n" +
                 $"</div>\n";
-        }
-        public StackPanel GetUIElement()
-        {
-            return body;
-        }
-        public void CreateDBElement(int id_form, NpgsqlConnection dBconnection)
-        {
-
         }
     }
 }
