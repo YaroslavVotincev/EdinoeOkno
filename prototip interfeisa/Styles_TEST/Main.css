@@ -1,0 +1,317 @@
+/* Styling the Body element i.e. Color,
+        Font, Alignment */
+html{
+    box-sizing:border-box;
+}
+*, *::before, *::after{
+    box-sizing: inherit;
+}
+img{
+    max-width: 100%;
+    height: auto;
+}
+body {
+    font-family:  Cuprum, "Open Sans",sans-serif  !important;
+    font-weight: normal;
+    font-style: normal;
+    line-height: 1.2;
+
+}
+
+.wrapper {
+    max-width: 1060px;
+    margin: 0 auto;
+}
+/*Header in*/
+.header {
+    background:url("../Styles/Logo/header_back.png");
+    position: fixed;
+    top:0;
+    left:0;
+    width: 100%;
+}
+.header__logo img{
+    margin-top: 20px;
+    position: absolute;
+    width: 215px;
+    height: 210px;
+    left: 0px;
+    top: 0px;
+}
+.header__wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: center;
+}
+.header__name {
+    margin-top: 20px;
+    color: white;
+    text-align: center;
+    margin-bottom: 120px;
+}
+h1{
+    margin: 0;
+    text-align: center;
+}
+.header__list {
+    display: flex;
+    flex-wrap: wrap;
+    list-style-type: none;
+    padding: 0;
+    width: 100%;
+}
+.header__item{
+    margin-right: 50px;
+}
+.header__link{
+    font-size: 30px;
+    line-height: 24px;
+    color: white;
+    text-decoration: none;
+    transition: color .2s linear;
+}
+.header__link:hover{
+    color: red;
+}
+/*Header end*/
+
+/*Intro in*/
+.intro{
+    background: white;
+    height: 50vh;
+    padding-top: 250px;
+}
+.intro__title{
+    text-align: center;
+    line-height: 40px;
+    font-size: 30px;
+    padding-bottom: 10px;
+}
+.intro__subtitle{
+    color: black;
+    font-size: 30px;
+}
+/*Intro end*/
+
+/*Benefits in*/
+
+.benefits__wrap{
+    padding-top: 0px;
+    max-width: 1262px;
+    background-color: white;
+    margin: 0 auto;
+    box-shadow: 0px 2px 20px rgb(21,24,36,0.15993);
+    position: relative;
+}
+.benefits_title{
+    width: 100%;
+    font-weight: 500;
+    font-size: 25px;
+    padding: 0px 100px 50px 100px ;
+    position: relative;
+    top:20px;
+    left:0;
+    background-color: white;
+}
+.benefits__cards{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-column-gap: 55px;
+    padding: 0 100px 50px;
+}
+.benefits_card{
+    grid-column: span 1;
+}
+.benefits__card-pic{
+    max-width: 66px;
+    margin-bottom: 20px;
+}
+.benefits__card-thumb{
+    display: block;
+}
+
+.container {
+    transition: max-height 0.2s;
+    overflow: visible;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+/*Benefits end*/
+/*Оформление для страницы отправки справок*/
+/*Нужен другой файл для форм анкетирования*/
+p{
+    color:black;
+    font-size: 20px;
+    text-align: left;
+    top: 50px;
+}
+.none
+{
+    display: none;
+}
+input[type=email], select {
+    float: right;
+    padding: 0px 10px;
+    box-sizing: border-box;
+    height: 30px;
+    width: 50%;
+    resize: vertical;
+}
+input[type=text], select {
+    float: right;
+    padding: 0px 10px;
+    box-sizing: border-box;
+    height: 30px;
+    width: 50%;
+    resize: vertical;
+}
+/*Оформление для страницы отправки справок (конец)*/
+
+/*Для страницы выбора справки*/
+.centre__nav{
+    font-size: 26px;
+    margin: 20px 0px;
+}
+.centre__nav__link{
+    display: inline-block;
+    vertical-align: top;
+    margin: 0px 10px;
+    position: relative;
+
+    color:black;
+    text-decoration: none;
+
+    transition: color .2s linear;
+}
+.centre__nav__link:after{
+    content: "";
+    display: block;
+    width: 100%;
+    height: 2px;
+
+    background-color: black;
+    opacity: 0;
+
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1;
+    transition: opacity .2s linear;
+}
+.centre__nav__link:hover:after{
+    opacity: 1;
+}
+.centre__nav__link:hover{
+    color: #e00000;
+}
+.spravkaref__nav{
+    font-size: 26px;
+    margin: 5px 0px;
+}
+.spravkaref__nav:before{
+    font-weight: 400;
+    content: "\f007";
+    color: #0048ff;
+}
+/*Для страницы выбора справки(конец)*/
+
+/*Надо менять (для старинцы задать вопрос)*/
+.info {
+    background-color: #f9f9ff;
+    padding: 10px 25px;
+}
+
+.info__switch {
+    display: none;
+}
+
+.info__body {
+    max-height:0;
+    overflow: hidden;
+    transition: 0.4s;
+}
+
+.info__switch:checked~.info__body {
+    max-height: 100px;
+}
+
+.info__headline::before {
+    content: "";
+    position: absolute;
+    left: -18px;
+    top: 4px;
+    border: 6px solid #39739d;
+}
+
+.info__switch:checked~.info__headline::before {
+    transform: rotate(180deg) translateY(6px);
+}
+.send_quest{
+    margin: auto;
+    width: 500px;
+    clear: both;
+}
+
+.send_quest input,textarea
+{
+    padding: 10px;
+    margin-top: 10px;
+    position: center;
+    width: 100%;
+    clear: both;
+}
+.buttonclick
+{
+    display: inline;
+}
+input[type=submit],[type=reset] {
+    background-color: #0048ff;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 0 auto;
+    display: block;
+}
+/*.buttonclick input {*/
+/*    background-color: #0048ff;*/
+/*    margin-left: 0px ;*/
+/*    width: 50%;*/
+/*}*/
+.send_quest select
+{
+    width: 100%;
+    clear: both;
+    margin-top: 10px;
+}
+/*Test end*
+/*для добавления файлов стиль*/
+.input__file {
+
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+}
+.input__file-button{
+    float: right;
+    background-color: #0048ff;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 0 auto;
+    display: block;
+    height: 35px;
+    width: 150px;
+    text-align: center;
+}
+.input__file-button-text
+{
+    font-size: 15px;
+}
+
+/*для добавления файлов стиль(конец)*/

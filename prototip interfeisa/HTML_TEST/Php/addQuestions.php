@@ -17,12 +17,11 @@ $username = 'Stas';
 $password = '1';
 $dbconn = pg_connect("host=$host port=5432 dbname=$db user=$username password=$password");
 $query = " ('$name','$surname','$patronimic','$fac','$email','$subject','$question') ";
-$query2 = "insert into dev1.questions (first_name, last_name, patronymic, faculty_code, email, subject, body)
+$query2 = "insert into dev1.questions (first_name, last_name, patronymic, faculty_code, email, subject, question)
 values " .$query;
 $result = pg_query($dbconn,$query2);
-//echo $query2;
 pg_close($dbconn);
-$new_url = '../HTML/Main.html';
+$new_url = '../Main.html';
 header('Location: '.$new_url);
 ?>
 

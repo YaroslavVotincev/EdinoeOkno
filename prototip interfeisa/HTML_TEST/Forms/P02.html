@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link href="../../Styles_TEST/Main.css" rel="stylesheet" type="text/css">
+  <meta charset="UTF-8">
+  <title>Student</title>
+</head>
+<body>
+<header class="header">
+  <div class="wrapper">
+    <div class = "header__name">
+      <h1>Многофункциональный центр ИжГТУ</h1>
+    </div>
+    <div class = "header__wrapper">
+      <div class = "header__logo">
+        <a href ="../Main.html" class = "header__logo-link">
+          <img src = "../../Styles/Logo/istu-logo.png" alt = "Main" class = "header__logo-pic"/>
+        </a>
+      </div>
+
+      <nav class ="header__nav">
+        <ul class="header__list">
+          <li class ="header__item">
+            <a href ="../Main.html" class ="header__link">Главная</a>
+          </li>
+          <li class ="header__item">
+            <a href ="../SpravkaRef.html" class ="header__link">Справки и заявления</a>
+          </li>
+          <li class ="header__item">
+            <a href ="../Test.html" class ="header__link">Анкетирование</a>
+          </li>
+          <li class ="header__item">
+            <a href ="../Questions.html" class ="header__link">Задать вопрос</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+  <div class="intro">
+    <div class="wrapper">
+  <h1>Оформить отпуск по уходу за ребенком</h1>
+  <form ENCTYPE="multipart/form-data" action="../Php/addOrder.php" method="POST">
+
+    <p>Фамилия<span class="kek">*</span><label>
+      <input required type = "text" name = "surname">
+    </label></p>
+
+    <p>Имя<span class="kek">*</span><label>
+      <input required type = "text" name = "name">
+    </label></p>
+
+
+    <p>Отчество<label>
+      <input required type = "text" name = "patronimic">
+    </label></p>
+    <div class="none">
+    <p>Выбор документа<select name="tag">
+      <option value="P00">Изменение персональных данных </option>
+      <option value="P01">Оформить или продлить академический отпуск</option>
+      <option selected value="P02"> Оформить отпуск по уходу за ребенком</option>
+      <option value="P03">Оформить отпуск по беременности и родам</option>
+      <option value="P04">Подать заявление на отчисление</option>
+      <option value="P05">Подать заявление перевод внутри университета</option>
+    </select>
+    </div>
+
+      <p>Факультет<span class="kek">*</span><select name="fac">
+    <option selected value="001">СТМАим </option>
+    <option value="002">ТТ</option>
+    <option value="003"> МиЕН</option>
+    <option value="004">П</option>
+    <option value="005">ИВТ</option>
+    <option value="006">ИЭ</option>
+    <option value="007">ИС</option>
+    <option value="008">ПиГН</option>
+    <option value="009">УК</option>
+    <option value="010">РиД</option>
+    <option value="011">ИДПО</option>
+    <option value="012">ИНПО</option>
+    <option value="013">ИФКиС</option>
+    <option value="014">ИЭУФ</option>
+    <option value="015">УМАД</option>
+  </select></p>
+
+      <p>Группа<span class="kek">*</span><label>
+        <input required type = "text" name = "group">
+      </label></p>
+      <p>Email<span class="kek">*</span><label>
+        <input required type = "email" name = "email">
+      </label></p>
+
+    <div onclick="myFunction(id)" id="1" class="input__wrapper">
+      <input name="filename[]" type="file"  id="input__file" class="input input__file" multiple>
+      <p>Прикрепить файл <span class="kek">*</span>
+        <label for="input__file" class="input__file-button">
+          <span class="input__file-button-text">Выберите файл</span>
+        </label></p>
+    </div>
+    <div onclick="myFunction(id)" id="11" class="input__wrapper none">
+      <input name="filename[]" type="file"  id="input__file1" class="input input__file" multiple>
+      <p>Дополнительные файлы
+        <label for="input__file1" class="input__file-button">
+          <span class="input__file-button-text">Выберите файл</span>
+        </label></p>
+    </div>
+    <div onclick="myFunction(id)" id="111" class="input__wrapper none">
+      <input name="filename[]" type="file"  id="input__file11" class="input input__file" multiple>
+      <p>Дополнительные файлы
+        <label for="input__file11" class="input__file-button">
+          <span class="input__file-button-text">Выберите файл</span>
+        </label></p>
+    </div>
+    <div onclick="myFunction(id)" id="1111" class="input__wrapper none">
+      <input name="filename[]" type="file"  id="input__file111" class="input input__file" multiple>
+      <p>Дополнительные файлы
+        <label for="input__file111" class="input__file-button">
+          <span class="input__file-button-text">Выберите файл</span>
+        </label></p>
+    </div>
+    <p>Скачать бланк <a href="https://istu.ru/storage/cabinet/blanks/%D0%B7%D0%B0%D1%8F%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BE%20%D1%81%D0%BC%D0%B5%D0%BD%D0%B5%20%D1%84%D0%B0%D0%BC%D0%B8%D0%BB%D0%B8%D0%B8.doc">заявления</a></p>
+
+
+    <input onclick="alertText()" type="submit" value="Отправить">
+ </form>
+
+<script>
+  function myFunction(id) {
+    var next = document.getElementById(id +'1');
+    next.classList.remove("none");
+  }
+</script>
+      <script>
+        function alertText()
+        {
+          if(document.form_name_send.surname.value === "")
+            alert("Заполните фамилию");
+          else if(document.form_name_send.name.value === "")
+            alert("Заполните имя");
+          else if(document.form_name_send.group.value === "")
+            alert("Заполните группу");
+          else if(document.form_name_send.email.value === "")
+            alert("Заполните email");
+          else
+            alert("Успешно отправленно");
+        }
+      </script>
+    </div>
+  </div>
+</main>
+</body>
+</html>
+
+
