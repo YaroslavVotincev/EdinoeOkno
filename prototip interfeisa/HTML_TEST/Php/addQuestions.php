@@ -17,7 +17,7 @@ $username = 'Stas';
 $password = '1';
 $dbconn = pg_connect("host=$host port=5432 dbname=$db user=$username password=$password");
 $query = " ('$name','$surname','$patronimic','$fac','$email','$subject','$question') ";
-$query2 = "insert into dev1.questions (first_name, last_name, patronymic, faculty_code, email, subject, question)
+$query2 = "insert into dev1.questions (first_name, last_name, patronymic, faculty_code, email, subject, body)
 values " .$query;
 $result = pg_query($dbconn,$query2);
 pg_close($dbconn);
