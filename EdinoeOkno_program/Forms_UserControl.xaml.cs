@@ -16,6 +16,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Controls.DataVisualization.Charting;
+using System.IO;
+using CsvHelper;
+using System.Globalization;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace EdinoeOkno_program
 {
@@ -25,6 +30,7 @@ namespace EdinoeOkno_program
     public partial class Forms_UserControl : UserControl
     {
         NpgsqlConnection dBconnection = OurDatabase.GetConnection();
+        NpgsqlConnection dBconnection1 = OurDatabase.GetConnection();
 
         public Forms_UserControl()
         {
@@ -290,6 +296,7 @@ namespace EdinoeOkno_program
                                         Margin = new Thickness(0, 0, 10, 0),
                                     };
                                     button.Click += selectStatForm;
+                                    statsListBox.Items.Add(button);
                                 }    
                             }
                         }
@@ -305,15 +312,256 @@ namespace EdinoeOkno_program
 
         struct Stats_table
         {
-            int id_question;
-            string name_question;
-            string type_question;
-            List<>
+            public int id_question;
+            public string name_question;
+            public string type_question;
+            public List<KeyValuePair<string, int>> counted_answers;
+            public int total;
+            public List<string> text_answers;
         }
 
         private void ConstructStatsWorkingArea(int id_form)
         {
+            List<Stats_table> stats = new List<Stats_table>();
+            if (dBconnection.State == System.Data.ConnectionState.Open
+                && dBconnection1.State == System.Data.ConnectionState.Open)
+            {
+                //try
+                {
+                    string temp;
+                    using (NpgsqlCommand cmd =
+                    new NpgsqlCommand($@"SELECT * FROM forms.stats_v WHERE id_form = {id_form};", dBconnection))
+                    {
+                        using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                            {
+                                foreach (DbDataRecord dB in reader)
+                                {
+                                    temp = null;
+                                    bool is_text_input = (bool)dB["is_text_input"];
+                                    if (is_text_input == true && Convert.ToInt32(dB["counted_answers"]) != 0)
+                                    {
+                                        NpgsqlCommand cmd1 =
+                                        new NpgsqlCommand
+                                        ($@"SELECT text_answers FROM forms.text_inputs_v WHERE id_answer = {(int)dB["id_answer"]};", dBconnection1);
+                                        temp = cmd1.ExecuteScalar().ToString();
+                                    }
+                                    Stats_table row = new Stats_table
+                                    {
+                                        id_question = (int)dB["id_question"],
+                                        name_question = (string)dB["name_question"],
+                                        type_question = (string)dB["type_question"],
+                                        counted_answers = new List<KeyValuePair<string, int>>()
+                                        {
+                                            new KeyValuePair<string, int>((string)dB["name_answer"], Convert.ToInt32(dB["counted_answers"]))
+                                        },
+                                        text_answers = is_text_input == true && Convert.ToInt32(dB["counted_answers"]) != 0 ? temp.Split('\t').ToList() : null
+                                    };
+                                    stats.Add(row);
+                                }
+                            }
+                        }
+                    }
+                    stats = stats
+                        .GroupBy(g => g.id_question)
+                        .Select(g => new Stats_table()
+                        {
+                            id_question = g.First().id_question,
+                            name_question = g.First().name_question,
+                            type_question = g.First().type_question,
+                            counted_answers = g.Select(n => n.counted_answers.First()).ToList(),
+                            total = g.Select(n => n.counted_answers.First().Value).Sum(),
+                            text_answers = g.Select(n => n.text_answers).SingleOrDefault(n => n != null)
+                        })
+                        .ToList();
+                    
+                    StackPanel st = new StackPanel();
+                    statsWorkingArea.Content = st;
 
+                    foreach(var row in stats)
+                    {
+                        if (row.type_question == "checkbox")
+                        {
+                            TextBlock questionTitle = new TextBlock()
+                            {
+                                Text = $"\"{row.name_question}\" ({row.total} отв.)",
+                                FontWeight = FontWeights.Bold,
+                            };
+                            st.Children.Add(questionTitle);
+                            if (row.total != 0)
+                            {
+                                BarSeries barSeries = new BarSeries()
+                                {
+                                    DependentValuePath = "Value",
+                                    IndependentValuePath = "Key",
+                                    Title = "Несколько из списка",
+                                    ItemsSource = row.counted_answers.Select(p => new KeyValuePair<string, int>($"{p.Key} ({p.Value} отв., {100 * p.Value / row.total}%) ", p.Value))
+                                };
+                                Chart chart = new Chart()
+                                {
+                                    Height = 75 * row.counted_answers.Count()
+                                };
+                                chart.Series.Add(barSeries);
+                                st.Children.Add(chart);
+                            }   
+                        }
+                        else if (row.type_question == "checkbox_with_text_input")
+                        {
+                            TextBlock questionTitle = new TextBlock()
+                            {
+                                Text = $"\"{row.name_question}\" ({row.total} отв.)",
+                                FontWeight = FontWeights.Bold,
+                            };
+                            st.Children.Add(questionTitle);
+                            if (row.total != 0)
+                            {
+                                BarSeries barSeries = new BarSeries()
+                                {
+                                    DependentValuePath = "Value",
+                                    IndependentValuePath = "Key",
+                                    Title = "Несколько из списка",
+                                    ItemsSource = row.counted_answers.Select(p => new KeyValuePair<string, int>($"{p.Key} ({p.Value} отв., {100 * p.Value / row.total}%) ", p.Value))
+                                };
+                                Chart chart = new Chart()
+                                {
+                                    Height = 75 * row.counted_answers.Count()
+                                };
+                                chart.Series.Add(barSeries);
+                                st.Children.Add(chart);
+                            }
+                            if (row.text_answers != null)
+                            {
+                                TextBlock text_inputsTitle = new TextBlock()
+                                {
+                                    Text = $"Текстовые ответы: {row.text_answers.Count()} отв.",
+                                };
+                                st.Children.Add(text_inputsTitle);
+                                Button reportButton = new Button()
+                                {
+                                    Content = "Посмотреть все ответы",
+                                    Tag = row.text_answers,
+                                    HorizontalAlignment = HorizontalAlignment.Left,
+                                };
+                                reportButton.Click += text_input_reportButton_Click;
+                                st.Children.Add(reportButton);
+                            }  
+                        }
+                        else if (row.type_question == "radio")
+                        {
+                            TextBlock questionTitle = new TextBlock()
+                            {
+                                Text = $"\"{row.name_question}\" ({row.total} отв.)",
+                                FontWeight = FontWeights.Bold,
+                            };
+                            st.Children.Add(questionTitle);
+                            if(row.total != 0)
+                            {
+                                PieSeries pieSeries = new PieSeries()
+                                {
+                                    DependentValuePath = "Value",
+                                    IndependentValuePath = "Key",
+                                    Title = "Один из списка",
+                                    ItemsSource = row.counted_answers.Select(p => new KeyValuePair<string, int>($"{p.Key} ({p.Value} отв., {100 * p.Value / row.total}%) ", p.Value))
+                                };
+                                Chart chart = new Chart()
+                                {
+                                    Height = 75 * row.counted_answers.Count()
+                                };
+                                chart.Series.Add(pieSeries);
+                                st.Children.Add(chart);
+                            }
+                            
+                        }
+                        else if (row.type_question == "radio_with_text_input")
+                        {
+                            TextBlock questionTitle = new TextBlock()
+                            {
+                                Text = $"\"{row.name_question}\" ({row.total} отв.)",
+                                FontWeight = FontWeights.Bold,
+                            };
+                            st.Children.Add(questionTitle);
+
+                            if (row.total != 0)
+                            {
+                                PieSeries pieSeries = new PieSeries()
+                                {
+                                    DependentValuePath = "Value",
+                                    IndependentValuePath = "Key",
+                                    Title = "Один из списка",
+                                    ItemsSource = row.counted_answers.Select(p => new KeyValuePair<string, int>($"{p.Key} ({p.Value} отв., {100 * p.Value / row.total}%) ", p.Value))
+                                };
+                                Chart chart = new Chart()
+                                {
+                                    Height = 75 * row.counted_answers.Count()
+                                };
+                                chart.Series.Add(pieSeries);
+                                st.Children.Add(chart);
+                            }
+                            if(row.text_answers != null)
+                            {
+                                TextBlock text_inputsTitle = new TextBlock()
+                                {
+                                    Text = $"Текстовые ответы: {row.text_answers.Count()} отв.",
+                                };
+                                st.Children.Add(text_inputsTitle);
+                                Button reportButton = new Button()
+                                {
+                                    Content = "Посмотреть все ответы",
+                                    Tag = row.text_answers,
+                                    HorizontalAlignment = HorizontalAlignment.Left,
+                                };
+                                reportButton.Click += text_input_reportButton_Click;
+                                st.Children.Add(reportButton);
+                            }
+                        }
+                        else if (row.type_question == "text_input")
+                        {
+
+                            TextBlock questionTitle = new TextBlock()
+                            {
+                                Text = $"\"{row.name_question}\" ({row.total} отв.) - текстовый ввод",
+                                FontWeight = FontWeights.Bold,
+                            };
+                            st.Children.Add(questionTitle);
+                            if(row.text_answers != null)
+                            {
+                                Button reportButton = new Button()
+                                {
+                                    Content = "Посмотреть все ответы",
+                                    Tag = row.text_answers,
+                                    HorizontalAlignment = HorizontalAlignment.Left,
+                                };
+                                reportButton.Click += text_input_reportButton_Click;
+                                st.Children.Add(reportButton);
+                            }
+                        }
+                    }
+                }
+                //catch (Exception ex)
+                //{
+                //    MessageBox.Show(ex.Message);
+                //}
+            }
+
+        }
+        private void text_input_reportButton_Click(object sender, EventArgs e)
+        {
+            Button button = sender as Button;
+            List<string> row = button.Tag as List<string>;
+
+            Directory.CreateDirectory("FormsReports");
+            string path = $"FormsReports\\{DateTime.Now:yyyy-MM-dd HH-mm-ss-ff}.csv";
+            using (StreamWriter stream = new StreamWriter(path, false, Encoding.Default))
+            {
+                foreach (string s in row)
+                {
+                    stream.WriteLine(s);
+                }
+                stream.Close();
+            }
+            var sInfo = new System.Diagnostics.ProcessStartInfo(path) { UseShellExecute = true };
+            System.Diagnostics.Process.Start(sInfo);
         }
     }
 }

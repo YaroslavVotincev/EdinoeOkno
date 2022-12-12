@@ -56,17 +56,18 @@ CREATE VIEW stats_v AS
 (
 	WITH answer_count AS
 	(
-		SELECT a.id_question, a.id_answer, a.name_answer, count(a.id_answer) as counted_answers
+		SELECT a.id_question, a.id_answer, a.name_answer, a.is_text_input, count(a.id_answer) as counted_answers
 			FROM forms.answers a
 			JOIN forms.response r ON r.id_answer = a.id_answer
 			GROUP BY 1,2
 		UNION  
-		SELECT id_question, id_answer, name_answer, 0 FROM forms.answers
+		SELECT id_question, id_answer, name_answer, is_text_input, 0 FROM forms.answers
 			WHERE id_answer NOT IN (SELECT id_answer FROM response)
 	)
 	SELECT f.id_form, q.id_question, 
 		q.name_question, q.type_question, 
-		ac.id_answer, ac.name_answer, ac.counted_answers
+		ac.id_answer, ac.name_answer, 
+		ac.counted_answers, ac.is_text_input
 	FROM answer_count ac
 	JOIN forms.questions q ON q.id_question = ac.id_question
 	JOIN forms.forms f ON f.id_form = q.id_form
@@ -112,7 +113,7 @@ VALUES
 ('1',2,2),
 ('1',3,5),
 ('1',4,7),
-('1',4,10)
+('1',5,10)
 */
 --SELECT * from forms;
 --SELECT * from questions;
