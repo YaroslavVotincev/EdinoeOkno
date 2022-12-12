@@ -7,96 +7,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content=
           "width=device-width, initial-scale=1.0">
+  <link href="../Styles_TEST/Anketa.css" rel="stylesheet" type="text/css">
 
-  <style>
-    body {
-      background: #0048ff url("../Styles/Logo/header_back.png");
-      font-family:   Cuprum, "Open Sans",sans-serif  !important;
-      text-align: center;
-    }
-
-    form {
-      background-color: #fff;
-      max-width: 700px;
-      margin: 50px auto;
-      padding: 30px 20px;
-      box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.5);
-    }
-
-    /* Styling form-control Class */
-    .form-control {
-      text-align: left;
-      padding-bottom: 5px;
-      border-bottom:solid  1px gray;
-    }
-
-    /* Styling form-control Label */
-    .form-control label {
-      display: block;
-      /*margin-bottom: 10px;*/
-      margin-top: 20px;
-    }
-
-    /* Styling form-control input,
-    select, textarea */
-    .form-control input,
-    .form-control select,
-    .form-control textarea {
-      border: 1px solid #777;
-      border-radius: 2px;
-      font-family: inherit;
-      padding: 10px;
-      display: block;
-      width: 95%;
-    }
-
-    /* Styling form-control Radio
-    button and Checkbox */
-    .form-control input[type="radio"],
-    .form-control input[type="checkbox"] {
-      display: inline-block;
-      width: auto;
-    }
-
-    /* Styling Button */
-    button {
-      background-color: #0048ff;
-      color:white;
-      border: 1px solid #777;
-      border-radius: 2px;
-      font-family: inherit;
-      font-size: 21px;
-      display: block;
-      width: 100%;
-      margin-top: 50px;
-      margin-bottom: 20px;
-    }
-    h1{
-      margin: 0;
-    }
-    form img
-    {
-      margin-top: 5%;
-      top: 0px;
-      left: 50px;
-      position: absolute;
-      width: 13%;
-    }
-    input.none{
-      display: none;
-    }
-    .form-control-text h1{
-      color: black;
-      text-align: center;
-    }
-    .form-other{
-      display: flex;
-      padding: 10px 0px 10px 0px;
-    }
-
-
-  </style>
-  <link href="../Styles_TEST/Main.css" rel="stylesheet" type="text/css">
 </head>
   <h1>Многофункциональный центр ИжГТУ</h1>
 <header class="header">
@@ -132,75 +44,15 @@
 </header>
 <body>
 <main class = "main">
- <div class = "intro">
-  <div class = "wrapper">
+ <section class = "intro">
+   <div class="wrapper">
+     <div class ="testing">
+       <script src="JavaScript/Anketa.js"></script>
+     </div>
+   </div>
+   </div>
+ </section>
 
-  <form id="form">
-    <div class="form-control-text">
-      <h1>Заголовок</h1>
-    </div>
-    <div class="form-control">
-      <label>Параграф
-      </label>
-    </div>
-    <div class="form-control">
-      <input class ="none" value="'id_question', 'id_answer', " name="3_textinput[]">
-      <label>вопрос</label>
-      <input maxlength="20" name="3_textinput[]" type="text" >
-    </div>
-    <div class="form-control">
-      <input class = "none" value="check-box" name="4_checkbox[]">
-        <label>Вопрос</label>
-      <label><input value="'id_question', 'id_answer'," name="4_checkbox[]" type="checkbox">
-        Вариант 1</label>
-      <label><input value="'id_question', 'id_answer'," name="4_checkbox[]" type="checkbox">
-        Вариант 2</label>
-      <label><input value="'id_question', 'id_answer'," name="4_checkbox[]" type="checkbox">
-        Вариант 3</label>
-    </div>
-    <div class="form-control">
-      <input class = "none" value="check-box-dop" name="5_checkbox[]">
-        <label>Вопрос</label>
-        <label><input value="'id_question', 'id_answer'," name="5_checkbox[]" type="checkbox">
-          Вариант 1</label>
-        <label><input value="'id_question', 'id_answer'," name="5_checkbox[]" type="checkbox">
-          Вариант 2</label>
-        <label><input value="'id_question', 'id_answer'," name="5_checkbox[]" type="checkbox">
-          Вариант 3</label>
-        <div class = "form-other"><input value="'id_question', 'id_answer'," name="5_checkbox[]" type="checkbox">
-          <input name="5_checkbox[]" maxlength="20" type="text" placeholder="Ваш вариант">
-        </div>
-    </div>
-  <div class="form-control">
-    <label>Вопрос</label>
-    <label><input value="'id_question', 'id_answer'," name="6_radio" type="radio">
-      Вариант 1</label>
-    <label><input value="'id_question', 'id_answer'," name="6_radio" type="radio">
-      Вариант 2</label>
-    <label><input value="'id_question', 'id_answer'," name="6_radio" type="radio">
-      Вариант 3</label>
-  </div>
-  <div class="form-control">
-    <input class = "none" value="radio-dop" name="7_radio[]">
-    <label>Вопрос</label>
-    <label><input value="'id_question', 'id_answer'," name="7_radio[]" type="radio">
-      Вариант 1</label>
-    <label><input value="'id_question', 'id_answer'," name="7_radio[]" type="radio">
-      Вариант 2</label>
-    <label><input value="'id_question', 'id_answer'," name="7_radio[]" type="radio">
-      Вариант 3</label>
-    <div class = "form-other"><input value="'id_question', 'id_answer'," name="7_radio[]" type="radio">
-      <input name="7_radio[]" maxlength="20" type="text" placeholder="Ваш вариант">
-    </div>
-  </div>
-
-
-    <button type="submit" value="submit">
-      Отправить
-    </button>
-    </form>
-  </div>
- </div>
 </main>
 </body>
 
