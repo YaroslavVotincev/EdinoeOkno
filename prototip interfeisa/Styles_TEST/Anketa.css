@@ -1,3 +1,11 @@
+html{
+    box-sizing:border-box;
+}
+
+*, *::before, *::after{
+    box-sizing: inherit;
+}
+
 .wrapper {
     max-width: 1060px;
     margin: 0 auto;
@@ -5,10 +13,11 @@
 /*Header in*/
 .header {
     background:url("../Styles/Logo/header_back.png");
-    position: fixed;
+    position: absolute;
     top:0;
     left:0;
     width: 100%;
+    height: 24%;
 }
 .header__logo img{
     margin-top: 20px;
@@ -57,10 +66,8 @@ h1{
 /*Header end*/
 
 /*Intro in*/
-.intro{
-    background: white;
+.introanketa{
     height: 0;
-    padding-top: 250px;
 }
 .intro__title{
     text-align: center;
@@ -75,17 +82,21 @@ h1{
 /*Intro end*/
 
 body {
-    background: #0048ff url("../Styles/Logo/header_back.png");
+    /*background: #0048ff url("../Styles/Logo/header_back.png");*/
+    margin-top: 250px;
+    background-color: #f0ebf8;
     font-family:   Cuprum, "Open Sans",sans-serif  !important;
     text-align: center;
+    font-weight: normal;
+    font-style: normal;
+    line-height: 1.2;
 }
-
 form {
     background-color: #fff;
     max-width: 700px;
-    margin: 50px auto;
+    margin: 0px auto;
     padding: 30px 20px;
-    box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 1px 1px 10px 5px rgba(0, 0, 0, 0.5);
 }
 
 /* Styling form-control Class */
@@ -140,6 +151,13 @@ button {
 h1{
     margin: 0;
 }
+
+.benefits__wrap{
+    width:100%;
+    padding-top:10px;
+    z-index:5;
+    overflow:auto;
+}
 form img
 {
     margin-top: 5%;
@@ -158,9 +176,6 @@ input.none{
 .form-other{
     display: flex;
     padding: 10px 0px 10px 0px;
-}
-input.fix{
-
 }
 
 .spravkaref__nav{

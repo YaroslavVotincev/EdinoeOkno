@@ -4,11 +4,11 @@
 winexe
 C#
 .cs
-D:\repos\EdinoeOkno\EdinoeOkno_program\obj\Debug\
+D:\repos\EdinoeOkno\EdinoeOkno_program\obj\Release\
 EdinoeOkno_program
 none
 false
-DEBUG;TRACE
+TRACE
 D:\repos\EdinoeOkno\EdinoeOkno_program\App.xaml
 6-1009837515
 
@@ -16,5 +16,5 @@ D:\repos\EdinoeOkno\EdinoeOkno_program\App.xaml
 36-64095046
 Authorization_UserControl.xaml;Forms_UserControl.xaml;MainWindow.xaml;Questions_UserControl.xaml;Requests_UserConrol.xaml;Аdministration_UserControl.xaml;
 
-False
+True
 

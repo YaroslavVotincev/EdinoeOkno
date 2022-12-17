@@ -11,10 +11,10 @@ namespace EdinoeOkno_program
 {
     internal static class OurDatabase
     {
-        public const string dBServer = "localhost";
+        public const string dBServer = "26.137.232.44";
         public const string dBPort = "5432";
-        public const string dBUser = "postgres";
-        public const string dBPassword = "";
+        public const string dBUser = "Stas";
+        public const string dBPassword = "1";
         public const string dBDatabase = "EdinoeOkno";
         public const string dBSchema = "dev1";
 

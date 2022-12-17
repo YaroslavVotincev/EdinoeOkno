@@ -146,3 +146,17 @@ C:\Users\User\Desktop\учеба\Проектная деятельность\rep
 C:\Users\User\Desktop\учеба\Проектная деятельность\repos\EdinoeOkno\EdinoeOkno_program\bin\Debug\DotNetProjects.DataVisualization.Toolkit.dll
 C:\Users\User\Desktop\учеба\Проектная деятельность\repos\EdinoeOkno\EdinoeOkno_program\bin\Debug\CsvHelper.dll
 C:\Users\User\Desktop\учеба\Проектная деятельность\repos\EdinoeOkno\EdinoeOkno_program\bin\Debug\CsvHelper.xml
+D:\repos\EdinoeOkno\EdinoeOkno_program\bin\Debug\CsvHelper.dll
+D:\repos\EdinoeOkno\EdinoeOkno_program\bin\Debug\DotNetProjects.DataVisualization.Toolkit.dll
+D:\repos\EdinoeOkno\EdinoeOkno_program\bin\Debug\CsvHelper.xml
+D:\repos\EdinoeOkno\EdinoeOkno_program\obj\Debug\Authorization_UserControl.g.cs
+D:\repos\EdinoeOkno\EdinoeOkno_program\obj\Debug\Forms_UserControl.g.cs
+D:\repos\EdinoeOkno\EdinoeOkno_program\obj\Debug\Questions_UserControl.g.cs
+D:\repos\EdinoeOkno\EdinoeOkno_program\obj\Debug\Requests_UserConrol.g.cs
+D:\repos\EdinoeOkno\EdinoeOkno_program\obj\Debug\Аdministration_UserControl.g.cs
+D:\repos\EdinoeOkno\EdinoeOkno_program\obj\Debug\GeneratedInternalTypeHelper.g.cs
+D:\repos\EdinoeOkno\EdinoeOkno_program\obj\Debug\Authorization_UserControl.baml
+D:\repos\EdinoeOkno\EdinoeOkno_program\obj\Debug\Forms_UserControl.baml
+D:\repos\EdinoeOkno\EdinoeOkno_program\obj\Debug\Questions_UserControl.baml
+D:\repos\EdinoeOkno\EdinoeOkno_program\obj\Debug\Requests_UserConrol.baml
+D:\repos\EdinoeOkno\EdinoeOkno_program\obj\Debug\Аdministration_UserControl.baml

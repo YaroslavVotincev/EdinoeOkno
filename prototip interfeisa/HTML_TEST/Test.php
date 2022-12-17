@@ -8,8 +8,8 @@
     "width=device-width, initial-scale=1.0">
     <link href="../Styles_TEST/Anketa.css" rel="stylesheet" type="text/css">
 
+
 </head>
-<h1>Многофункциональный центр ИжГТУ</h1>
 <header class="header">
     <div class="wrapper">
         <div class = "header__name">
@@ -41,13 +41,12 @@
         </div>
     </div>
 </header>
+
 <body>
 <main class = "main">
-    <section class = "intro">
-        <div class="wrapper">
-            <div class ="testing">
-                <form>
-
+    <section class ="benefits">
+        <div class = "benefits__wrap">
+            <form>
                 <?php
                 $var_value = $_GET['varname'];
                 $host='26.137.232.44';
@@ -65,10 +64,7 @@
                     <button type="submit" value="submit">
                         Отправить
                     </button>
-
-                </form>
-            </div>
-
+            </form>
         </div>
     </section>
 

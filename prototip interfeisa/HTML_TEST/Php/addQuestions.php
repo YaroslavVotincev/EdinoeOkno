@@ -24,4 +24,3 @@ pg_close($dbconn);
 $new_url = '../Main.html';
 header('Location: '.$new_url);
 ?>
-

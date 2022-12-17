@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content=
     "width=device-width, initial-scale=1.0">
-    <link href="../Styles_TEST/Anketa.css" rel="stylesheet" type="text/css">
+    <link href="../Styles_TEST/AnketaList.css" rel="stylesheet" type="text/css">
 
 </head>
 <h1>Многофункциональный центр ИжГТУ</h1>
@@ -42,9 +42,18 @@
     </div>
 </header>
 <body>
+
 <main class = "main">
     <section class = "intro">
-        <nav class="wrapper">
+        <div class="wrapper">
+            <h1 class="intro__title">
+                Доступные анкеты
+            </h1>
+        </div>
+    </section>
+
+        <section class ="benefits">
+          <div class = "benefits__wrap">
             <nav class="spravkaref__nav"
             <?php
                 $host='26.137.232.44';
@@ -52,26 +61,25 @@
                 $username = 'Stas';
                 $password = '1';
                 $dbconn = pg_connect("host=$host port=5432 dbname=$db user=$username password=$password");
-                $query = "select id_form ,name_form from forms.forms;";
+                $query = "select id_form ,name_form,description from forms.forms;";
                 $result = pg_query($dbconn,$query );
                 $data = array();
-                $i = 0;
+                $i = 1;
                 $k = true;
                 $n = pg_num_rows($result);
-                while($i < $n)
+                while($i <= $n)
                 {
-                    $data = pg_fetch_row($result,$i);
-                    echo '<br>';
-                    echo "<a class='centre__nav__link' href=\"Test.php?varname=$data[0]\">$data[1]</a>";
+                    $data = pg_fetch_row($result,$i-1);
+                    echo "<div class = 'pixel'>";
+                    echo "<div class = 'designblock'>
+                            <a class='centre__nav__link' href=\"Test.php?varname=$data[0]\">$data[1]</a>
+                            <p>$data[2]</p>
+                          </div>";
                     $i++;
                 }
-
-//                $data = pg_fetch_result($result,1,"name_form");
-//
-//                print_r($data);
                 pg_close($dbconn);
                 ?>
-        </nav>
-        </div>
-    </section>
+          </div>
+        </section>
+
 </main>
