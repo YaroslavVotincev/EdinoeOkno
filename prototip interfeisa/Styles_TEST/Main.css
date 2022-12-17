@@ -281,6 +281,7 @@ input[type=submit],[type=reset] {
 /*    margin-left: 0px ;*/
 /*    width: 50%;*/
 /*}*/
+
 .send_quest select
 {
     width: 100%;
@@ -299,11 +300,9 @@ input[type=submit],[type=reset] {
     float: right;
     background-color: #0048ff;
     color: white;
-    padding: 5px 10px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    margin: 0 auto;
     display: block;
     height: 35px;
     width: 150px;
