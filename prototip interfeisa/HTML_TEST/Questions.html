@@ -47,38 +47,47 @@
 
   <div class="info">
     <input id="info__body_1" class="info__switch" type="checkbox">
-    <label for="info__body_1" class="info__headline"><h2>Первый частозадаваемый вопрос</h2></label>
+    <label for="info__body_1" class="info__headline"><h2>Какой срок получения справки или заявления?</h2></label>
     <div class="info__body">
-      <br>
-      Тут первый текст для вопроса
-
+      Сроки готовности справки состовляет от 1 до 3-х дней
     </div>
   </div>
   <br>
 
   <div class="info">
     <input id="info__body_2" class="info__switch" type="checkbox">
-    <label for="info__body_2" class="info__headline"><h2>Второй частозадаваемый вопрос</h2></label>
+    <label for="info__body_2" class="info__headline"><h2>Могу ли я получить материальную помощь?</h2></label>
     <div class="info__body">
-      <br>
-      Тут второй текст для вопроса
-
+      Вы можете получать материальную помощь, если входите в одну из категорий студентов, указанных в
+      <a href ="https://istu.ru/storage/sveden/2022/%D0%9F%D1%80%D0%B8%D0%BA%D0%B0%D0%B7%20%E2%84%96%20860%20%D0%BE%D1%82%2001.09.2022.pdf">
+        документе</a>
     </div>
   </div>
+      <br>
+
+      <div class="info">
+        <input id="info__body_3" class="info__switch" type="checkbox">
+        <label for="info__body_3" class="info__headline"><h2>Как часто можно получать материальную помощь?</h2></label>
+        <div class="info__body">
+          Материальную помощь можно получать один раз в три месяца.
+        </div>
+      </div>
+      <br>
 
     <p>Если Вы не нашли ответ на интересующий вас вопрос, то предлагаем вам написать нам и специалист ответит вам на почту в ближайшее время</p>
     <form name="form_name_send" action="Php/addQuestions.php" method="POST">
+      <p style="text-align: center">Поля отмеченные * обязательны к заполнению</p>
       <div class ="send_quest">
         <label>
-          <input required type = "text" name = "name" placeholder="Введите ваше имя">
+          <input required type = "text" name = "surname" placeholder="*Введите вашу фамилию">
         </label>
 
         <label>
-          <input required type = "text" name = "surname" placeholder="Введите вашу фамилию">
+          <input required type = "text" name = "name" placeholder="*Введите ваше имя">
         </label>
 
         <label>
-          <input required type = "text" name = "patronimic" placeholder="Введите ваше отчество">
+          <input type = "text" name = "patronimic" placeholder="Введите ваше отчество">
         </label>
 
         <select name="fac">
@@ -101,14 +110,14 @@
         </select>
 
         <label>
-          <input type="email" name = "email" placeholder="Email">
+          <input required type="email" name = "email" placeholder="*Email">
         </label>
 
         <label>
-          <input type="text" name = "subject" placeholder="Тема вопроса">
+          <input required type="text" name = "subject" placeholder="*Тема вопроса">
         </label>
 
-        <textarea name = "question" required placeholder="Введите ваш вопрос"></textarea>
+        <textarea required name = "question" required placeholder="*Введите ваш вопрос"></textarea>
 
         <div class ="buttonclick">
           <input onclick="alertText()" type="submit" value="Отправить">
