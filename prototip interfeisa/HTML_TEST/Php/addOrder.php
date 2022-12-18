@@ -115,5 +115,5 @@ $result = pg_query($dbconn,$query );
 pg_close($dbconn);
 $new_url = '../Main.html';
 echo $query;
-//header('Location: '.$new_url);
+header('Location: '.$new_url);
 ?>

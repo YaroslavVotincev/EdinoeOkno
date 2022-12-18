@@ -19,7 +19,9 @@ body {
     padding: 0;
 
 }
-
+.main{
+    height: 80vh;
+}
 .wrapper {
     max-width: 1060px;
     margin: 0 auto;
