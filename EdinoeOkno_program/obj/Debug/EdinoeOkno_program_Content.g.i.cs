@@ -8,6 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("bin/debug/dotnetprojects.datavisualization.toolkit.dll")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("app-logo1.png")]
 
 

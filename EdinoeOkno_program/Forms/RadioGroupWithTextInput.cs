@@ -27,11 +27,6 @@ namespace EdinoeOkno_program.Forms
             HorizontalAlignment = HorizontalAlignment.Stretch,
         };
 
-        private StackPanel miscRow = new StackPanel()
-        {
-            Orientation = Orientation.Horizontal,
-        };
-
         private TextBlock description = new TextBlock()
         {
             Text = "Тип: Один из списка c текстовым вводом",
@@ -41,7 +36,7 @@ namespace EdinoeOkno_program.Forms
         private CheckBox requiredAnswer = new CheckBox()
         {
             Content = "Обязательный вопрос?",
-            HorizontalAlignment = HorizontalAlignment.Right,
+            HorizontalAlignment = HorizontalAlignment.Left,
         };
 
         private TextBox title = new TextBox()
@@ -144,8 +139,6 @@ namespace EdinoeOkno_program.Forms
 
         public RadioGroupWithTextInput()
         {
-            miscRow.Children.Add(description);
-            miscRow.Children.Add(requiredAnswer);
             otherRow.Children.Add(otherRadioButton);
             otherRow.Children.Add(otherTextBlock);
             otherRow.Children.Add(otherTextBox);
@@ -153,7 +146,8 @@ namespace EdinoeOkno_program.Forms
             maxInputLengthRow.Children.Add(maxInputLengthBox);
             maxInputLengthBox.TextChanged += maxInputLengthBox_TextChanged;
 
-            body.Children.Add(miscRow);
+            body.Children.Add(description);
+            body.Children.Add(requiredAnswer);
             body.Children.Add(title);
             body.Children.Add(addAnswerButton);
             addAnswerButton.Click += addAnswerButton_Click;
@@ -213,14 +207,15 @@ namespace EdinoeOkno_program.Forms
         {
             string result;
             string isRequired = requiredAnswer.IsChecked == true ? " required" : "";
+            string starRequired = requiredAnswer.IsChecked == true ? "(*)" : "";
 
             result = $"<div class=\"{css_class}\">\n" +
                 $"\t<input class = \"none\" value=\"{noneInputValue}\" name=\"{number}_radio[]\">\n" +
-                $"\t<label>{title.Text}</label>\n";
+                $"\t<label>{title.Text} {starRequired}</label>\n";
             int i = 0;
             foreach (var answer in answersArea.Children)
             {
-                result += $"\t\t<label><input{isRequired} value=\"{id_question}, {id_answers[i]}\" name=\"{number}_radio[]\" type=\"radio\">\n" +
+                result += $"\t\t<label><input{isRequired} value=\"{id_question}, {id_answers[i]},\" name=\"{number}_radio[]\" type=\"radio\">\n" +
                         $"\t\t{((answer as StackPanel).Tag as TextBox).Text}</label>\n";
                 i++;
             }

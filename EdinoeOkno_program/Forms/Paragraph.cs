@@ -62,7 +62,7 @@ namespace EdinoeOkno_program.Forms
         public string GetHTML(int number)
         {
             return $"<div class=\"{css_class}\">\n" +
-                $"\t<label>{paragraph_text.Text}\n</label>" +
+                $"\t<label>{paragraph_text.Text}\n</label>\n" +
                 $"</div>\n";
         }
         public string GetPreviewHtml(int number)

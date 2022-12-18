@@ -146,3 +146,5 @@ C:\Users\User\Desktop\учеба\Проектная деятельность\rep
 C:\Users\User\Desktop\учеба\Проектная деятельность\repos\EdinoeOkno\EdinoeOkno_program\bin\Debug\DotNetProjects.DataVisualization.Toolkit.dll
 C:\Users\User\Desktop\учеба\Проектная деятельность\repos\EdinoeOkno\EdinoeOkno_program\bin\Debug\CsvHelper.dll
 C:\Users\User\Desktop\учеба\Проектная деятельность\repos\EdinoeOkno\EdinoeOkno_program\bin\Debug\CsvHelper.xml
+C:\Users\User\Desktop\учеба\Проектная деятельность\repos\EdinoeOkno\EdinoeOkno_program\obj\Debug\App.baml
+C:\Users\User\Desktop\учеба\Проектная деятельность\repos\EdinoeOkno\EdinoeOkno_program\obj\Debug\Styles_Dictionary.baml

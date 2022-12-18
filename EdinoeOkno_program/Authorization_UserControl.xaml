@@ -6,15 +6,20 @@
              xmlns:local="clr-namespace:EdinoeOkno_program"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="#FF164ACF">
+    <Grid>
+        <Grid.Background>
+            <ImageBrush Stretch="None" ImageSource="/header_back.png"/>
+        </Grid.Background>
+        <Image Source="/istu-logo1.png" HorizontalAlignment="Left" VerticalAlignment="Top" Width="180" Height="180"/>
         <GroupBox x:Name="authBox" Header="Вход в приложение" BorderBrush="Black" HorizontalAlignment="Center" VerticalAlignment="Center" Height="205" Width="348" Foreground="White">
             <Grid Background="#FFFCFCFC">
-                <TextBlock x:Name="feedTextBlock" TextWrapping="Wrap" Text="Пожалуйста, введите ваш логин и пароль сотрудника" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,20,0,0" Width="241" TextAlignment="Center" Foreground="Black" FontSize="10" FontStyle="Italic"/>
-                <Label Content="Логин:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="62,61,0,0"></Label>
+                <TextBlock x:Name="feedTextBlock" TextWrapping="Wrap" Text="Пожалуйста, введите ваш логин и пароль сотрудника" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,20,0,0" Width="241" TextAlignment="Center" Foreground="Black"/>
+                <Label Content="Логин:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="62,61,0,0"/>
                 <TextBox x:Name="loginTextBox" HorizontalAlignment="Center" Width="120" VerticalAlignment="Top" Margin="0,65,0,0" Background="#FFE8F0FE" TextChanged="loginTextBox_TextChanged"/>
                 <Label Content="Пароль:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="54,87,0,0"/>
+
                 <TextBox x:Name="passwordTextBox" HorizontalAlignment="Center" Width="120" VerticalAlignment="Top" Margin="0,91,0,0" Background="#FFE8F0FE" TextChanged="passwordTextBox_TextChanged"/>
-                <Button x:Name="authButton" Content="Войти" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="80" Margin="0,0,0,25" Background="#FF164ACF" BorderBrush="{x:Null}" Foreground="White" Click="authButton_Click"/>
+                <Button x:Name="authButton" Content="Войти" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="80" Margin="0,0,0,25" Background="#FF164ACF" BorderBrush="{x:Null}" Foreground="White" Click="authButton_Click" Style="{StaticResource blueButton}"/>
             </Grid>
         </GroupBox>
     </Grid>

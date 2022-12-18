@@ -168,6 +168,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Styles_Dictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Аdministration_UserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -191,18 +195,41 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Resource Include="Fonts\Cuprum.ttf" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Resource Include="Styles\Cuprum-Bold.ttf" />
+    <Resource Include="Styles\Cuprum-Italic.ttf" />
+    <Resource Include="Styles\Cuprum-Regular.ttf" />
+    <Resource Include="Styles\Cuprum.ttf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\Debug\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="header_back.png" />
+    <Resource Include="Styles\header_back.png" />
+    <Resource Include="Styles\istu-logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="istu-logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="istu-logo1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="header_back1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="app-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="app-logo1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\System.Text.Json.6.0.0\build\System.Text.Json.targets" Condition="Exists('packages\System.Text.Json.6.0.0\build\System.Text.Json.targets')" />

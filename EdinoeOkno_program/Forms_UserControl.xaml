@@ -11,8 +11,8 @@
     <Grid Background="#FF164ACF">
         <TabControl BorderThickness="0,0,0,0" Background="#FF164ACF">
             <TabItem Header="Создание анкет">
-                <Grid Background="#FF164ACF">
-                    <ScrollViewer x:Name="formsWorkingArea" Margin="10,10,10,0" Background="#FFF0EBF8" BorderBrush="Black" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
+                <Grid Background="White">
+                    <ScrollViewer x:Name="formsWorkingArea" Margin="5,5,5,0" Background="#FFF0EBF8" BorderBrush="Black" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Статистика">

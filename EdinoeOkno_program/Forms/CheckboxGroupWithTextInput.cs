@@ -203,7 +203,7 @@ namespace EdinoeOkno_program.Forms
             int i = 0;
             foreach (var answer in answersArea.Children)
             {
-                result += $"\t\t<label><input value=\"{id_question}, {id_answers[i]}\" name=\"{number}_checkbox[]\" type=\"checkbox\">\n" +
+                result += $"\t\t<label><input value=\"{id_question}, {id_answers[i]},\" name=\"{number}_checkbox[]\" type=\"checkbox\">\n" +
                         $"\t\t{((answer as StackPanel).Tag as TextBox).Text}</label>\n";
                 i++;
             }
