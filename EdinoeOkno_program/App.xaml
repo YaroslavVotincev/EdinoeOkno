@@ -4,6 +4,11 @@
              xmlns:local="clr-namespace:EdinoeOkno_program"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        
+        <ResourceDictionary>
+            <FontFamily x:Key="Cuprum">./Styles/Cuprum.ttf#Cuprum</FontFamily>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles_Dictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

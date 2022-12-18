@@ -20,7 +20,7 @@ using System.Windows.Controls.DataVisualization.Charting;
 using System.IO;
 using CsvHelper;
 using System.Globalization;
-using static System.Net.Mime.MediaTypeNames;
+//using static System.Net.Mime.MediaTypeNames;
 
 namespace EdinoeOkno_program
 {
@@ -55,6 +55,7 @@ namespace EdinoeOkno_program
             Button addElementButton = new Button()
             {
                 Content = "Добавить элемент:",
+                Style = (Style)Application.Current.FindResource("blueButton"),
             };
             ComboBox elementSelection = new ComboBox() { SelectedIndex = 0 };
             elementSelection.Items.Add(new ComboBoxItem() { Content = "Заголовок" });
@@ -67,10 +68,12 @@ namespace EdinoeOkno_program
             Button clearAllElementsButton = new Button()
             {
                 Content = "Очистить список",
+                Style = (Style)Application.Current.FindResource("blueButton"),
             };
             Button createFormButton = new Button()
             {
                 Content = "Готово",
+                Style = (Style)Application.Current.FindResource("blueButton"),
             };
 
             tools1.Children.Add(addElementButton);
@@ -107,7 +110,7 @@ namespace EdinoeOkno_program
                 {
                     Orientation = Orientation.Horizontal,
                     HorizontalAlignment = HorizontalAlignment.Stretch,
-                    Margin = new Thickness(5, 10, 10, 0),
+                    Margin = new Thickness(0, 0, 0, 0),
                 };
                 switch (sel)
                 {
@@ -147,9 +150,16 @@ namespace EdinoeOkno_program
                         elementRow.Tag = radioGroupWithTextInput;
                         break;
                 }
+                Border border = new Border()
+                {
+                    Width = formsWorkingArea.Width - 20,
+                    Style = (Style)Application.Current.FindResource("formsElement"),
+                    Child = elementRow,
+                    Tag = elementRow.Tag
+                };
                 StackPanel elementTools = new StackPanel()
                 {
-                    VerticalAlignment = VerticalAlignment.Center
+                    VerticalAlignment = VerticalAlignment.Center,
                 };
 
                 Button upButton = new Button() { Content = "Наверх" };
@@ -160,10 +170,11 @@ namespace EdinoeOkno_program
                 {
                     for (int i = 1; i < listPanel.Children.Count; i++)
                     {
-                        if (listPanel.Children[i] == elementRow)
+                        if (listPanel.Children[i] == border)
                         {
-                            StackPanel temp = listPanel.Children[i - 1] as StackPanel;
-                            StackPanel temp1 = listPanel.Children[i] as StackPanel;
+                            
+                            Border temp = listPanel.Children[i - 1] as Border;
+                            Border temp1 = listPanel.Children[i] as Border;
                             listPanel.Children.Remove(temp);
                             listPanel.Children.Insert(i, temp);
                             listPanel.Children.Remove(temp1);
@@ -177,9 +188,9 @@ namespace EdinoeOkno_program
                 {
                     for (int i = 0; i < listPanel.Children.Count; i++)
                     {
-                        if (listPanel.Children[i] == elementRow)
+                        if (listPanel.Children[i] == border)
                         {
-                            listPanel.Children.Remove(elementRow);
+                            listPanel.Children.Remove(border);
                             break;
                         }
                     }
@@ -189,10 +200,10 @@ namespace EdinoeOkno_program
                 {
                     for (int i = 0; i < listPanel.Children.Count - 1; i++)
                     {
-                        if (listPanel.Children[i] == elementRow)
+                        if (listPanel.Children[i] == border)
                         {
-                            StackPanel temp = listPanel.Children[i] as StackPanel;
-                            StackPanel temp1 = listPanel.Children[i + 1] as StackPanel;
+                            Border temp = listPanel.Children[i] as Border;
+                            Border temp1 = listPanel.Children[i + 1] as Border;
                             listPanel.Children.Remove(temp);
                             listPanel.Children.Insert(i + 1, temp);
                             listPanel.Children.Remove(temp1);
@@ -208,7 +219,8 @@ namespace EdinoeOkno_program
                 elementTools.Children.Add(downButton);
 
                 elementRow.Children.Add(elementTools);
-                listPanel.Children.Add(elementRow);
+                
+                listPanel.Children.Add(border);
             }
             addElementButton.Click += addElement_Click;
 
@@ -220,7 +232,7 @@ namespace EdinoeOkno_program
 
             void createFormButton_Click(object sender, EventArgs e)
             {
-                List<IForms_Element> forms_Elements = listPanel.Children.Cast<StackPanel>()
+                List<IForms_Element> forms_Elements = listPanel.Children.Cast<Border>()
                     .Select(el => el.Tag as IForms_Element).ToList<IForms_Element>();
                 NewFormWorkingArea();
                 CreateNewForm(formTitleBox.Text, descriptionTitleBox.Text, forms_Elements);
@@ -241,7 +253,15 @@ namespace EdinoeOkno_program
                     cmd = new NpgsqlCommand(query, dBconnection);
                     int id_form = Convert.ToInt32(cmd.ExecuteScalar());
                     //TODO: написать теги для шапки анкеты
-                    string html_code = "";
+                    string html_code = $"<div class=\"form-control\">\n" +
+                        $"\t<h1>{form_name}</h1>\n" +
+                        $"</div>\n" +
+                        $"<div class=\"form-control\">\n" +
+                        $"\t<label>{form_description}\n</label>\n" +
+                        $"</div>\n" +
+                        $"<div class=\"form-control\">\n" +
+                        $"\t<label>(*) - обязательный вопрос\n</label>\n" +
+                        $"</div>\n";
                     int number = 1;
                     foreach(var element in form_questions)
                     {

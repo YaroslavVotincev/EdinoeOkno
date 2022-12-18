@@ -275,28 +275,25 @@ namespace EdinoeOkno_program
             for (int i = 0; i < questionsList.Count; i++)
             {
                 q = questionsList[i];
-                Button button = new Button();
-                TextBlock preview = new TextBlock
+                Button button = new Button()
                 {
-                    Text = $"Вопрос №{q.question_id} ({q.last_name})\n" +
+                    Content = $"Вопрос №{q.question_id} ({q.last_name})\n" +
                     $"Состояние: {q.status_name}\n" +
                     $"Время поступления: {q.time_when_added}\n" +
                     $"Факультет: {q.faculty_short_name}\n" +
                     $"Тема: \"{q.subject}\"",
-                    TextWrapping = TextWrapping.Wrap
+                    Style = (Style)Application.Current.FindResource("listBoxButton"),
+                    Width = questionsListBox.Width - 32,
+                    Tag = q,
                 };
-                button.Tag = q;
-                button.HorizontalContentAlignment = HorizontalAlignment.Stretch;
-                button.Width = questionsListBox.Width - 35;
-                button.Content = preview;
-                button.Click += SelectRequest;
+                button.Click += SelectQuestion;
                 questionsListBox.Items.Add(button);
             }
         }
         /// <summary>
         /// По нажатию кнопки из requestListBox выбирается соответствующий selectedRequest
         /// </summary>
-        private void SelectRequest(object sender, EventArgs eventArgs)
+        private void SelectQuestion(object sender, EventArgs eventArgs)
         {
             Button selectedButton = sender as Button;
             selectedQuestion = selectedButton.Tag as Question;
@@ -493,7 +490,12 @@ namespace EdinoeOkno_program
                 FontWeight = FontWeights.Bold,
             };
 
-            ComboBox statusChangeComboBox = new ComboBox() { Tag = confirm_responseCheckBox };
+            ComboBox statusChangeComboBox = new ComboBox() 
+            { 
+                Tag = confirm_responseCheckBox,
+                Height = 22,
+                VerticalAlignment = VerticalAlignment.Bottom,
+            };
             foreach (string[] statuses in OurDatabase.statusNamesList)
             {
                 statusChangeComboBox.Items.Add(new ComboBoxItem()
@@ -514,6 +516,7 @@ namespace EdinoeOkno_program
                 Foreground = Brushes.White,
                 Tag = statusChangeComboBox,
                 HorizontalAlignment = HorizontalAlignment.Left,
+                Style = (Style)Application.Current.FindResource("blueButton"),
             };
             confirmStatusChangeButton.Click += confirmStatusChangeButton_Click;
             st.Children.Add(confirmStatusChangeButton);

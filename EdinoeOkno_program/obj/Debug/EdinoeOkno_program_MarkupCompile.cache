@@ -9,12 +9,21 @@ EdinoeOkno_program
 none
 false
 DEBUG;TRACE
+<<<<<<< HEAD
 D:\repos\EdinoeOkno\EdinoeOkno_program\App.xaml
 6-1009837515
 
 24-1826355147
 36-64095046
 Authorization_UserControl.xaml;Forms_UserControl.xaml;MainWindow.xaml;Questions_UserControl.xaml;Requests_UserConrol.xaml;Аdministration_UserControl.xaml;
+=======
+C:\Users\User\Desktop\учеба\Проектная деятельность\repos\EdinoeOkno\EdinoeOkno_program\App.xaml
+7688763915
+
+24326242440
+36-1404345039
+Authorization_UserControl.xaml;Forms_UserControl.xaml;MainWindow.xaml;Questions_UserControl.xaml;Requests_UserConrol.xaml;Styles_Dictionary.xaml;Аdministration_UserControl.xaml;
+>>>>>>> 7e0c193f5db7b0e88b47a080bc971c8f239ac282
 
 False
 

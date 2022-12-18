@@ -148,9 +148,10 @@ namespace EdinoeOkno_program.Forms
         {
             string result;
             string isRequired = requiredAnswer.IsChecked == true ? " required" : "";
+            string starRequired = requiredAnswer.IsChecked == true ? "(*)" : "";
 
             result = $"<div class=\"{css_class}\">\n" +
-                $"\t<label>{title.Text}</label>\n";
+                $"\t<label>{title.Text} {starRequired}</label>\n";
             int i = 0;
             foreach (var answer in answersArea.Children)
             {

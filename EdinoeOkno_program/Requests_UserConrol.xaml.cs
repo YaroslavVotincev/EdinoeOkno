@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
@@ -66,8 +67,8 @@ namespace EdinoeOkno_program
 
         private void GetNamesOfRequests()
         {
-            filter_requestComboBox.SelectionChanged += filter_ComboBox_SelectionChanged;
-            foreach(string[] req_name in OurDatabase.requestNamesList)
+            filter_requestComboBox.SelectionChanged += delegate (object sender, SelectionChangedEventArgs e) { filter_requestComboBox.SelectedIndex = 0; };
+            foreach (string[] req_name in OurDatabase.requestNamesList)
             {
                 if (Authorization.account.request_privileges.Contains(req_name[0]))
                 {
@@ -85,11 +86,10 @@ namespace EdinoeOkno_program
                         HorizontalContentAlignment = HorizontalAlignment.Stretch,
                         VerticalContentAlignment = VerticalAlignment.Stretch,
                         IsChecked = true,
-                        Tag = req_name[0],
                         Content = req_name[1]
                     };
-                    checkBox.Checked += filter_requestCheckBox_Checked;
-                    checkBox.Unchecked += filter_requestCheckBox_Unchecked;
+                    checkBox.Checked += delegate (object sender, RoutedEventArgs e) { type_filter.Add(req_name[0]); };
+                    checkBox.Unchecked += delegate (object sender, RoutedEventArgs e) { type_filter.Remove(req_name[0]); }; ;
                     item.Content = checkBox;
                     filter_requestComboBox.Items.Add(item);
 
@@ -119,7 +119,7 @@ namespace EdinoeOkno_program
 
         private void GetNamesOfStatus()
         {
-            filter_statusComboBox.SelectionChanged += filter_ComboBox_SelectionChanged;
+            filter_statusComboBox.SelectionChanged += delegate (object sender, SelectionChangedEventArgs e) { filter_statusComboBox.SelectedIndex = 0; }; ;
             foreach (string[] status_name in OurDatabase.statusNamesList)
             {
                 ComboBoxItem item = new ComboBoxItem()
@@ -136,11 +136,10 @@ namespace EdinoeOkno_program
                     HorizontalContentAlignment = HorizontalAlignment.Stretch,
                     VerticalContentAlignment = VerticalAlignment.Stretch,
                     IsChecked = true,
-                    Tag = status_name[0],
                     Content = status_name[2]
                 };
-                checkBox.Checked += filter_statusCheckBox_Checked;
-                checkBox.Unchecked += filter_statusCheckBox_Unchecked;
+                checkBox.Checked += delegate (object sender, RoutedEventArgs e) { status_filter.Add(status_name[0]); };
+                checkBox.Unchecked += delegate (object sender, RoutedEventArgs e) { status_filter.Remove(status_name[0]); };
                 item.Content = checkBox;
                 filter_statusComboBox.Items.Add(item);
 
@@ -148,21 +147,9 @@ namespace EdinoeOkno_program
             }
         }
 
-        private void filter_statusCheckBox_Checked(object sender, EventArgs e)
-        {
-            CheckBox checkBox = sender as CheckBox;
-            status_filter.Add(checkBox.Tag as string);
-        }
-
-        private void filter_statusCheckBox_Unchecked(object sender, EventArgs e)
-        {
-            CheckBox checkBox = sender as CheckBox;
-            status_filter.Remove(checkBox.Tag as string);
-        }
-
         private void GetNamesOfFaculty()
         {
-            filter_facultyComboBox.SelectionChanged += filter_ComboBox_SelectionChanged;
+            filter_facultyComboBox.SelectionChanged += delegate (object sender, SelectionChangedEventArgs e) { filter_facultyComboBox.SelectedIndex = 0; }; ;
             foreach (string[] fac_name in OurDatabase.facultyNamesList)
             {
                 ComboBoxItem item = new ComboBoxItem()
@@ -179,30 +166,16 @@ namespace EdinoeOkno_program
                     HorizontalContentAlignment = HorizontalAlignment.Stretch,
                     VerticalContentAlignment = VerticalAlignment.Stretch,
                     IsChecked = true,
-                    Tag = fac_name[0],
                     Content = $"{fac_name[1]}"
                 };
-                checkBox.Checked += filter_facultyCheckBox_Checked;
-                checkBox.Unchecked += filter_facultyCheckBox_Unchecked;
+                checkBox.Checked += delegate (object sender, RoutedEventArgs e) { faculty_filter.Add(fac_name[0]); };
+                checkBox.Unchecked += delegate (object sender, RoutedEventArgs e) { faculty_filter.Remove(fac_name[0]); };
                 item.Content = checkBox;
                 filter_facultyComboBox.Items.Add(item);
 
                 faculty_filter.Add(fac_name[0]);
             }
         }
-
-        private void filter_facultyCheckBox_Checked(object sender, EventArgs e)
-        {
-            CheckBox checkBox = sender as CheckBox;
-            faculty_filter.Add(checkBox.Tag as string);
-        }
-
-        private void filter_facultyCheckBox_Unchecked(object sender, EventArgs e)
-        {
-            CheckBox checkBox = sender as CheckBox;
-            faculty_filter.Remove(checkBox.Tag as string);
-        }
-
 
         /// <summary>
         /// Очищает requestsListBox
@@ -235,9 +208,7 @@ namespace EdinoeOkno_program
             };
             workingArea.Content = defaultWorkingAreaMessage;
         }
-        /// <summary>
-        /// Заполняет заданный requestsList со статусом status_code с помощью запроса к БД
-        /// </summary>
+
         private void GetRequestList(List<Request> requestsList)
         {
             //Фильтр
@@ -324,20 +295,17 @@ namespace EdinoeOkno_program
             for (int i = 0; i < requestsList.Count; i++)
             {
                 r = requestsList[i];
-                Button button = new Button();
-                TextBlock preview = new TextBlock
+                Button button = new Button()
                 {
-                    Text = $"Заявка №{r.request_id} ({r.last_name})\n" +
+                    Content = $"Заявка №{r.request_id} ({r.last_name})\n" +
                     $"Состояние: {r.status_name}\n" +
                     $"Время поступления: {r.time_when_added}\n" +
                     $"Факультет: {r.faculty_short_name}\n" +
                     $"Тип: {r.request_name}",
-                    TextWrapping = TextWrapping.Wrap
+                    Style = (Style)Application.Current.FindResource("listBoxButton"),
+                    Width = requestsListBox.Width - 32,
+                    Tag = r,
                 };
-                button.Tag = r;
-                button.HorizontalContentAlignment = HorizontalAlignment.Stretch;
-                button.Width = requestsListBox.Width - 35;
-                button.Content = preview;
                 button.Click += SelectRequest;
                 requestsListBox.Items.Add(button);
             }
@@ -543,7 +511,12 @@ namespace EdinoeOkno_program
                 FontWeight = FontWeights.Bold,
             };
 
-            ComboBox statusChangeComboBox = new ComboBox() { Tag = confirm_responseCheckBox };
+            ComboBox statusChangeComboBox = new ComboBox() 
+            { 
+                Tag = confirm_responseCheckBox,
+                Height = 22,
+                VerticalAlignment= VerticalAlignment.Bottom,
+            };
             foreach (string[] statuses in OurDatabase.statusNamesList)
             {
                 statusChangeComboBox.Items.Add(new ComboBoxItem()
@@ -564,6 +537,7 @@ namespace EdinoeOkno_program
                 Foreground = Brushes.White,
                 Tag = statusChangeComboBox,
                 HorizontalAlignment = HorizontalAlignment.Left,
+                Style = (Style)Application.Current.FindResource("blueButton"),
             };
             confirmStatusChangeButton.Click += confirmStatusChangeButton_Click;
             st.Children.Add(confirmStatusChangeButton);

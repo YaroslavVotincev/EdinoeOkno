@@ -5,29 +5,31 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EdinoeOkno_program"
         mc:Ignorable="d"
-        Title="Единое окно" Height="450" Width="800">
-    <TabControl Grid.Row ="0" Margin="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TabStripPlacement="Right" BorderThickness="5" >
-        <TabItem Header="Вход" Height="50" Width="100">
+        Title="Единое окно" Height="450" Width="800" 
+        FontFamily="{StaticResource Cuprum}"
+        FontSize="14" Icon="/app-icon.png">
+    <TabControl Grid.Row ="0" Margin="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TabStripPlacement="Right" BorderThickness="1" >
+        <TabItem Header="Вход" Height="50" Width="100" Style="{StaticResource mainTabItem}">
             <Grid x:Name="authorizationGrid">
                <local:Authorization_UserControl></local:Authorization_UserControl> 
             </Grid>
         </TabItem>
-        <TabItem Header="Заявки" Height="50" Width="100">
+        <TabItem Header="Заявки" Height="50" Width="100" Style="{StaticResource mainTabItem}">
             <Grid x:Name="requestGrid">
                 <TextBlock FontSize="35" TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center">Пожалуйста, ввойдите в ваш аккаунт сотрудника во вкладке "Вход"</TextBlock>
             </Grid>
         </TabItem>
-        <TabItem Header="Вопросы" Height="50" Width="100">
+        <TabItem Header="Вопросы" Height="50" Width="100" Style="{StaticResource mainTabItem}">
             <Grid x:Name="questionsGrid">
                 <TextBlock FontSize="35" TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center">Пожалуйста, ввойдите в ваш аккаунт сотрудника во вкладке "Вход"</TextBlock>
             </Grid>
         </TabItem>
-        <TabItem Header="Анкетирование" Height="50" Width="100">
+        <TabItem Header="Анкетирование" Height="50" Width="100" Style="{StaticResource mainTabItem}">
             <Grid x:Name="formsGrid">
                 <TextBlock FontSize="35" TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center">Пожалуйста, ввойдите в ваш аккаунт сотрудника во вкладке "Вход"</TextBlock>
             </Grid>
         </TabItem>
-        <TabItem Header="Адм. приложения" Height="50" Width="100">
+        <TabItem Header="Управление приложением" Height="50" Width="100" Style="{StaticResource mainTabItem}">
             <Grid x:Name="adminGrid">
                 <TextBlock FontSize="35" TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center">Пожалуйста, ввойдите в ваш аккаунт сотрудника во вкладке "Вход"</TextBlock>
             </Grid>

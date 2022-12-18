@@ -25,11 +25,6 @@ namespace EdinoeOkno_program.Forms
             HorizontalAlignment = HorizontalAlignment.Stretch,
         };
 
-        private StackPanel miscRow = new StackPanel()
-        {
-            Orientation = Orientation.Horizontal,
-        };
-
         private TextBlock description = new TextBlock()
         {
             Text = "Тип: Текстовый ввод   ",
@@ -79,13 +74,12 @@ namespace EdinoeOkno_program.Forms
 
         public TextInput()
         {
-            miscRow.Children.Add(description);
-            miscRow.Children.Add(requiredAnswer);
             maxInputLengthRow.Children.Add(maxInputLengthTextBlock);
             maxInputLengthRow.Children.Add(maxInputLengthBox);
             maxInputLengthBox.TextChanged += maxInputLengthBox_TextChanged;
 
-            body.Children.Add(miscRow);
+            body.Children.Add(description);
+            body.Children.Add(requiredAnswer);
             body.Children.Add(title);
             body.Children.Add(userInput);
             body.Children.Add(maxInputLengthRow);
@@ -124,18 +118,20 @@ namespace EdinoeOkno_program.Forms
         public string GetHTML(int number)
         {
             string isRequired = requiredAnswer.IsChecked == true ? "required" : "";
+            string starRequired = requiredAnswer.IsChecked == true ? "(*)" : "";
             return $"<div class=\"{css_class}\">\n" +
                 $"\t<input class =\"none\" value=\"{id_question},{id_answer},\" name=\"{number}_textinput[]\">\n" +
-                $"\t<label>вопрос</label>\n" +
+                $"\t<label>{title.Text} {starRequired}</label>\n" +
                 $"\t<input maxlength=\"{maxInputLength}\" name=\"{number}_textinput[]\" type=\"text\" {isRequired}>\n" +
                 $"</div>\n";
         }
         public string GetPreviewHtml(int number)
         {
             string isRequired = requiredAnswer.IsChecked == true ? "required" : "";
+            string starRequired = requiredAnswer.IsChecked == true ? "(*)" : "";
             return $"<div class=\"{css_class}\">\n" +
                 $"\t<input class =\"none\" value=\"'id_question', 'id_answer', \" name=\"{number}_textinput[]\">\n" +
-                $"\t<label>вопрос</label>\n" +
+                $"\t<label>вопрос {starRequired}</label>\n" +
                 $"\t<input maxlength=\"{maxInputLength}\" name=\"{number}_textinput[]\" type=\"text\" {isRequired}>\n" +
                 $"</div>\n";
         }
