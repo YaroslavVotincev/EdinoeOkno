@@ -83,3 +83,21 @@
         </section>
 
 </main>
+<footer class = "site-footer">
+    <section class ="footersec">
+        <div class = "footer__wrap">
+            <h2 class="footer_title">
+                О ПРОЕКТЕ
+            </h2>
+            <h2 class="footer_title">
+                Многофункциональный центр для студентов "Единое окно"
+            </h2>
+            <h2 class="footer_title">
+                Учебный проект для ФГБОУ ВО "ИжГТУ им. М.Т.Калашникова"
+            </h2>
+
+        </div>
+    </section>
+</footer>
+</body>
+</html>

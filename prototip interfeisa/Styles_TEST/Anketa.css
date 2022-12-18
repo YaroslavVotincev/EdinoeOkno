@@ -12,7 +12,7 @@ html{
 }
 /*Header in*/
 .header {
-    background:url("../Styles/Logo/header_back.png");
+    background:url("../Styles/Logo/header_back_ny.png");
     position: absolute;
     top:0;
     left:0;
@@ -26,6 +26,7 @@ html{
     height: 210px;
     left: 0px;
     top: 0px;
+    margin-left: 100px;
 }
 .header__wrapper {
     display: flex;

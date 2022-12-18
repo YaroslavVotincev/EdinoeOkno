@@ -15,7 +15,9 @@ body {
     font-weight: normal;
     font-style: normal;
     line-height: 1.2;
-
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 .wrapper {
@@ -24,12 +26,13 @@ body {
 }
 /*Header in*/
 .header {
-    background:url("../Styles/Logo/header_back.png");
+    background:url("../Styles/Logo/header_back_ny.png");
     position: absolute;
     top:0;
     left:0;
     width: 100%;
 }
+
 .header__logo img{
     margin-top: 20px;
     position: absolute;
@@ -37,6 +40,7 @@ body {
     height: 210px;
     left: 0px;
     top: 0px;
+    margin-left: 100px;
 }
 .header__wrapper {
     display: flex;
@@ -316,3 +320,27 @@ input[type=submit],[type=reset] {
 /*для добавления файлов стиль(конец)*/
 /*Для анектирвоания*/
 /*Для анектирвоания(конец)*/
+
+/*footer*/
+.site-footer{
+    margin-top: 50px;
+    background:url("../Styles/Logo/footer_ny.png");
+    height: 20vh;
+}
+
+.footer__wrap{
+    padding-top: 0px;
+    max-width: 1262px;
+    margin: 0 auto;
+    position: relative;
+}
+.footer_title{
+    width: 100%;
+    font-weight: 500;
+    font-size: 25px;
+    position: relative;
+    top:20px;
+    left:0px;
+    color: white;
+}
+/*footer end*/
