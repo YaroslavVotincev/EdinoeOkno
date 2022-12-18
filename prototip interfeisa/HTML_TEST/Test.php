@@ -46,7 +46,7 @@
 <main class = "main">
     <section class ="benefits">
         <div class = "benefits__wrap">
-            <form>
+            <form action="Php/temp.php" method="POST">
                 <?php
                 $var_value = $_GET['varname'];
                 $host='26.137.232.44';
